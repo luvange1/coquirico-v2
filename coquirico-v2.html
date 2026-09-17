@@ -74,17 +74,15 @@ p{margin:0}
 .nav-toggle{display:none;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
 
 /* ---------------- HERO ---------------- */
-.hero{position:relative;height:100vh;min-height:clamp(720px,100vh,985px);max-height:985px;overflow:hidden;color:var(--ink);isolation:isolate}
-.hero-bg{position:absolute;inset:-6% -2.5% 0 -2.5%;z-index:0}
-.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 68%}
-/* the video sits on top of the still and is visible from the start. Its poster IS the still, so if it
-   cannot play (blocked autoplay, reduced motion, no codec) the hero looks exactly as it always did. */
-.hero-bg video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 68%}
-.hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(20,20,20,.28) 0%,rgba(20,20,20,0) 24%)}
+.hero{position:relative;height:100vh;min-height:clamp(720px,100vh,985px);max-height:985px;overflow:hidden;color:#fbf6ee;isolation:isolate}
+.hero-bg{position:absolute;inset:-6% -2.5% 0 -2.5%;z-index:0;background:#0d1418}
+/* the poster IS the first frame of the loop, so if playback is blocked the hero still shows the same water */
+.hero-bg video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%}
+.hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(8,12,14,.40) 0%,rgba(8,12,14,.16) 28%,rgba(8,12,14,0) 50%),linear-gradient(180deg,rgba(8,12,14,.44) 0%,rgba(8,12,14,.10) 30%,rgba(8,12,14,0) 55%,rgba(8,12,14,.28) 100%)}
 .hero-copy{position:absolute;z-index:3;left:calc(50% - var(--container)/2);top:21%;max-width:640px}
-.hero-copy .eyebrow{color:var(--ink);opacity:.85;margin-bottom:26px}
-.hero h1{font-size:88px;line-height:.98;font-weight:500;letter-spacing:-.015em;max-width:9ch}
-.hero .sub{margin-top:26px;font-size:19px;line-height:1.55;max-width:34ch;color:var(--ink)}
+.hero-copy .eyebrow{color:#f4e6c8;opacity:.92;margin-bottom:26px}
+.hero h1{font-size:88px;line-height:.98;font-weight:500;letter-spacing:-.015em;max-width:9ch;text-shadow:0 2px 30px rgba(4,8,10,.45)}
+.hero .sub{margin-top:26px;font-size:19px;line-height:1.55;max-width:34ch;color:rgba(251,246,238,.92);text-shadow:0 1px 18px rgba(4,8,10,.5)}
 .hero .actions{margin-top:38px;display:flex;gap:14px;align-items:center}
 .hero-stage{position:absolute;inset:0;z-index:2;pointer-events:none}
 .can{position:absolute;bottom:var(--b);left:var(--x);width:var(--w);transform:translateX(-50%);pointer-events:auto}
@@ -102,7 +100,7 @@ p{margin:0}
 .can-l{--x:54%;--w:500px;--b:calc(8.6% - 26px);z-index:1}
 .can-c{--x:67%;--w:540px;--b:calc(8.2% - 28px);z-index:3}
 .can-r{--x:80%;--w:500px;--b:calc(8.6% - 26px);z-index:2}
-.hero-foot{position:absolute;z-index:3;left:calc(50% - var(--container)/2);bottom:40px;display:flex;gap:26px;align-items:center;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--ink);opacity:.78}
+.hero-foot{position:absolute;z-index:3;left:calc(50% - var(--container)/2);bottom:40px;display:flex;gap:26px;align-items:center;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:#fbf6ee;opacity:.82}
 .hero-foot span{display:inline-flex;align-items:center;gap:26px}
 .hero-foot i{display:block;width:34px;height:1px;background:currentColor}
 
@@ -349,8 +347,8 @@ p{margin:0}
 <!-- ============ HERO ============ -->
 <section class="hero" id="hero">
   <div class="hero-bg" data-parallax>
-    <video class="hero-vid" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1" poster="assets/video/hero-ocean-poster.jpg">
-      <source src="assets/video/hero-ocean.mp4" type="video/mp4">
+    <video class="hero-vid" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1" poster="assets/video/hero-gold-poster.jpg">
+      <source src="assets/video/hero-gold.mp4" type="video/mp4">
     </video>
   </div>
   <div class="hero-scrim" aria-hidden="true"></div>
@@ -378,7 +376,7 @@ p{margin:0}
     <h1 lang="es">Coco, isla y&nbsp;calma.</h1>
     <p class="sub">A Puerto Rican coconut drink. No alcohol, no hurry — just the island, cold.</p>
     <div class="actions">
-      <a class="btn" href="#drinks">Explore the drinks</a>
+      <a class="btn light" href="#drinks">Explore the drinks</a>
     </div>
   </div>
 </section>
