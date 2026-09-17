@@ -1047,6 +1047,35 @@ function initCan(canvas){
   ScrollTrigger.create({ trigger:driver, start:'top top', end:'bottom bottom', scrub:0.6,
     onUpdate:function(self){ prog.p=self.progress; } });
   chapters.forEach(function(el){
+    /* PHONES: a chapter's copy used to fade IN and then sit at full opacity until it scrolled off
+       the top of the screen — so the tail of one chapter and the head of the next were legible at
+       the same time and the screen read as clutter (Pedro, 2026-09-17: the hero's last two lines
+       were still sitting above "04 / AFTER DARK"). A phone is one screen tall; it can only hold one
+       thought. So on phones the copy RISES, HOLDS while its chapter owns the screen, then SINKS
+       back out as the chapter leaves — one scrubbed timeline, so it reverses correctly when you
+       scroll back up.
+       The timeline maps across trigger 'top 80%' -> 'bottom 25%'; at the chapter's resting scroll
+       position that lands at 0.52, safely inside the hold, so nothing is ever mid-fade while you
+       are actually reading it (or reaching for the After Dark picker, which lives inside this
+       element). Desktop keeps the authored one-way fade — there the chapters are far apart. */
+    if(window.COQ_SMALL){
+      /* NOT the last chapter: the scroll ENDS on it, so there is nothing to hand over to. Fading it
+         would dissolve the screen you are standing on — and autoAlpha:0 sets visibility:hidden,
+         which would make NOTIFY ME untappable. It keeps the one-way fade. */
+      if(el === chapters[chapters.length-1]){
+        gsap.fromTo(el,{autoAlpha:0,y:46},{autoAlpha:1,y:0,ease:'power2.out',
+          scrollTrigger:{trigger:el.parentElement,start:'top 80%',end:'top 45%',scrub:true}});
+        return;
+      }
+      gsap.timeline({scrollTrigger:{trigger:el.parentElement,start:'top 80%',end:'bottom 25%',scrub:true}})
+        .fromTo(el,{autoAlpha:0,y:46},{autoAlpha:1,y:0,ease:'power2.out',duration:0.28})
+        .to(el,{autoAlpha:1,duration:0.40})
+        /* power2.OUT on the way out too, not power2.in: an ease-in is slow off the mark, which left
+           the outgoing copy at ~0.87 alpha exactly where the next chapter's headline arrived. This
+           drops fast and tails off, so the handover is decisive. */
+        .to(el,{autoAlpha:0,y:-26,ease:'power2.out',duration:0.32});
+      return;
+    }
     gsap.fromTo(el,{autoAlpha:0,y:46},{autoAlpha:1,y:0,ease:'power2.out',
       scrollTrigger:{trigger:el.parentElement,start:'top 80%',end:'top 45%',scrub:true}});
   });
