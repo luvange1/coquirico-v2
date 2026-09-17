@@ -101,6 +101,8 @@
   .chapter[data-tone="dark"]{ color:var(--cream); }
   .chapter[data-tone="light"]{ color:var(--ink); }
   .hintline{ margin-top:1rem; font-size:.68rem; letter-spacing:.24em; text-transform:uppercase; opacity:.6; }
+  .hint-touch{ display:none; }
+  @media (max-width:700px), (hover:none){ .hint-pointer{ display:none; } .hint-touch{ display:inline; } }
   .facts{ margin:1.1rem 0 0; font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; opacity:.75; line-height:2; }
 
   /* rituals cards (DRINK) */
@@ -267,16 +269,18 @@
       min-height:100svh; }
     .chapter .inner,
     .chapter[data-side="right"] .inner{ max-width:none; margin:0; text-align:left; border-radius:0;
-      background:linear-gradient(180deg,rgba(8,14,8,0) 0px,rgba(8,14,8,.22) 28px,rgba(8,14,8,.55) 60px,rgba(8,14,8,.82) 92px,rgba(8,14,8,.94) 140px,rgba(8,14,8,.96) 100%);
-      padding:100px 18px calc(24px + env(safe-area-inset-bottom)); }
+      background:linear-gradient(180deg,rgba(8,14,8,0) 0px,rgba(8,14,8,.16) 28px,rgba(8,14,8,.40) 60px,rgba(8,14,8,.62) 92px,rgba(8,14,8,.74) 140px,rgba(8,14,8,.78) 100%);
+      padding:100px 18px calc(24px + env(safe-area-inset-bottom));
+      text-shadow:0 1px 10px rgba(4,8,4,.92), 0 0 26px rgba(4,8,4,.65); }
     .chapter[data-tone="light"] .inner{
-      background:linear-gradient(180deg,rgba(244,234,210,0) 0px,rgba(244,234,210,.26) 28px,rgba(244,234,210,.60) 60px,rgba(244,234,210,.86) 92px,rgba(244,234,210,.96) 140px,rgba(244,234,210,.98) 100%); }
+      background:linear-gradient(180deg,rgba(244,234,210,0) 0px,rgba(244,234,210,.20) 28px,rgba(244,234,210,.48) 60px,rgba(244,234,210,.72) 92px,rgba(244,234,210,.84) 140px,rgba(244,234,210,.88) 100%);
+      text-shadow:0 1px 10px rgba(250,243,226,.95), 0 0 24px rgba(250,243,226,.8); }
     .chapter .inner{ position:relative; }
     .chapter .inner::after{ content:""; position:absolute; left:0; right:0; top:100%; height:26vh;
       pointer-events:none;
-      background:linear-gradient(180deg,rgba(8,14,8,.96) 0%,rgba(8,14,8,.90) 26%,rgba(8,14,8,.62) 56%,rgba(8,14,8,0) 100%); }
+      background:linear-gradient(180deg,rgba(8,14,8,.78) 0%,rgba(8,14,8,.72) 26%,rgba(8,14,8,.50) 56%,rgba(8,14,8,0) 100%); }
     .chapter[data-tone="light"] .inner::after{
-      background:linear-gradient(180deg,rgba(244,234,210,.98) 0%,rgba(244,234,210,.92) 26%,rgba(244,234,210,.64) 56%,rgba(244,234,210,0) 100%); }
+      background:linear-gradient(180deg,rgba(244,234,210,.88) 0%,rgba(244,234,210,.82) 26%,rgba(244,234,210,.58) 56%,rgba(244,234,210,0) 100%); }
     #world > .inner::after{ display:none; }
     /* the merch inner carries an INLINE `margin:0 auto`, which beats the stylesheet and centred a
        373px plate in a 375px chapter — a 1px hairline of film down each edge, which is exactly the
@@ -319,7 +323,8 @@
     #world{ justify-content:flex-start; padding-bottom:0; }
     #world{ padding-left:0; padding-right:0; }
     #world > .inner{ margin-top:-86px; padding:100px 16px 186px;
-      background:linear-gradient(180deg,rgba(8,14,8,.34) 0px,rgba(8,14,8,.34) 42px,rgba(8,14,8,.58) 84px,rgba(8,14,8,.86) 128px,rgba(8,14,8,.94) 176px,rgba(8,14,8,.96) 100%); }
+      background:linear-gradient(180deg,rgba(8,14,8,.28) 0px,rgba(8,14,8,.28) 42px,rgba(8,14,8,.48) 84px,rgba(8,14,8,.70) 128px,rgba(8,14,8,.80) 176px,rgba(8,14,8,.84) 100%);
+      text-shadow:0 1px 10px rgba(4,8,4,.92), 0 0 26px rgba(4,8,4,.65); }
     #world .sensory{ font-size:.92rem; line-height:1.42; margin-bottom:.8rem; }
     #world h2{ font-size:clamp(1.7rem,7.4vw,2.2rem); margin-bottom:.55rem; }
     #world .family{ margin-top:.7rem; }
@@ -370,10 +375,13 @@
   
     /* --- the tallest two chapters still overran the screen (772px and 743px in an 844px
            viewport), which is what put two chapters of copy on screen at once --- */
-    #drink .rituals{ gap:8px; margin-top:.9rem; }
-    #drink .rit{ padding:10px; }
-    #drink .rit-canvas{ height:104px; }
-    #drink .status{ font-size:.66rem; padding:.38rem .7rem; }
+    #drink .rituals{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:.9rem; }
+    #drink .rit{ padding:10px 8px; display:flex; flex-direction:column; align-items:center;
+      justify-content:flex-start; }
+    #drink .rit-canvas{ height:92px; }
+    #drink .rit h3{ margin:.35rem 0 .3rem; font-size:.95rem; }
+    #drink .status{ font-size:.58rem; letter-spacing:.07em; line-height:1.5; padding:.32rem .55rem;
+      text-align:center; }
     #world > .inner{ padding-bottom:150px; }
     #world .fam-rail{ margin-top:.6rem; }
   }
@@ -522,7 +530,7 @@
           <span class="status">Holiday &middot; availability TBC</span>
         </div>
       </div>
-      <p class="hintline">Move your cursor &mdash; stir the pour</p>
+      <p class="hintline"><span class="hint-pointer">Move your cursor &mdash; stir the pour</span><span class="hint-touch">Drag the pour &mdash; it stirs where you touch</span></p>
     </div>
   </div>
 
@@ -1204,12 +1212,23 @@ function initCan(canvas){
     g.rotation.y = idleAngle + p*Math.PI*2 + dYaw;
     g.rotation.x = -0.02 + dPit;
     g.rotation.z = Math.sin(time*0.5)*0.02 + lip*0.05;
-    /* phones: pull the can toward the centre, shrink it and lift it so the copy owns the lower
-       third of the screen instead of being buried under the artwork */
+    /* PHONES: the can is the THROUGH-LINE of the scroll. It used to be parked high and shrunk to
+       half size so the copy could own the lower third — which made it a small ornament that each
+       new screen interrupted. Pedro, 2026-09-17: "the mobile experience should be able to see the
+       can go all the way down the screen without getting interrupted."
+       So on a phone its height is driven by the SCROLL: it enters near the top of the first screen
+       and sinks the full height of the frame as you read down the site — one object travelling,
+       not a new plate every screen. The camera is a 32deg vertical FOV at z=6.2, so the visible
+       band is 2*6.2*tan(16deg) = 3.555 world units tall; half of that is 1.78. The tallest the can
+       ever gets here is bodyH 2.42 * curCanS 1.02 * 0.62 = 1.53 (half 0.77), so MOB_Y_TOP 0.66
+       puts its crown at 1.43, clear of the nav (0.92 cropped the lid), and MOB_Y_BOT -0.86 lands it
+       low without pushing its base out of view. Desktop keeps its authored centre line. */
     var _mob = window.COQ_SMALL ? 1 : 0;
+    var MOB_Y_TOP = 0.66, MOB_Y_BOT = -0.86;
+    var mobY = _mob ? (MOB_Y_TOP + (MOB_Y_BOT-MOB_Y_TOP)*Math.min(1,Math.max(0,p))) : 0;
     g.position.x = curCanX*2.2*(_mob?0.42:1);
-    g.position.y = Math.sin(time*0.9)*0.035 - lip*0.16 + (_mob?0.80:0);
-    g.scale.setScalar(Math.max(0.001,curCanS*(1-lip*0.05)*(_mob?0.50:1)));
+    g.position.y = Math.sin(time*0.9)*0.035 - lip*0.16 + mobY;
+    g.scale.setScalar(Math.max(0.001,curCanS*(1-lip*0.05)*(_mob?0.62:1)));
     /* Fade the traveling can out DURING the final wipe into merch (last BOUNDS), so it's gone before the
        merch world fully arrives — scroll-driven, not a late class toggle. */
     var canFade = (wIdx>=BOUNDS.length) ? 1
