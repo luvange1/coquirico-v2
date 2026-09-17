@@ -786,22 +786,34 @@ p{margin:0}
   function v1Url(id){
     var known = ['coquetearte','brisa-de-parcha','guayaba-rosada','cafe-y-canela','future-rum','flamboyan-at-dusk','rain-on-palm','coqui-chorus','caribbean-night-01'];
     var d = known.indexOf(id) >= 0 ? id : 'coquetearte';
-    return (/github\.io$/.test(location.hostname) ? 'v1/' : '../coquirico-site.html') + '?drink=' + d;
+    return (/github\.io$/.test(location.hostname) ? 'v1/' : '../coquirico-site.html') + '?drink=' + d + '&handoff=1';
+  }
+  /* prerender the chosen drink's V1 world in the background, so following the bottle is instant */
+  var specTag = null;
+  function prerenderV1(id){
+    if (!HTMLScriptElement.supports || !HTMLScriptElement.supports('speculationrules')) return;
+    if (specTag) specTag.remove();
+    specTag = document.createElement('script');
+    specTag.type = 'speculationrules';
+    specTag.textContent = JSON.stringify({ prerender: [{ urls: [v1Url(id)], eagerness: 'immediate' }] });
+    document.head.appendChild(specTag);
   }
   var following = false;
   function followBottle(){
     if (following || !current) return;
     following = true;
     var d = DRINKS.filter(function(x){ return x.id === current; })[0];
-    var url = v1Url(current);
+    var url = v1Url(current), accent = d ? d.accent : '#CAA24C';
+    /* paint the page itself in the accent so no in-between frame can ever flash white */
+    document.documentElement.style.background = accent;
     if (quietMotion){ location.href = url; return; }
-    fPath.style.fill = d ? d.accent : '#CAA24C';
+    fPath.style.fill = accent;
     fSvg.classList.add('on');
-    var t0 = performance.now(), UP = 560;
+    var t0 = performance.now(), UP = 620;
     function frame(){
       var now = performance.now(), el = now - t0;
       fPath.setAttribute('d', buildWavePath(Math.min(1, el/UP), now/1000, 600, 1000));
-      if (el >= UP + 120){ gsap.ticker.remove(frame); location.href = url; }
+      if (el >= UP + 140){ gsap.ticker.remove(frame); location.href = url; }
     }
     gsap.ticker.add(frame);
   }
@@ -816,6 +828,7 @@ p{margin:0}
       li.classList.toggle('is-open', li.getAttribute('data-id') === id);
     });
     document.documentElement.style.setProperty('--theme', d.accent);
+    prerenderV1(id);
     var apply = function(){
       detail.style.setProperty('--accent', d.accent);
       var im = detail.querySelector('.fig img');

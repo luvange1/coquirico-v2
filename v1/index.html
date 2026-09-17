@@ -1,6 +1,13 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script>/* follow-the-bottle handoff (injected by stage-v1.mjs) */
+(function(){
+  var A={'coquetearte':'#CAA24C','brisa-de-parcha':'#F6D859','guayaba-rosada':'#FF927F','cafe-y-canela':'#D79760','future-rum':'#A9B98A','flamboyan-at-dusk':'#EE744E','rain-on-palm':'#68C3AE','coqui-chorus':'#E9B666','caribbean-night-01':'#8FA3D9'};
+  var q=new URLSearchParams(location.search); window.__HANDOFF = q.get('handoff')==='1' ? (A[q.get('drink')]||'#CAA24C') : null;
+  if(window.__HANDOFF) document.documentElement.style.background=window.__HANDOFF;
+})();</script>
+<style>#hand-veil{position:fixed;inset:0;z-index:2000;pointer-events:none;opacity:1}</style>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>COQUIRICO — Coquetearte · Puerto Rican Style Coconut Drink</title>
@@ -1308,5 +1315,30 @@ function initCan(canvas){
   else boot();
 })();
 </script>
+<script>/* follow-the-bottle arrival (injected by stage-v1.mjs) */
+(function(){
+  if(!window.__HANDOFF) return;
+  var v=document.createElement('div'); v.id='hand-veil'; v.style.background=window.__HANDOFF;
+  document.body.appendChild(v);
+  var skipped=false, t0=Date.now();
+  var iv=setInterval(function(){
+    var b=document.getElementById('ov-skip');
+    if(b && !skipped){ skipped=true; b.click(); }        /* the intro already played in V2's wave */
+    if((skipped || Date.now()-t0>7000) && !document.getElementById('ov')){ clearInterval(iv); reveal(); }
+    else if(Date.now()-t0>9000){ clearInterval(iv); reveal(); }  /* failsafe: never trap the visitor */
+  }, 80);
+  function reveal(){
+    var go=function(){
+      var t1=performance.now();
+      (function f(){ var k=Math.min(1,(performance.now()-t1)/700);
+        v.style.opacity=String(1-k*k);
+        if(k<1) requestAnimationFrame(f); else { v.remove(); document.documentElement.style.background=''; }
+      })();
+    };
+    /* if we were prerendered, hold the veil until the user actually arrives */
+    if(document.prerendering){ document.addEventListener('prerenderingchange', go, {once:true}); }
+    else go();
+  }
+})();</script>
 </body>
 </html>
