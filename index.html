@@ -64,6 +64,8 @@ p{margin:0}
 .brand{display:inline-flex;align-items:center;gap:12px;font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:.16em;text-transform:uppercase;line-height:1}
 .brand .frog{width:22px;height:22px;background:currentColor;-webkit-mask:none;opacity:.95}
 .brand img{width:22px;height:auto;filter:brightness(0) invert(1);transition:filter .4s}
+@keyframes frog-hop{0%{transform:translateY(0) rotate(0)}32%{transform:translateY(-7px) rotate(-14deg)}62%{transform:translateY(1px) rotate(4deg)}100%{transform:translateY(0) rotate(0)}}
+.brand img.hop{animation:frog-hop .55s cubic-bezier(.34,1.56,.5,1)}
 .nav-links{display:flex;gap:34px;list-style:none;margin:0;padding:0}
 .nav-links a{font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;position:relative;padding:6px 0}
 .nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:currentColor;transition:right .35s cubic-bezier(.2,.7,.2,1)}
@@ -849,6 +851,47 @@ p{margin:0}
   }
   open('coquetearte');
 
+  /* V1 heritage — the coquí call: two sine sweeps through a lowpass, synthesized live, no files.
+     It sings ONLY on a real click of the nav frog (user gesture), and ?qa=1 stays silent. */
+  var QA_SILENT = new URLSearchParams(location.search).get('qa') === '1';
+  var coquiCtx = null;
+  function coquiCall(){
+    if (QA_SILENT) return;
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+      if (!coquiCtx) coquiCtx = new AC();
+      if (coquiCtx.state === 'suspended') coquiCtx.resume();
+      var ctx = coquiCtx, t = ctx.currentTime + .02;
+      var master = ctx.createGain(); master.gain.value = .8; master.connect(ctx.destination);
+      var lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 5600; lp.connect(master);
+      [[1080,1120,t,.10,.20],[1480,2140,t+.185,.30,.23]].forEach(function(n){
+        var o = ctx.createOscillator(); o.type = 'sine'; var g = ctx.createGain();
+        o.frequency.setValueAtTime(n[0], n[2]); o.frequency.exponentialRampToValueAtTime(n[1], n[2] + n[3]*.8);
+        g.gain.setValueAtTime(.0001, n[2]); g.gain.exponentialRampToValueAtTime(n[4], n[2] + .018);
+        g.gain.exponentialRampToValueAtTime(.0001, n[2] + n[3]);
+        o.connect(g); g.connect(lp); o.start(n[2]); o.stop(n[2] + n[3] + .05);
+      });
+    } catch(e){}
+  }
+  var navBrand = document.querySelector('.nav .brand');
+  if (navBrand){
+    navBrand.addEventListener('click', function(){
+      coquiCall();
+      var fr = navBrand.querySelector('img');
+      if (fr){ fr.classList.remove('hop'); void fr.offsetWidth; fr.classList.add('hop'); }
+    });
+  }
+
+  /* statement — the line assembles word by word as you scroll through it */
+  var stP = document.querySelector('.statement p');
+  if (stP && window.gsap && window.ScrollTrigger){
+    var stWords = stP.textContent.replace(/ /g, ' ').trim().split(/\s+/);
+    stP.classList.remove('reveal');
+    stP.innerHTML = stWords.map(function(w){ return '<span class="stw">' + w + '</span>'; }).join(' ');
+    gsap.fromTo('.statement .stw', { opacity: .16 }, { opacity: 1, stagger: .06, ease: 'none',
+      scrollTrigger: { trigger: '.statement', start: 'top 80%', end: 'bottom 58%', scrub: true } });
+  }
+
   /* forms — presentation only, nothing is sent */
   function wireForm(formId, inputId, statusId){
     var f = document.getElementById(formId); if (!f) return;
@@ -1249,6 +1292,8 @@ html.ov-lock, html.ov-lock body{ overflow:hidden !important; height:100%; touch-
   function finish(){ if(done) return; done=true;
     S.waveOn=false; gsap.ticker.remove(render); unlock();
     if(ov&&ov.parentNode) ov.parentNode.removeChild(ov);
+    /* ov-lock collapsed the document height while triggers measured — remeasure now */
+    if(window.ScrollTrigger) ScrollTrigger.refresh();
   }
   function skip(){ audioOn(); if(tl) tl.pause(); finish(); }
   skipBtn.addEventListener('click', function(e){ e.stopPropagation(); skip(); });
