@@ -84,7 +84,7 @@ p{margin:0}
 .hero-bg video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%}
 .hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(8,12,14,.40) 0%,rgba(8,12,14,.16) 28%,rgba(8,12,14,0) 50%),linear-gradient(180deg,rgba(8,12,14,.44) 0%,rgba(8,12,14,.10) 30%,rgba(8,12,14,0) 55%,rgba(8,12,14,.28) 100%)}
 .hero-copy{position:absolute;z-index:3;left:calc(50% - var(--container)/2);top:21%;max-width:640px}
-.hero-copy .eyebrow{color:#f4e6c8;opacity:.92;margin-bottom:26px}
+.hero-copy .eyebrow{color:#f4e6c8;opacity:1;margin-bottom:26px;text-shadow:0 1px 18px rgba(4,8,10,.55)}
 .hero h1{font-size:88px;line-height:.98;font-weight:500;letter-spacing:-.015em;max-width:9ch;text-shadow:0 2px 30px rgba(4,8,10,.45)}
 .hero .sub{margin-top:26px;font-size:19px;line-height:1.55;max-width:34ch;color:rgba(251,246,238,.92);text-shadow:0 1px 18px rgba(4,8,10,.5)}
 .hero .actions{margin-top:38px;display:flex;gap:14px;align-items:center}
@@ -139,7 +139,7 @@ p{margin:0}
 .drink:hover .field img,.drink.is-open .field img{transform:translate(-50%,-12px)}
 .drink .name{font-family:var(--serif);font-size:24px;font-weight:500;line-height:1.1;margin-top:6px}
 .drink .short{font-size:14px;color:var(--ink-2);margin-top:-6px}
-.pill{display:inline-flex;align-items:center;gap:8px;height:24px;padding:0 11px;border-radius:var(--r-pill);font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;line-height:1;border:1px solid var(--rule-2);color:var(--ink)}
+.pill{display:inline-flex;align-items:center;gap:8px;height:24px;padding:0 11px;border-radius:var(--r-pill);font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;line-height:1;white-space:nowrap;border:1px solid var(--rule-2);color:var(--ink)}
 .pill.real{background:var(--leaf-deep);border-color:var(--leaf-deep);color:var(--paper)}
 .pill.artist{border-style:solid;border-color:var(--ink)}
 .pill.study{border-style:dashed;border-color:var(--ink-3);color:var(--ink-2)}
@@ -157,8 +157,9 @@ p{margin:0}
 .d-count{font-family:var(--sans);font-size:11.5px;font-weight:600;letter-spacing:.18em;color:var(--ink-3)}
 .drink-detail .fig{position:relative;height:520px;display:flex;justify-content:center;align-items:flex-end;cursor:pointer}
 /* the bottle is a door: follow it into the V1 world, themed to this drink */
-.drink-detail .fig::after{content:"Síguela · vive el mundo →";position:absolute;left:50%;bottom:30px;transform:translate(-50%,8px);z-index:3;background:var(--ink);color:var(--paper);font-family:var(--sans);font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:10px 18px;border-radius:var(--r-pill);opacity:0;transition:opacity .4s ease,transform .4s cubic-bezier(.2,.7,.2,1);pointer-events:none;white-space:nowrap}
-.drink-detail .fig:hover::after{opacity:.96;transform:translate(-50%,0)}
+.drink-detail .fig::after{content:"Síguela · vive el mundo →";position:absolute;left:50%;bottom:30px;transform:translate(-50%,0);z-index:3;background:var(--ink);color:var(--paper);font-family:var(--sans);font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:10px 18px;border-radius:var(--r-pill);opacity:.55;transition:opacity .4s ease,transform .4s cubic-bezier(.2,.7,.2,1);pointer-events:none;white-space:nowrap}
+.drink-detail .fig:hover::after,.drink-detail .fig:focus-visible::after{opacity:.96;transform:translate(-50%,0)}
+.drink-detail .fig:focus-visible{outline:2px solid var(--leaf-deep);outline-offset:4px;border-radius:12px}
 .drink-detail .fig:hover img{transform:translateY(-8px)}
 .drink-detail .fig img{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .follow-wave{position:fixed;inset:0;z-index:200;pointer-events:none;display:none;width:100vw;height:100vh}
@@ -323,6 +324,12 @@ p{margin:0}
 /* ---------------- DE NOCHE ----------------
    "De noche, la isla canta." One click of the moon and the island turns to night: deep jungle
    greens and gold, the hero becomes molten-gold water, the coquí calls once. Same site, second act. */
+.lang-tab{display:flex;align-items:center;gap:9px;font-size:11.5px;font-weight:600;letter-spacing:.14em;flex:none}
+.lang-tab span{opacity:.4}
+.lang-btn{padding:4px 1px;opacity:.55;position:relative;letter-spacing:inherit;transition:opacity .3s ease}
+.lang-btn:hover{opacity:.85}
+.lang-btn.is-on{opacity:1}
+.lang-btn.is-on::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor}
 .mode-toggle{width:40px;height:40px;flex:none;border-radius:50%;border:1.5px solid rgba(255,255,255,.55);display:grid;place-items:center;color:inherit;transition:border-color .3s ease,background .3s ease,transform .35s cubic-bezier(.2,.7,.2,1)}
 .mode-toggle:hover{transform:translateY(-2px) rotate(-12deg)}
 .nav.scrolled .mode-toggle{border-color:var(--rule-2)}
@@ -331,9 +338,12 @@ p{margin:0}
 :root[data-noche]{
   --paper:#0C110D; --paper-2:#121A13; --paper-3:#19241A; --paper-deep:#202C20;
   --ink:#F2E9D6; --ink-2:#CFC2A8; --ink-3:#9A927E;
-  --leaf:#8CA05C; --palm:#7FBF8A;
+  --leaf:#8CA05C; --leaf-deep:#9DB374; --palm:#7FBF8A;
   --rule:rgba(242,233,214,.15); --rule-2:rgba(242,233,214,.32);
 }
+:root[data-noche] .footer .brand{color:var(--ink)}
+:root[data-noche] .pill.real{color:var(--ink)}
+:root[data-noche] .pill.concept{color:#241812}
 :root[data-noche] .eyebrow{color:color-mix(in srgb,var(--theme) 52%,var(--ink-2))}
 :root[data-noche] .benefit .disc{background:var(--paper-2)}
 :root[data-noche] .form input,:root[data-noche] .join-card .news input{background:#121A13;border-color:var(--rule-2);color:var(--ink)}
@@ -347,7 +357,6 @@ p{margin:0}
 :root[data-noche] .kinetic{color:#F6EEDD}
 :root[data-noche] .footer{background:#0A0F0A;color:#F2E9D6}
 :root[data-noche] .pill.real{background:#1C2A1C;border-color:#1C2A1C}
-:root[data-noche] .pill.concept{color:#E8DFC8}
 :root[data-noche] .drink .field img{filter:drop-shadow(0 18px 26px rgba(0,0,0,.5))}
 
 /* ---------------- RESPONSIVE ---------------- */
@@ -428,7 +437,18 @@ p{margin:0}
   /* the drink-detail is one column here: the arrow tour sits as its own centered row on top
      instead of floating over the can */
   .d-nav{position:static;order:-1;justify-content:center;margin-bottom:4px}
+  /* phones see only the middle ~26% of the 16:9 hero — aim that band at the open water left
+     of the figures instead of a neck-cropped torso (applies to the poster too) */
+  .hero-bg video{object-position:22% 50%}
+  .hero-scrim{background:linear-gradient(90deg,rgba(8,12,14,.40) 0%,rgba(8,12,14,.16) 28%,rgba(8,12,14,0) 50%),linear-gradient(265deg,rgba(8,12,14,.30) 0%,rgba(8,12,14,0) 45%),linear-gradient(180deg,rgba(8,12,14,.55) 0%,rgba(8,12,14,.12) 30%,rgba(8,12,14,0) 55%,rgba(8,12,14,.28) 100%)}
+  .pill{letter-spacing:.12em;padding:0 9px}
+  .mode-toggle{width:44px;height:44px}
 }
+/* 44px hit area for the Menu button with zero layout shift */
+.nav-toggle{padding:14px 12px;margin:-14px -12px}
+/* serve card 3: reframe below the render's halo rings (stopgap until the photo is re-exported) */
+.serve-grid li:nth-child(3) .photo img{transform:scale(1.45);transform-origin:50% 96%}
+.serve-grid li:nth-child(3):hover .photo img{transform:scale(1.5)}
 /* touch screens have no hover: the door into V1 must announce itself */
 @media (hover:none){
   .drink-detail .fig::after{opacity:.92;transform:translate(-50%,0)}
@@ -453,6 +473,7 @@ p{margin:0}
       <li><a href="#serve">Cómo se sirve</a></li>
       <li><a href="#find">Dónde</a></li>
     </ul>
+    <div class="lang-tab" role="group" aria-label="Language / Idioma"><button type="button" class="lang-btn is-on" data-lang="en">EN</button><span aria-hidden="true">·</span><button type="button" class="lang-btn" data-lang="es">ES</button></div>
     <button type="button" class="mode-toggle" id="mode-toggle" aria-pressed="false" aria-label="De noche — night mode" title="De noche"><span class="moon" aria-hidden="true"></span></button>
     <a class="btn light sm cta" href="#find">Notify me</a>
     <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
@@ -618,10 +639,10 @@ p{margin:0}
       </li>
       <li class="serve">
         <div class="photo reveal-img" style="--pos:58% 50%"><img src="assets/serves/serve-golden-hour.webp" alt="A short glass of Coquetearte at sunset beside the can" width="1536" height="1024" loading="lazy"></div>
-        <div class="txt reveal"><p class="eyebrow">With coffee</p><b lang="es">Con café</b><p>Cold Coquetearte, a short espresso poured on top, stirred once.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
+        <div class="txt reveal"><p class="eyebrow">Golden hour</p><b lang="es">La hora dorada</b><p>Straight and very cold, poured as the sun drops — the island’s happy hour without the hour.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
       </li>
       <li class="serve">
-        <div class="photo reveal-img" style="--pos:52% 50%"><img src="assets/serves/serve-dusk.webp" alt="A small glass of Coquetearte at dusk beside the can" width="1536" height="1024" loading="lazy"></div>
+        <div class="photo reveal-img" style="--pos:50% 96%"><img src="assets/serves/serve-dusk.webp" alt="A small glass of Coquetearte at dusk beside the can" width="1536" height="1024" loading="lazy"></div>
         <div class="txt reveal"><p class="eyebrow">After dark</p><b lang="es">De noche</b><p>A short glass, ice, and the can opened at blue hour — when the coquí starts.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
       </li>
     </ul>
@@ -834,6 +855,27 @@ p{margin:0}
   }
   var quietMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* one renderer for the detail card, shared by open() and the language switch.
+     LOC() overlays a drink's Spanish fields when the site is in ES. */
+  function LOC(d){
+    if (LANG !== 'es' || !d.es) return d;
+    var m = {}; for (var k in d) m[k] = d[k]; for (var k2 in d.es) m[k2] = d.es[k2]; return m;
+  }
+  function paintDetail(d0){
+    var d = LOC(d0);
+    detail.style.setProperty('--accent', d.accent);
+    var im = detail.querySelector('.fig img');
+    im.src = 'assets/product/' + d.img + '@2x.webp'; im.alt = d.alt;
+    var pill = detail.querySelector('[data-d="pill"]');
+    pill.className = 'pill ' + d.tier; pill.textContent = d.pill;
+    detail.querySelector('[data-d="name"]').textContent = d.name;
+    detail.querySelector('[data-d="desc"]').textContent = d.desc;
+    detail.querySelector('[data-d="truth"]').textContent = d.truth;
+    var ins = detail.querySelector('[data-d="inside"]');
+    if (d.inside){ ins.innerHTML = '<b>' + d.insideLabel + '</b>' + d.inside; ins.hidden = false; } else { ins.innerHTML = ''; ins.hidden = true; }
+    detail.querySelector('[data-d="tags"]').textContent = d.tags;
+  }
+
   /* Follow the bottle — clicking the big can pours its color over the whole screen,
      then carries you into the V1 world already themed to that drink (V1 reads ?drink=). */
   var fSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -878,7 +920,12 @@ p{margin:0}
     }
     gsap.ticker.add(frame);
   }
-  detail.querySelector('.fig').addEventListener('click', followBottle);
+  var figEl = detail.querySelector('.fig');
+  figEl.addEventListener('click', followBottle);
+  figEl.setAttribute('tabindex', '0');
+  figEl.setAttribute('role', 'button');
+  figEl.setAttribute('aria-label', 'Síguela — open the full Coquírico world themed to this drink');
+  figEl.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); followBottle(); } });
 
   function open(id, fromGrid){
     if (id === current || waving) return;
@@ -903,20 +950,7 @@ p{margin:0}
         else window.scrollTo({ top: y, behavior: 'smooth' });
       }
     }
-    var apply = function(){
-      detail.style.setProperty('--accent', d.accent);
-      var im = detail.querySelector('.fig img');
-      im.src = 'assets/product/' + d.img + '@2x.webp'; im.alt = d.alt;
-      var pill = detail.querySelector('[data-d="pill"]');
-      pill.className = 'pill ' + d.tier; pill.textContent = d.pill;
-      detail.querySelector('[data-d="name"]').textContent = d.name;
-      detail.querySelector('[data-d="desc"]').textContent = d.desc;
-      detail.querySelector('[data-d="truth"]').textContent = d.truth;
-      var ins = detail.querySelector('[data-d="inside"]');
-      if (d.inside){ ins.innerHTML = '<b>' + d.insideLabel + '</b>' + d.inside; ins.hidden = false; } else { ins.innerHTML = ''; ins.hidden = true; }
-      detail.querySelector('[data-d="tags"]').textContent = d.tags;
-      detail.classList.remove('fade');
-    };
+    var apply = function(){ paintDetail(d); detail.classList.remove('fade'); };
     if (!detail.classList.contains('ready')){ apply(); detail.classList.add('ready'); }
     else if (quietMotion){ detail.classList.add('fade'); setTimeout(apply, 220); }
     else { waveSwap(d.accent, apply); }
@@ -929,6 +963,125 @@ p{margin:0}
     });
   });
   open('coquetearte');
+
+  /* ============ EN / ES ============
+     EN = the approved bilingual mix (English copy, Spanish brand flourishes).
+     ES = the whole page in Spanish. Originals are captured on first switch and restored on EN,
+     so English never drifts. Brand lines already in Spanish (statement, kinetic, hero h1) stay. */
+  var LANG = 'en';
+  var DRINKS_ES = {
+    'coquetearte':{ pill:'Real · en lata', short:'Coco, canela, vainilla — frío.', insideLabel:'Lo que lleva',
+      desc:'La que sí hacemos. Coco puertorriqueño, fresco y cremoso, cero alcohol — la lata de verdad alrededor de la cual se sueña todo lo demás en esta página.',
+      truth:'Producto principal — sin alcohol.',
+      inside:'Agua de coco · leche de coco · azúcar de caña · sirope de agave · sabores naturales · canela · extracto de vainilla.' },
+    'el-original':{ pill:'Real · en botella', short:'El coquito de Navidad, 750 mL.', insideLabel:'En la etiqueta',
+      desc:'Nuestro coquito, y el único Coquírico que no es libre de alcohol. La etiqueta lo dice claro: coquito vegano, hecho con coco y ron blanco. 750 mL, solo en Navidad. Disponibilidad por confirmar.',
+      truth:'Botella navideña — hecha con coco y ron blanco.',
+      inside:'Botella de 750 mL, hecha con coco y ron blanco.' },
+    'brisa-de-parcha':{ pill:'Estudio de sabor', short:'Parcha, imaginada.',
+      desc:'Un sueño brillante de parcha — brisa de fruta de la pasión sobre coco, oro agrio encontrándose con la crema. Dibujamos la lata y le pusimos nombre al sentimiento. No hay fórmula detrás, y así debe ser.',
+      truth:'Un estudio de sabor — imaginado, no embotellado.' },
+    'guayaba-rosada':{ pill:'Estudio de sabor', short:'Guayaba rosada, imaginada.',
+      desc:'Guayaba rosada sonrojando la crema, suave y floral como una tarde en la isla. Una hora rosa soñada sobre la base de coco — dibujada, nombrada, y ahí dejada. Nada se ha mezclado ni servido.',
+      truth:'Un estudio de sabor — imaginado, no embotellado.' },
+    'cafe-y-canela':{ pill:'Estudio de sabor', short:'Café y canela, imaginados.',
+      desc:'Un cortadito enroscado en coco — café tibio, un susurro de canela, la greca del colmado recordada. Existe como dibujo y como deseo. No hay receta ni lata en ninguna góndola.',
+      truth:'Un estudio de sabor — imaginado, no embotellado.' },
+    'flamboyan-at-dusk':{ pill:'Edición de artista', short:'Coquetearte, vestida de atardecer.', insideLabel:'Adentro · la receta Coquetearte',
+      desc:'Lámina I. El flamboyán en llamas al anochecer, tirado en serigrafía — coral, llama y ciruela de ocaso envolviendo la lata. El arte es nuevo. La bebida adentro es la Coquetearte que ya conoces.',
+      truth:'Edición de artista — la receta real de Coquetearte, con otro arte.',
+      inside:'Agua de coco · leche de coco · azúcar de caña · sirope de agave · sabores naturales · canela · extracto de vainilla.' },
+    'rain-on-palm':{ pill:'Edición de artista', short:'Coquetearte, después de la lluvia.', insideLabel:'Adentro · la receta Coquetearte',
+      desc:'Lámina II. Lluvia tibia resbalando por una palma ancha, la isla entera inclinándose y exhalando a la vez. Verdes más hondos, luz mojada — y debajo del arte, el mismo coco frío de siempre.',
+      truth:'Edición de artista — la receta real de Coquetearte, con otro arte.',
+      inside:'Agua de coco · leche de coco · azúcar de caña · sirope de agave · sabores naturales · canela · extracto de vainilla.' },
+    'coqui-chorus':{ pill:'Edición de artista', short:'Coquetearte, vestida del coro.', insideLabel:'Adentro · la receta Coquetearte',
+      desc:'Lámina III. Un coquí abre la noche, otro contesta, y la ladera entera canta. Oro cálido sobre verde-noche — un nocturno que cabe en una mano, con la receta real adentro.',
+      truth:'Edición de artista — la receta real de Coquetearte, con otro arte.',
+      inside:'Agua de coco · leche de coco · azúcar de caña · sirope de agave · sabores naturales · canela · extracto de vainilla.' },
+    'caribbean-night-01':{ pill:'Edición de artista', short:'Coquetearte, en azul y oro.', insideLabel:'Adentro · la receta Coquetearte',
+      desc:'Lámina IV, y la primera de la serie Caribbean Night. El índigo inunda la lata y una sola línea de oro encuentra la luna, baja sobre una costa en calma. La misma isla después de la última luz. La misma bebida.',
+      truth:'Edición de artista — la receta real de Coquetearte, con otro arte.',
+      inside:'Agua de coco · leche de coco · azúcar de caña · sirope de agave · sabores naturales · canela · extracto de vainilla.' },
+    'future-rum':{ pill:'Concepto 21+', short:'Una botella que no hemos hecho.',
+      desc:'Guardada para la noche: vidrio esmeralda ahumado y una posibilidad, no una promesa. No se ha servido nada — sin fórmula con nombre, sin fecha. Si algún día llega, será adulta, callada y sin prisa.',
+      truth:'Un concepto 21+. Sin receta, sin fecha.' }
+  };
+  DRINKS.forEach(function(d){ d.es = DRINKS_ES[d.id]; });
+
+  var I18N = [
+    ['.nav .cta', 'Avísame'],
+    ['.nav-toggle', 'Menú'],
+    ['.hero .sub', 'Una bebida de coco puertorriqueña. Sin alcohol y sin prisa — la isla, bien fría.'],
+    ['.hero .actions .btn', 'Conoce las latas'],
+    ['.benefits > .eyebrow', 'Bebida de coco al estilo puertorriqueño'],
+    ['.benefit .tiny', ['Sin alcohol — lo dice la propia lata.', 'Por lata de 8 oz / 240 ml, tal como está impreso.', 'Agua y leche de coco — los dos primeros de la lista.']],
+    ['.drinks .sec-head .h2', 'Una isla. Muchas expresiones.'],
+    ['.drinks .sec-head .lead', 'Dos de estas son de verdad. Las demás son estudios, ediciones e ideas — y cada tarjeta dice cuál es.'],
+    ['#ingredients .sec-head .h2', 'Todo lo que lleva'],
+    ['#ingredients .sec-head .lead', 'Todo lo que lleva Coquetearte, directo de la parte de atrás de la lata. Siete ingredientes — y esa lista es toda la lista.'],
+    ['.ing b', ['Agua y leche de coco', 'Canela', 'Extracto de vainilla']],
+    ['.ing p', ['La base. Las dos, para que se beba fresco y cremoso.', 'La nota cálida debajo del coco.', 'El último borde suave antes del final.']],
+    ['.inside-foot .small', ['<strong>Coquetearte:</strong> agua de coco · leche de coco · azúcar de caña · sirope de agave · sabores naturales · canela · extracto de vainilla.', 'Las ediciones de artista son la misma bebida. Los estudios de sabor son imaginados, no embotellados — no tienen fórmula. Sin alcohol: la banda dorada de la lata lo dice bien claro — manténgase refrigerado · sin alcohol.']],
+    ['#story .h2', 'La rana que nos da el nombre.'],
+    ['.story-text > p.reveal', ['El Yunque es el bosque lluvioso que corona la isla — cálido, húmedo, despierto de noche. El coquí es la ranita que vive en él. Al anochecer empieza: dos notas, co… quí, una y otra vez, hasta que toda la ladera contesta.', 'Ese canto es nuestro nombre, nuestro sonido y nuestro primer ingrediente. Lo demás es coco — agua y leche, un poco de caña y agave, canela, vainilla. Frío, sin alcohol, puertorriqueño. Todo lo que hacemos empieza en esa ladera, de noche.']],
+    ['.story-inset .tiny', 'De El Yunque hasta la costa. El coquí canta dos notas, toda la noche, desde esta ladera.'],
+    ['#serve .sec-head .h2', 'Así nos gusta'],
+    ['#serve .sec-head .lead', 'Sugerencias para servir, no recetas. Tres maneras de tomarlo frío — sin medidas, sin mezclar nada.'],
+    ['.serve .txt .eyebrow', ['Sencillo', 'Hora dorada', 'Al anochecer']],
+    ['.serve .txt > p:not(.eyebrow):not(.tiny)', ['Directo de la lata sobre un vaso alto con hielo. Nada más.', 'Pura y bien fría, servida mientras baja el sol — la hora feliz de la isla, sin la hora.', 'Un vaso corto, hielo, y la lata abierta a la hora azul — cuando empieza el coquí.']],
+    ['.serve .txt .tiny', ['Sugerencia para servir — sin medidas.', 'Sugerencia para servir — sin medidas.', 'Sugerencia para servir — sin medidas.']],
+    ['.map-card > .tiny', 'Zonas hacia las que trabajamos. No son puntos de venta.'],
+    ['.map-card .pin tspan.s', ['— próximamente', '— próximamente', '— próximamente', '— próximamente']],
+    ['#find .h2', 'Dónde encontrarnos'],
+    ['#find .lead', 'Todavía no hay nada en las góndolas. Estas son las zonas de la isla hacia donde vamos — primero los colmados, como debe ser.'],
+    ['#notify label', 'Correo'],
+    ['#notify .btn', 'Avísame'],
+    ['#notify .tiny', 'Solo presentación — no se envía nada y no se guarda ninguna dirección.'],
+    ['#faq .h2', 'Lo que nos preguntan'],
+    ['#faq .lead', 'Las tres más frecuentes, abiertas. Las demás, a un toque.'],
+    ['.faq-list summary', ['¿Coquírico tiene alcohol?', '¿Qué es el coquito?', '¿Los estudios de sabor son bebidas reales?', '¿Dónde lo consigo?', '¿Es vegano? ¿Lleva lácteos?', '¿Tiene cafeína?', '¿Qué significa coquí?']],
+    ['.faq-list .a', ['No. Coquetearte es una bebida de coco sin alcohol — lo dice la lata. Las dos excepciones son El Original, nuestro coquito navideño, que se hace con coco y ron blanco, y el Rum Expression, un concepto 21+ que no hemos hecho.', 'El coquito es la bebida navideña de coco de Puerto Rico, la que se comparte en diciembre. El Original es nuestra botella de 750 mL. Coquetearte es el refresco estilo coquito de todos los días — la misma isla, sin alcohol.', 'No. Brisa de Parcha, Guayaba Rosada y Café y Canela son estudios de sabor — imaginados, no embotellados. No hay fórmula detrás. Las ediciones de artista son lo contrario: la receta real de Coquetearte vistiendo otro arte.', 'Todavía en ningún sitio. Este es un sitio conceptual — solo presentación. Trabajamos hacia colmados por toda la isla. Deja un correo y te avisamos.', 'La propia etiqueta de El Original dice coquito vegano. De Coquetearte solo publicamos lo que está impreso en la lata — agua de coco, leche de coco, azúcar de caña, sirope de agave, sabores naturales, canela y extracto de vainilla. La única leche en esa lista es la de coco.', 'No publicamos una cifra de cafeína, así que no vamos a inventarla. Lo que sí publicamos es la lista completa de arriba: no lleva café ni té. Café y Canela es un estudio de sabor — el dibujo de una idea, no una bebida.', 'El coquí es la ranita de Puerto Rico. Canta dos notas — co… quí — toda la noche, y le presta su nombre a la marca. Escúchalo una vez y entenderás por qué la isla suena de noche.']],
+    ['.join-card .h2', 'Déjanos tu correo.'],
+    ['.join-card .lead', 'Te avisamos cuando el primer colmado la tenga — y nada más. Todavía no existe ninguna lista; esta página es una presentación.'],
+    ['#news .btn', 'Avísame'],
+    ['#news .tiny', 'Solo presentación — no se envía nada y no se guarda ninguna dirección.'],
+    ['.footer .concept', 'Sitio conceptual — solo presentación.'],
+    ['.footer .social span', ['Instagram — próximamente', 'TikTok — próximamente']],
+    ['.footer .bottom p:first-child', '© 2026 Coquírico — presentación conceptual. Nada en este sitio está a la venta, y nada es una oferta. Puerto Rico.']
+  ];
+  var LANG_ORIG = new Map();
+  function setLang(l){
+    LANG = (l === 'es') ? 'es' : 'en';
+    document.documentElement.lang = LANG;
+    document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.toggle('is-on', b.getAttribute('data-lang') === LANG); });
+    I18N.forEach(function(pair){
+      var els = document.querySelectorAll(pair[0]);
+      Array.prototype.forEach.call(els, function(el, i){
+        var es = Array.isArray(pair[1]) ? pair[1][i] : pair[1];
+        if (es == null) return;
+        if (!LANG_ORIG.has(el)) LANG_ORIG.set(el, el.innerHTML);
+        el.innerHTML = LANG === 'es' ? es : LANG_ORIG.get(el);
+      });
+    });
+    Array.prototype.forEach.call(grid.children, function(li){
+      var d = DRINKS.filter(function(x){ return x.id === li.getAttribute('data-id'); })[0];
+      if (!d) return; var v = LOC(d);
+      li.querySelector('.short').textContent = v.short;
+      li.querySelector('.pill').textContent = v.pill;
+    });
+    var cd = DRINKS.filter(function(x){ return x.id === current; })[0];
+    if (cd) paintDetail(cd);
+    try { localStorage.setItem('coq-lang', LANG); } catch(e){}
+  }
+  document.querySelectorAll('.lang-btn').forEach(function(b){
+    b.addEventListener('click', function(){ if (b.getAttribute('data-lang') !== LANG) setLang(b.getAttribute('data-lang')); });
+  });
+  (function(){
+    var p = new URLSearchParams(location.search).get('lang'); var saved = null;
+    try { saved = localStorage.getItem('coq-lang'); } catch(e){}
+    if (p === 'es' || (p !== 'en' && saved === 'es')) setLang('es');
+  })();
 
   /* V1 heritage — the coquí call: two sine sweeps through a lowpass, synthesized live, no files.
      It sings ONLY on a real click of the nav frog (user gesture), and ?qa=1 stays silent. */
@@ -1040,8 +1193,8 @@ p{margin:0}
       e.preventDefault();
       var v = document.getElementById(inputId).value.trim();
       var s = document.getElementById(statusId);
-      if (!/^\S+@\S+\.\S+/.test(v) || /\s/.test(v)){ s.textContent = 'That doesn’t look like an email address.'; return; }
-      s.textContent = 'Gracias — we’ll let you know. (Nothing was sent.)';
+      if (!/^\S+@\S+\.\S+/.test(v) || /\s/.test(v)){ s.textContent = (LANG === 'es') ? 'Eso no parece una dirección de correo.' : 'That doesn’t look like an email address.'; return; }
+      s.textContent = (LANG === 'es') ? 'Gracias — te avisamos. (No se envió nada.)' : 'Gracias — we’ll let you know. (Nothing was sent.)';
       document.getElementById(inputId).value = '';
     });
   }
@@ -1201,12 +1354,16 @@ p{margin:0}
     bg.tx = -(e.clientX / window.innerWidth - 0.5) * 8;
   }, { passive: true });
   heroEl.addEventListener('pointerleave', restAll);
+  /* the hero cans are the page's most inviting click — selecting one now also opens its drink
+     below (the existing fromGrid glide carries you to the card mid-pour) */
+  var HERO_IDS = ['flamboyan-at-dusk', 'coquetearte', 'caribbean-night-01'];
   function toggleCan(c){
     var was = c.sel;
     canData.forEach(function(o){ o.sel = false; o.fig.style.zIndex = o.baseZ; o.fig.setAttribute('aria-pressed', 'false'); });
     c.sel = !was;
     c.fig.style.zIndex = c.sel ? '6' : c.baseZ;
     c.fig.setAttribute('aria-pressed', c.sel ? 'true' : 'false');
+    if (c.sel && typeof open === 'function'){ open(HERO_IDS[canData.indexOf(c)], true); }
   }
   heroEl.addEventListener('click', function(e){
     var hit = canAt(e.clientX, e.clientY);
@@ -1281,8 +1438,9 @@ p{margin:0}
   font-size:clamp(.58rem,.95vw,.8rem); letter-spacing:.34em; text-transform:uppercase; color:#CAA24C; opacity:0; }
 #ov-frameL{ left:1.8rem; } #ov-frameR{ right:1.8rem; }
 #ov-skip{ position:absolute; right:1.5rem; top:1.35rem; pointer-events:auto; font-family:var(--sans); font-weight:600;
-  font-size:.58rem; letter-spacing:.24em; text-transform:uppercase; color:#F4EAD2; opacity:.5;
-  background:none; border:1px solid rgba(244,234,210,.28); border-radius:20px; padding:.45rem .85rem; cursor:pointer; }
+  font-size:.72rem; letter-spacing:.24em; text-transform:uppercase; color:#F4EAD2; opacity:.75;
+  background:none; border:1px solid rgba(244,234,210,.32); border-radius:24px; padding:.7rem 1.1rem;
+  min-height:44px; min-width:64px; cursor:pointer; }
 #ov-skip:hover,#ov-skip:focus-visible{ opacity:.95; }
 html.ov-lock, html.ov-lock body{ overflow:hidden !important; height:100%; touch-action:none; }
 @media (prefers-reduced-motion:reduce){ #ov{ display:none !important; } }
@@ -1438,6 +1596,8 @@ html.ov-lock, html.ov-lock body{ overflow:hidden !important; height:100%; touch-
   }
   function skip(){ audioOn(); if(tl) tl.pause(); finish(); }
   skipBtn.addEventListener('click', function(e){ e.stopPropagation(); skip(); });
+  /* once the wordmark has resolved, any tap anywhere ends the overture — nobody gets trapped */
+  addEventListener('pointerdown', function(){ if(!done && tl && tl.time() > 4.5) skip(); }, {passive:true});
   ['pointerdown','keydown','wheel','touchstart'].forEach(function(ev){ addEventListener(ev, function(){ gestured=true; audioOn(); }, {passive:true}); });
 
   function boot(){ lock(); build(); }
