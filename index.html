@@ -224,6 +224,55 @@ p{margin:0}
 .form input:focus{border-color:var(--ink)}
 .form .status{font-size:14px;color:var(--leaf-deep);min-height:1.4em}
 
+/* ---------------- EL COLMADO (the map is a place) ----------------
+   Evening on the island: the route home draws itself out of El Yunque, the pins glow like
+   storefront signs, each town opens a little colmado vignette. De noche the map goes full
+   night — moon up, fireflies out. */
+.map-card{background:linear-gradient(180deg,#F3E0C6 0%,#E3EFE4 46%,#DCEFE9 100%)}
+.ruta{stroke:#B98A36;stroke-width:2.2;stroke-linecap:round;opacity:.5;stroke-dasharray:1;stroke-dashoffset:1}
+.yunque path{stroke:var(--leaf-deep);stroke-width:2;stroke-linejoin:round;opacity:.75}
+.yq-t{font-family:var(--serif);font-style:italic;font-size:15px;fill:var(--ink-2)}
+.map-moon{display:none}
+.map-moon circle{fill:#F2E9C8}
+.map-moon .mm-bite{fill:#13201C}
+.map-card .pin{cursor:pointer}
+.map-card .pin circle{transition:transform .4s cubic-bezier(.34,1.56,.5,1),filter .4s ease}
+.map-card .pin:hover circle,.map-card .pin.on circle{filter:drop-shadow(0 0 7px rgba(201,122,44,.85))}
+.town-card{position:absolute;z-index:3;width:196px;background:rgba(255,253,247,.96);border:1px solid var(--rule);border-radius:14px;padding:12px 14px 11px;box-shadow:0 18px 38px -18px rgba(36,24,18,.35);opacity:0;transform:translateY(6px);pointer-events:none;transition:opacity .35s ease,transform .35s cubic-bezier(.2,.7,.2,1)}
+.town-card.on{opacity:1;transform:translateY(0)}
+.town-card .cm{width:40px;height:29px;display:block;margin-bottom:7px}
+.town-card .cm path{fill:none;stroke:#B9812F;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.town-card .cm .cm-b,.town-card .cm .cm-d{stroke:var(--leaf-deep)}
+.town-card .cm .cm-l{fill:#E4A33C}
+.town-card b{font-family:var(--serif);font-weight:500;font-size:18px;display:block;line-height:1.1}
+.town-card p{font-size:12.5px;line-height:1.45;color:var(--ink-2);margin-top:3px}
+.map-ff{position:absolute;width:5px;height:5px;border-radius:50%;background:radial-gradient(circle,#FFE9A8 0%,rgba(255,233,168,0) 70%);display:none;pointer-events:none}
+:root[data-noche] .map-card{background:linear-gradient(180deg,#0A111C 0%,#0F1B1A 55%,#13201C 100%)}
+:root[data-noche] .map-moon{display:block}
+:root[data-noche] .ruta{stroke:#E9C06A;opacity:.75}
+:root[data-noche] .yunque path{stroke:var(--palm)}
+:root[data-noche] .yq-t{fill:var(--ink-2)}
+:root[data-noche] .map-card .pin circle{filter:drop-shadow(0 0 6px rgba(233,192,106,.8));animation:signglow 2.8s ease-in-out infinite alternate}
+:root[data-noche] .town-card{background:rgba(16,24,19,.96);border-color:var(--rule)}
+:root[data-noche] .town-card .cm .cm-b,:root[data-noche] .town-card .cm .cm-d{stroke:var(--palm)}
+:root[data-noche] .map-ff{display:block;animation:ffdrift 5.5s ease-in-out infinite}
+.map-ff:nth-child(odd){animation-duration:7s;animation-delay:1.2s}
+.map-ff:nth-child(3n){animation-duration:6.2s;animation-delay:2.4s}
+@keyframes signglow{from{filter:drop-shadow(0 0 4px rgba(233,192,106,.55))}to{filter:drop-shadow(0 0 9px rgba(233,192,106,.95))}}
+@keyframes ffdrift{0%,100%{opacity:0;transform:translate(0,0)}25%{opacity:.9}50%{opacity:.35;transform:translate(9px,-12px)}75%{opacity:.85;transform:translate(-6px,-20px)}}
+@media (prefers-reduced-motion:reduce){
+  :root[data-noche] .map-card .pin circle,:root[data-noche] .map-ff{animation:none}
+  .ruta{stroke-dashoffset:0}
+}
+@media (max-width:600px){
+  .town-card{width:150px;padding:10px 11px}
+  .town-card b{font-size:15.5px}
+  .town-card p{font-size:11.5px}
+  .town-card[data-town="sj"]{left:auto;right:4%}
+  .town-card[data-town="cg"]{left:auto;right:8%}
+  .town-card[data-town="mz"]{left:5%}
+}
+
 /* ---------------- FAQ ---------------- */
 .faq-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:80px;align-items:start}
 .faq .sec-head{margin-bottom:0;position:sticky;top:120px}
@@ -348,7 +397,6 @@ p{margin:0}
 :root[data-noche] .benefit .disc{background:var(--paper-2)}
 :root[data-noche] .form input,:root[data-noche] .join-card .news input{background:#121A13;border-color:var(--rule-2);color:var(--ink)}
 :root[data-noche] .form .status,:root[data-noche] .join-card .status{color:var(--palm)}
-:root[data-noche] .map-card{background:#13201C}
 :root[data-noche] .map-card .coq-pr-land{fill:#182518;stroke:var(--palm)}
 :root[data-noche] .map-card .pin text{fill:var(--ink)}
 :root[data-noche] .map-card .pin tspan.s{fill:var(--ink-2)}
@@ -661,12 +709,24 @@ p{margin:0}
           <path class="coq-pr-land" d="M818.2 229.8 827.9 229.8 837.1 229 846.5 225.5 855 220.4 861.7 214.9 866.1 212.5 903.7 206.5 909.7 207.5 926 213.2 950.6 214.2 956.8 216.6 961.4 222.4 957.9 224.2 945.4 223.4 942.2 224.5 933.3 230.7 930.8 233.5 927.6 233.5 923.4 229.5 916.5 231.1 907.6 234.8 870.8 243.5 863.4 247 853.7 243.9 839.1 245.7 825.4 243.8Z"/>
           <path class="coq-pr-land" d="M934 121.7 945.5 121.7 958.9 124.4 970.3 130 976 138.6 974.6 138.9 969.6 138.6 972.8 142 967.8 142.2 963.9 141.1 961.2 138.7 959.9 134.9 956.8 134.9 961 143.3 961.8 147.3 959.9 152.1 953.5 141.9 933.8 123.5Z"/>
         </g>
-        <g class="pin"><circle cx="612" cy="78" r="7"/><text x="600" y="46">San Juan <tspan class="s">— coming soon</tspan></text></g>
-        <g class="pin"><circle cx="612" cy="180" r="7"/><text x="600" y="185" text-anchor="end">Caguas <tspan class="s">— coming soon</tspan></text></g>
-        <g class="pin"><circle cx="470" cy="288" r="7"/><text x="470" y="348" text-anchor="middle">Ponce <tspan class="s">— coming soon</tspan></text></g>
-        <g class="pin"><circle cx="84" cy="196" r="7"/><text x="100" y="201">Mayagüez <tspan class="s">— coming soon</tspan></text></g>
+        <!-- El Colmado: the route home — from El Yunque out to every town we're walking toward -->
+        <path class="ruta" pathLength="1" d="M742 128 C 700 96, 655 84, 612 78 C 618 112, 616 146, 612 180 C 566 214, 512 254, 470 288 C 380 262, 200 220, 84 196" fill="none"/>
+        <g class="yunque" aria-hidden="true">
+          <path d="M726 132 742 106 758 132 Z M740 132 752 112 764 132 Z" fill="none"/>
+          <text x="742" y="152" text-anchor="middle" class="yq-t">El Yunque</text>
+        </g>
+        <g class="map-moon" aria-hidden="true"><circle cx="930" cy="52" r="16"/><circle class="mm-bite" cx="938" cy="46" r="14"/></g>
+        <g class="pin" data-town="sj"><circle cx="612" cy="78" r="7"/><text x="600" y="46">San Juan <tspan class="s">— coming soon</tspan></text></g>
+        <g class="pin" data-town="cg"><circle cx="612" cy="180" r="7"/><text x="600" y="185" text-anchor="end">Caguas <tspan class="s">— coming soon</tspan></text></g>
+        <g class="pin" data-town="pn"><circle cx="470" cy="288" r="7"/><text x="470" y="348" text-anchor="middle">Ponce <tspan class="s">— coming soon</tspan></text></g>
+        <g class="pin" data-town="mz"><circle cx="84" cy="196" r="7"/><text x="100" y="201">Mayagüez <tspan class="s">— coming soon</tspan></text></g>
       </svg>
-      <p class="tiny">Areas we’re working toward. Not stockists.</p>
+      <div class="town-card" data-town="sj" style="left:64%;top:26%"><svg class="cm" viewBox="0 0 44 32" aria-hidden="true"><path class="cm-a" d="M4 12 Q7 6 10 12 Q13 6 16 12 Q19 6 22 12 Q25 6 28 12 Q31 6 34 12 Q37 6 40 12"/><path class="cm-b" d="M6 12v14h32V12"/><path class="cm-d" d="M18 26v-8h8v8"/><circle class="cm-l" cx="33" cy="19" r="2"/></svg><b>San Juan</b><p>Where the first fridges hum.</p></div>
+      <div class="town-card" data-town="cg" style="left:64%;top:54%"><svg class="cm" viewBox="0 0 44 32" aria-hidden="true"><path class="cm-a" d="M4 12 Q7 6 10 12 Q13 6 16 12 Q19 6 22 12 Q25 6 28 12 Q31 6 34 12 Q37 6 40 12"/><path class="cm-b" d="M6 12v14h32V12"/><path class="cm-d" d="M18 26v-8h8v8"/><circle class="cm-l" cx="33" cy="19" r="2"/></svg><b>Caguas</b><p>The valley in the middle of everything.</p></div>
+      <div class="town-card" data-town="pn" style="left:47%;top:54%"><svg class="cm" viewBox="0 0 44 32" aria-hidden="true"><path class="cm-a" d="M4 12 Q7 6 10 12 Q13 6 16 12 Q19 6 22 12 Q25 6 28 12 Q31 6 34 12 Q37 6 40 12"/><path class="cm-b" d="M6 12v14h32V12"/><path class="cm-d" d="M18 26v-8h8v8"/><circle class="cm-l" cx="33" cy="19" r="2"/></svg><b>Ponce</b><p>The south, señorial and slow.</p></div>
+      <div class="town-card" data-town="mz" style="left:11%;top:28%"><svg class="cm" viewBox="0 0 44 32" aria-hidden="true"><path class="cm-a" d="M4 12 Q7 6 10 12 Q13 6 16 12 Q19 6 22 12 Q25 6 28 12 Q31 6 34 12 Q37 6 40 12"/><path class="cm-b" d="M6 12v14h32V12"/><path class="cm-d" d="M18 26v-8h8v8"/><circle class="cm-l" cx="33" cy="19" r="2"/></svg><b>Mayagüez</b><p>Sunset side of the island.</p></div>
+      <span class="map-ff" style="left:22%;top:30%"></span><span class="map-ff" style="left:38%;top:18%"></span><span class="map-ff" style="left:55%;top:40%"></span><span class="map-ff" style="left:70%;top:22%"></span><span class="map-ff" style="left:82%;top:48%"></span><span class="map-ff" style="left:30%;top:60%"></span><span class="map-ff" style="left:60%;top:66%"></span>
+      <p class="tiny">De El Yunque a toda la isla — areas we’re working toward. Not stockists.</p>
     </div>
     <div class="find-text">
       <p class="eyebrow reveal" lang="es">Llegando a colmados</p>
@@ -1031,7 +1091,8 @@ p{margin:0}
     ['.serve .txt .eyebrow', ['Sencillo', 'Hora dorada', 'Al anochecer']],
     ['.serve .txt > p:not(.eyebrow):not(.tiny)', ['Directo de la lata sobre un vaso alto con hielo. Nada más.', 'Pura y bien fría, servida mientras baja el sol — la hora feliz de la isla, sin la hora.', 'Un vaso corto, hielo, y la lata abierta a la hora azul — cuando empieza el coquí.']],
     ['.serve .txt .tiny', ['Sugerencia para servir — sin medidas.', 'Sugerencia para servir — sin medidas.', 'Sugerencia para servir — sin medidas.']],
-    ['.map-card > .tiny', 'Zonas hacia las que trabajamos. No son puntos de venta.'],
+    ['.map-card > .tiny', 'De El Yunque a toda la isla — zonas hacia las que trabajamos. No son puntos de venta.'],
+    ['.town-card p', ['Donde zumban las primeras neveras.', 'El valle en el medio de todo.', 'El sur, señorial y lento.', 'El lado del atardecer.']],
     ['.map-card .pin tspan.s', ['— próximamente', '— próximamente', '— próximamente', '— próximamente']],
     ['#find .h2', 'Dónde encontrarnos'],
     ['#find .lead', 'Todavía no hay nada en las góndolas. Estas son las zonas de la isla hacia donde vamos — primero los colmados, como debe ser.'],
@@ -1081,6 +1142,28 @@ p{margin:0}
     var p = new URLSearchParams(location.search).get('lang'); var saved = null;
     try { saved = localStorage.getItem('coq-lang'); } catch(e){}
     if (p === 'es' || (p !== 'en' && saved === 'es')) setLang('es');
+  })();
+
+  /* EL COLMADO — pins open their town's vignette (hover on desktop, tap on touch);
+     the route home draws itself out of El Yunque when the map enters view */
+  (function(){
+    var card = document.querySelector('.map-card'); if (!card) return;
+    var pins = card.querySelectorAll('.pin[data-town]');
+    function show(town){
+      card.querySelectorAll('.town-card').forEach(function(tc){ tc.classList.toggle('on', tc.getAttribute('data-town') === town); });
+      Array.prototype.forEach.call(pins, function(p){ p.classList.toggle('on', p.getAttribute('data-town') === town); });
+    }
+    Array.prototype.forEach.call(pins, function(p){
+      var t = p.getAttribute('data-town');
+      p.addEventListener('pointerenter', function(){ show(t); });
+      p.addEventListener('click', function(e){ e.stopPropagation(); show(p.classList.contains('on') ? null : t); });
+    });
+    card.addEventListener('pointerleave', function(){ show(null); });
+    var ruta = card.querySelector('.ruta');
+    if (ruta && window.gsap && window.ScrollTrigger && !quietMotion){
+      gsap.to(ruta, { strokeDashoffset: 0, duration: 2.4, ease: 'power2.inOut',
+        scrollTrigger: { trigger: card, start: 'top 75%' } });
+    } else if (ruta){ ruta.style.strokeDashoffset = '0'; }
   })();
 
   /* V1 heritage — the coquí call: two sine sweeps through a lowpass, synthesized live, no files.
