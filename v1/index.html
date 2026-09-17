@@ -7,7 +7,14 @@
   var q=new URLSearchParams(location.search); window.__HANDOFF = q.get('handoff')==='1' ? (A[q.get('drink')]||'#CAA24C') : null;
   if(window.__HANDOFF) document.documentElement.style.background=window.__HANDOFF;
 })();</script>
-<style>#hand-veil{position:fixed;inset:0;z-index:2000;pointer-events:none;opacity:1}</style>
+<style>
+#hand-veil{position:fixed;inset:0;z-index:2000;pointer-events:none;opacity:1;
+  display:grid;place-items:center;transition:opacity .7s ease}
+#hand-veil.out{opacity:0}
+#hand-frog{width:66px;height:auto;animation:handspin 1.05s cubic-bezier(.5,0,.5,1) infinite}
+@keyframes handspin{0%{transform:rotateY(0deg) scale(1)}50%{transform:rotateY(180deg) scale(1.08)}100%{transform:rotateY(360deg) scale(1)}}
+@media (prefers-reduced-motion:reduce){#hand-frog{animation:none}}
+</style>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>COQUIRICO — Coquetearte · Puerto Rican Style Coconut Drink</title>
@@ -389,9 +396,12 @@
 
 <!-- ORIGINAL HERO CAN — untouched -->
 <script>
+/* phones render the same worlds at a fraction of the pixel cost: the atmosphere/fluid shaders run
+   ~30 noise evaluations per pixel, which is fine on a laptop GPU and brutal on a handset. */
+window.COQ_SMALL = (innerWidth < 900) || (window.matchMedia && matchMedia('(hover:none)').matches);
 function initCan(canvas){
-  var renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  var renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:!window.COQ_SMALL});
+  renderer.setPixelRatio(Math.min(devicePixelRatio, window.COQ_SMALL?1.25:2));
   renderer.outputEncoding=THREE.sRGBEncoding;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure=0.98;
@@ -508,7 +518,7 @@ function initCan(canvas){
 
   // bg canvas: atmosphere + fluid quads
   var bgRenderer=new THREE.WebGLRenderer({ canvas:document.getElementById('bg-canvas'), alpha:true, antialias:false });
-  bgRenderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+  bgRenderer.setPixelRatio(Math.min(devicePixelRatio, window.COQ_SMALL?0.85:1.5));
   bgRenderer.setSize(innerWidth,innerHeight,false);
   var bgScene=new THREE.Scene(), bgCam=new THREE.Camera();
   var NOISE=[
@@ -520,8 +530,9 @@ function initCan(canvas){
 ' float a=hash(i),b=hash(i+vec2(1.,0.)),c=hash(i+vec2(0.,1.)),d=hash(i+vec2(1.,1.));',
 ' return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}',
 /* rotate + offset every octave so nothing stacks up axis-aligned */
+/* 3 octaves on phones, 5 on desktop — the visual difference is slight, the cost difference is not */
 'float fbm(vec2 p){float s=0.,a=.5;mat2 R=mat2(.80,.60,-.60,.80);',
-' for(int i=0;i<5;i++){s+=a*vnoise(p);p=R*p*2.02+17.0;a*=.5;}return s;}'
+' for(int i=0;i<'+(window.COQ_SMALL?3:5)+';i++){s+=a*vnoise(p);p=R*p*2.02+17.0;a*=.5;}return s;}'
   ].join('\n');
   var atmU={ uTime:{value:0}, uAspect:{value:innerWidth/innerHeight},
     uCol0:{value:new THREE.Color('#081008')}, uCol1:{value:new THREE.Color('#12271a')},
@@ -1337,26 +1348,32 @@ function initCan(canvas){
 (function(){
   if(!window.__HANDOFF) return;
   var v=document.createElement('div'); v.id='hand-veil'; v.style.background=window.__HANDOFF;
+  v.innerHTML='<img id="hand-frog" src="../assets/social/icon-frog-cream.png" alt="">';
   document.body.appendChild(v);
-  var skipped=false, t0=Date.now();
-  var iv=setInterval(function(){
-    var b=document.getElementById('ov-skip');
-    if(b && !skipped){ skipped=true; b.click(); }        /* the intro already played in V2's wave */
-    if((skipped || Date.now()-t0>7000) && !document.getElementById('ov')){ clearInterval(iv); reveal(); }
-    else if(Date.now()-t0>9000){ clearInterval(iv); reveal(); }  /* failsafe: never trap the visitor */
-  }, 80);
+  var done=false, t0=Date.now();
   function reveal(){
+    if(done) return; done=true;
     var go=function(){
-      var t1=performance.now();
-      (function f(){ var k=Math.min(1,(performance.now()-t1)/700);
-        v.style.opacity=String(1-k*k);
-        if(k<1) requestAnimationFrame(f); else { v.remove(); document.documentElement.style.background=''; }
-      })();
+      v.classList.add('out');                       /* CSS transition, not rAF — cannot stall */
+      setTimeout(function(){ if(v.parentNode) v.parentNode.removeChild(v);
+        document.documentElement.style.background=''; }, 780);
     };
-    /* if we were prerendered, hold the veil until the user actually arrives */
     if(document.prerendering){ document.addEventListener('prerenderingchange', go, {once:true}); }
     else go();
   }
+  /* V2's pour WAS the intro — skip V1's. Wait briefly for it to build, then reveal regardless. */
+  var iv=setInterval(function(){
+    var b=document.getElementById('ov-skip');
+    if(b){ b.click(); clearInterval(iv); reveal(); return; }
+    if(Date.now()-t0>2200){ clearInterval(iv); reveal(); }
+  }, 60);
+  [400,900,1600,2600,4200].forEach(function(ms){          /* if the intro builds late, skip it too */
+    setTimeout(function(){ var b=document.getElementById('ov-skip'); if(b) b.click(); }, ms);
+  });
+  setTimeout(reveal, 3200);                                /* hard failsafe: never a stuck screen */
+  ['pointerdown','touchstart','wheel','keydown'].forEach(function(ev){
+    addEventListener(ev, reveal, {once:true, passive:true});   /* any touch dismisses it */
+  });
 })();</script>
 </body>
 </html>

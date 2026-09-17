@@ -182,6 +182,12 @@ p{margin:0}
 .drink-detail .fig img{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .follow-wave{position:fixed;inset:0;z-index:200;pointer-events:none;display:none;width:100vw;height:100vh}
 .follow-wave.on{display:block}
+/* the coquí spins through the crossing and keeps spinning on the far side (V1's arrival veil) */
+.follow-frog{position:fixed;left:50%;top:50%;width:66px;margin:-33px 0 0 -33px;z-index:201;
+  pointer-events:none;opacity:0;transition:opacity .3s ease}
+.follow-frog.on{opacity:1;animation:followspin 1.05s cubic-bezier(.5,0,.5,1) infinite}
+@keyframes followspin{0%{transform:rotateY(0deg) scale(1)}50%{transform:rotateY(180deg) scale(1.08)}100%{transform:rotateY(360deg) scale(1)}}
+@media (prefers-reduced-motion:reduce){.follow-frog.on{animation:none}}
 .drink-detail .fig .disc{position:absolute;left:50%;bottom:0;width:340px;height:520px;border-radius:170px 170px 14px 14px;background:var(--paper-3);background:radial-gradient(120% 78% at 50% 24%,color-mix(in srgb,var(--accent) 18%,#fff) 0%,color-mix(in srgb,var(--accent) 46%,#fff) 72%,color-mix(in srgb,var(--accent) 54%,#fff) 100%);transform:translateX(-50%)}
 .drink-detail .fig img{position:relative;width:400px;height:auto;margin-bottom:-6px}
 .drink-detail .body{display:flex;flex-direction:column;gap:18px;align-items:flex-start}
@@ -1054,6 +1060,10 @@ p{margin:0}
   var fPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   fSvg.appendChild(fPath);
   document.body.appendChild(fSvg);
+  var fFrog = document.createElement('img');
+  fFrog.className = 'follow-frog'; fFrog.alt = ''; fFrog.setAttribute('aria-hidden', 'true');
+  fFrog.src = 'assets/social/icon-frog-cream.png';
+  document.body.appendChild(fFrog);
   function v1Url(id){
     var known = ['coquetearte','brisa-de-parcha','guayaba-rosada','cafe-y-canela','future-rum','flamboyan-at-dusk','rain-on-palm','coqui-chorus','caribbean-night-01'];
     var d = known.indexOf(id) >= 0 ? id : 'coquetearte';
@@ -1083,6 +1093,7 @@ p{margin:0}
     if (quietMotion){ location.href = url; return; }
     fPath.style.fill = accent;
     fSvg.classList.add('on');
+    setTimeout(function(){ fFrog.classList.add('on'); }, 240);   /* he appears as the colour takes over */
     var t0 = performance.now(), UP = 620;
     function frame(){
       var now = performance.now(), el = now - t0;
