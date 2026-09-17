@@ -255,16 +255,29 @@
     #mute{ margin-left:0; min-height:44px; padding:.72rem .95rem; font-size:.72rem;
       display:inline-flex; align-items:center; }
 
-    /* --- chapters: copy owns the lower band on its own plate. The gradient ramps in PIXELS, not
-           percentages: a percentage ramp on a 940px-tall plate was still transparent where the
-           first line of text actually sat. --- */
-    .chapter{ justify-content:flex-end; padding-bottom:6vh; min-height:100svh; }
+    /* --- chapters: the copy is a CINEMATIC LOWER THIRD, not a card. It used to be a rounded plate
+           with side gutters and a 30px gradient ramp, which floated over the film and read as a
+           POP-UP DIALOG on a phone (Pedro, 2026-09-17). Three things make a card: side gutters, a
+           corner radius, and a bottom edge. All three are gone — the scrim now runs edge to edge,
+           has no radius, and bleeds off the bottom of the screen. The only boundary left is the
+           top, and that is a 100px ramp, which reads as haze rather than an edge.
+           The ramp is in PIXELS, not percentages: a percentage ramp on a tall plate was still
+           transparent where the first line of text actually sat. --- */
+    .chapter{ justify-content:flex-end; padding-bottom:0; padding-left:0; padding-right:0;
+      min-height:100svh; }
     .chapter .inner,
-    .chapter[data-side="right"] .inner{ max-width:none; margin:0; text-align:left;
-      background:linear-gradient(180deg,rgba(8,14,8,0) 0px,rgba(8,14,8,.93) 30px,rgba(8,14,8,.96) 64px,rgba(8,14,8,.97) 100%);
-      padding:34px 18px 24px; border-radius:18px; }
+    .chapter[data-side="right"] .inner{ max-width:none; margin:0; text-align:left; border-radius:0;
+      background:linear-gradient(180deg,rgba(8,14,8,0) 0px,rgba(8,14,8,.22) 28px,rgba(8,14,8,.55) 60px,rgba(8,14,8,.82) 92px,rgba(8,14,8,.94) 140px,rgba(8,14,8,.96) 100%);
+      padding:100px 18px calc(24px + env(safe-area-inset-bottom)); }
     .chapter[data-tone="light"] .inner{
-      background:linear-gradient(180deg,rgba(244,234,210,0) 0px,rgba(244,234,210,.95) 30px,rgba(244,234,210,.97) 64px,rgba(244,234,210,.98) 100%); }
+      background:linear-gradient(180deg,rgba(244,234,210,0) 0px,rgba(244,234,210,.26) 28px,rgba(244,234,210,.60) 60px,rgba(244,234,210,.86) 92px,rgba(244,234,210,.96) 140px,rgba(244,234,210,.98) 100%); }
+    .chapter .inner{ position:relative; }
+    .chapter .inner::after{ content:""; position:absolute; left:0; right:0; top:100%; height:26vh;
+      pointer-events:none;
+      background:linear-gradient(180deg,rgba(8,14,8,.96) 0%,rgba(8,14,8,.90) 26%,rgba(8,14,8,.62) 56%,rgba(8,14,8,0) 100%); }
+    .chapter[data-tone="light"] .inner::after{
+      background:linear-gradient(180deg,rgba(244,234,210,.98) 0%,rgba(244,234,210,.92) 26%,rgba(244,234,210,.64) 56%,rgba(244,234,210,0) 100%); }
+    #world > .inner::after{ display:none; }
 
     /* the kinetic pour word is authored for a wide frame with the copy in a side column; here the
        plate is full-bleed, so the word printed straight through the body text */
@@ -300,8 +313,9 @@
            Here it becomes a bottom sheet: read the drink at the bottom, pick it with the thumb
            just above. --- */
     #world{ justify-content:flex-start; padding-bottom:0; }
-    #world > .inner{ padding:14px 16px 186px;
-      background:linear-gradient(180deg,rgba(8,14,8,0) 0,rgba(8,14,8,.88) 20px,rgba(8,14,8,.94) 92px,rgba(8,14,8,.96) 100%); }
+    #world{ padding-left:0; padding-right:0; }
+    #world > .inner{ margin-top:-86px; padding:100px 16px 186px;
+      background:linear-gradient(180deg,rgba(8,14,8,.34) 0px,rgba(8,14,8,.34) 42px,rgba(8,14,8,.58) 84px,rgba(8,14,8,.86) 128px,rgba(8,14,8,.94) 176px,rgba(8,14,8,.96) 100%); }
     #world .sensory{ font-size:.92rem; line-height:1.42; margin-bottom:.8rem; }
     #world h2{ font-size:clamp(1.7rem,7.4vw,2.2rem); margin-bottom:.55rem; }
     #world .family{ margin-top:.7rem; }
@@ -348,7 +362,7 @@
     .chapter .body{ font-size:.94rem; line-height:1.48; }
     .chapter .facts{ margin-top:.55rem; }
     .chapter .inner,
-    .chapter[data-side="right"] .inner{ padding:24px 16px 18px; }
+    .chapter[data-side="right"] .inner{ padding:100px 16px calc(18px + env(safe-area-inset-bottom)); }
   
     /* --- the tallest two chapters still overran the screen (772px and 743px in an 844px
            viewport), which is what put two chapters of copy on screen at once --- */
