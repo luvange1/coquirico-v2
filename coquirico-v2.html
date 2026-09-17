@@ -1,0 +1,1108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coquírico — Puerto Rican coconut drink</title>
+<meta name="description" content="A Puerto Rican coconut drink from the island of the coquí. Coquetearte, cold and non-alcoholic, plus the holiday coquito. Concept site — presentation only.">
+<meta name="theme-color" content="#FBF6F2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* ------------------------------------------------------------------
+   COQUÍRICO V2 — photographic brand site
+   type: Cormorant Garamond (headlines) + Instrument Sans (everything else)
+   ------------------------------------------------------------------ */
+:root{
+  --paper:#FBF6F2; --paper-2:#F6EEE4; --paper-3:#EFE5D6; --paper-deep:#E9DCC8;
+  --ink:#241812; --ink-2:#5C4C3F; --ink-3:#8A7A66;
+  --leaf:#647237; --leaf-deep:#2E3A1A; --palm:#2F6B3A;
+  --amber:#CAA24C; --amber-ink:#6E5220; --flamboyan:#C12B13;
+  --rule:rgba(36,24,18,.14); --rule-2:rgba(36,24,18,.28);
+  --serif:'Cormorant Garamond','Iowan Old Style',Georgia,serif;
+  --sans:'Instrument Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --container:1440px; --gutter:48px;
+  --sec:150px; --r-media:40px; --r-card:28px; --r-pill:999px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:auto;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;font-weight:400;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+h1,h2,h3{font-family:var(--serif);font-weight:500;margin:0;letter-spacing:-.01em}
+p{margin:0}
+.wrap{width:min(var(--container),100% - var(--gutter)*2);margin-inline:auto}
+.wrap-wide{width:min(1780px,100% - var(--gutter)*2);margin-inline:auto}
+.eyebrow{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--leaf-deep)}
+.h2{font-size:64px;line-height:1.04;font-weight:500;letter-spacing:-.012em}
+.h3{font-size:30px;line-height:1.15;font-weight:500}
+.lead{font-size:19px;line-height:1.6;color:var(--ink-2);max-width:56ch}
+.small{font-size:14px;line-height:1.55;color:var(--ink-2)}
+.tiny{font-size:12.5px;line-height:1.5;color:var(--ink-2);letter-spacing:.01em}
+.sec{padding-top:var(--sec)}
+.sec-head{display:flex;flex-direction:column;gap:22px;align-items:flex-start;margin-bottom:64px}
+.sec-head .lead{margin-top:4px}
+.center{text-align:center;align-items:center}
+.center .lead{margin-inline:auto}
+
+/* buttons: one family — pills. solid = primary, outlined = secondary */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:52px;padding:0 30px;border-radius:var(--r-pill);font-family:var(--sans);font-size:13.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);transition:transform .35s cubic-bezier(.2,.7,.2,1),background .3s,color .3s,border-color .3s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper)}
+.btn.light{border-color:rgba(255,255,255,.85);background:transparent;color:#fff}
+.btn.light:hover{background:#fff;color:var(--ink)}
+.btn.sm{height:44px;padding:0 22px;font-size:12px}
+
+/* ---------------- NAV ---------------- */
+.nav{position:fixed;inset:0 0 auto 0;height:72px;z-index:50;display:flex;align-items:center;transition:background .4s,color .4s,box-shadow .4s;color:#fff}
+.nav .wrap-wide{display:flex;align-items:center;justify-content:space-between;gap:32px}
+.brand{display:inline-flex;align-items:center;gap:12px;font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:.16em;text-transform:uppercase;line-height:1}
+.brand .frog{width:22px;height:22px;background:currentColor;-webkit-mask:none;opacity:.95}
+.brand img{width:22px;height:auto;filter:brightness(0) invert(1);transition:filter .4s}
+.nav-links{display:flex;gap:34px;list-style:none;margin:0;padding:0}
+.nav-links a{font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;position:relative;padding:6px 0}
+.nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:currentColor;transition:right .35s cubic-bezier(.2,.7,.2,1)}
+.nav-links a:hover::after{right:0}
+.nav .cta{justify-self:end}
+.nav.scrolled{background:rgba(251,246,242,.92);color:var(--ink);backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--rule)}
+.nav.scrolled .brand img{filter:none}
+.nav.scrolled .btn.light{border-color:var(--ink);color:var(--ink)}
+.nav.scrolled .btn.light:hover{background:var(--ink);color:var(--paper)}
+.nav-toggle{display:none;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+
+/* ---------------- HERO ---------------- */
+.hero{position:relative;height:100vh;min-height:clamp(720px,100vh,985px);max-height:985px;overflow:hidden;color:var(--ink);isolation:isolate}
+.hero-bg{position:absolute;inset:-6% -2.5% 0 -2.5%;z-index:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 68%}
+/* the video sits on top of the still and is visible from the start. Its poster IS the still, so if it
+   cannot play (blocked autoplay, reduced motion, no codec) the hero looks exactly as it always did. */
+.hero-bg video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 68%}
+.hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(20,20,20,.28) 0%,rgba(20,20,20,0) 24%)}
+.hero-copy{position:absolute;z-index:3;left:calc(50% - var(--container)/2);top:21%;max-width:640px}
+.hero-copy .eyebrow{color:var(--ink);opacity:.85;margin-bottom:26px}
+.hero h1{font-size:88px;line-height:.98;font-weight:500;letter-spacing:-.015em;max-width:9ch}
+.hero .sub{margin-top:26px;font-size:19px;line-height:1.55;max-width:34ch;color:var(--ink)}
+.hero .actions{margin-top:38px;display:flex;gap:14px;align-items:center}
+.hero-stage{position:absolute;inset:0;z-index:2;pointer-events:none}
+.can{position:absolute;bottom:var(--b);left:var(--x);width:var(--w);transform:translateX(-50%);pointer-events:auto}
+.can>img{width:100%;height:auto;position:relative;z-index:2;will-change:transform}
+.can .shadow{position:absolute;left:50%;top:96.1%;width:60%;height:5.2%;transform:translate(-44%,-50%);z-index:1;border-radius:50%;background:radial-gradient(ellipse at center,rgba(45,28,12,.55) 0%,rgba(45,28,12,.28) 40%,rgba(45,28,12,0) 72%);filter:blur(5px)}
+.can .cast{position:absolute;left:50%;top:96.1%;width:110%;height:4%;transform:translate(-32%,-40%) skewX(-28deg);z-index:1;border-radius:50%;background:radial-gradient(ellipse at center,rgba(45,28,12,.22) 0%,rgba(45,28,12,0) 70%);filter:blur(9px)}
+.can .refl{position:absolute;left:0;top:96.1%;width:100%;height:100%;z-index:1;pointer-events:none}
+.can .refl img{position:absolute;left:0;top:0;width:100%;height:auto;transform:translateY(-3.9%) scaleY(-1);filter:blur(1.6px)}
+.can .refl img:nth-child(1){clip-path:inset(0 0 95% 0);opacity:.42}
+.can .refl img:nth-child(2){clip-path:inset(5% 0 90% 0);opacity:.33}
+.can .refl img:nth-child(3){clip-path:inset(10% 0 85% 0);opacity:.24}
+.can .refl img:nth-child(4){clip-path:inset(15% 0 80% 0);opacity:.16}
+.can .refl img:nth-child(5){clip-path:inset(20% 0 75% 0);opacity:.09}
+.can .refl img:nth-child(6){clip-path:inset(25% 0 70% 0);opacity:.04}
+.can-l{--x:54%;--w:500px;--b:calc(8.6% - 26px);z-index:1}
+.can-c{--x:67%;--w:540px;--b:calc(8.2% - 28px);z-index:3}
+.can-r{--x:80%;--w:500px;--b:calc(8.6% - 26px);z-index:2}
+.hero-foot{position:absolute;z-index:3;left:calc(50% - var(--container)/2);bottom:40px;display:flex;gap:26px;align-items:center;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--ink);opacity:.78}
+.hero-foot span{display:inline-flex;align-items:center;gap:26px}
+.hero-foot i{display:block;width:34px;height:1px;background:currentColor}
+
+/* ---------------- STATEMENT ---------------- */
+.statement{padding:112px 0 96px;text-align:center}
+.statement p{font-family:var(--sans);font-size:24px;line-height:1.5;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--leaf-deep);max-width:1120px;margin-inline:auto}
+
+/* ---------------- MEDIA BLOCK ---------------- */
+.media{position:relative;height:860px;border-radius:var(--r-media);overflow:hidden;background:#1c2a20}
+.media img{position:absolute;inset:-8% 0;width:100%;height:116%;object-fit:cover;object-position:50% 55%}
+.kinetic{position:absolute;left:0;top:10%;white-space:nowrap;font-family:var(--serif);font-style:italic;font-weight:500;font-size:170px;line-height:1;color:var(--paper);opacity:.96;letter-spacing:-.01em;will-change:transform;transform:translateX(8%)}
+.kinetic span{margin-right:.35em}
+.media .cap{position:absolute;left:56px;bottom:44px;color:#fff;font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;opacity:.9}
+
+/* ---------------- BENEFITS ---------------- */
+.benefits{padding:120px 0 0;text-align:center}
+.benefits .eyebrow{display:block;margin-bottom:56px}
+.benefit-row{display:flex;justify-content:center;gap:0}
+.benefit{width:340px;display:flex;flex-direction:column;align-items:center;gap:22px}
+.benefit .disc{width:112px;height:112px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 1px 0 var(--rule);color:var(--leaf-deep)}
+.benefit .disc svg{width:44px;height:44px}
+.benefit b{font-family:var(--serif);font-weight:500;font-size:26px;letter-spacing:-.005em}
+.benefit .tiny{margin-top:-14px}
+.benefits .note{margin-top:44px}
+
+/* ---------------- DRINKS ---------------- */
+.drinks .sec-head{align-items:center;text-align:center}
+.drink-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:72px 32px;list-style:none;margin:0;padding:0;width:min(1720px,100% - var(--gutter)*2);margin-inline:auto}
+.drink{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;cursor:pointer}
+.drink .field{position:relative;width:100%;aspect-ratio:256/400;border-radius:50% 50% 14px 14px / 32% 32% 14px 14px;background:var(--paper-3);background:radial-gradient(120% 78% at 50% 24%,color-mix(in srgb,var(--accent) 18%,#fff) 0%,color-mix(in srgb,var(--accent) 46%,#fff) 72%,color-mix(in srgb,var(--accent) 54%,#fff) 100%);overflow:hidden;display:block}
+.drink .field img{position:absolute;left:50%;bottom:-2.5%;width:114%;height:auto;transform:translateX(-50%);transition:transform .6s cubic-bezier(.2,.7,.2,1);filter:drop-shadow(0 18px 22px rgba(36,24,18,.18))}
+.drink:hover .field img,.drink.is-open .field img{transform:translate(-50%,-12px)}
+.drink .name{font-family:var(--serif);font-size:24px;font-weight:500;line-height:1.1;margin-top:6px}
+.drink .short{font-size:14px;color:var(--ink-2);margin-top:-6px}
+.pill{display:inline-flex;align-items:center;gap:8px;height:24px;padding:0 11px;border-radius:var(--r-pill);font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;line-height:1;border:1px solid var(--rule-2);color:var(--ink)}
+.pill.real{background:var(--leaf-deep);border-color:var(--leaf-deep);color:var(--paper)}
+.pill.artist{border-style:solid;border-color:var(--ink)}
+.pill.study{border-style:dashed;border-color:var(--ink-3);color:var(--ink-2)}
+.pill.concept{background:var(--ink);border-color:var(--ink);color:#E8DFC8}
+.drink.is-open .name{text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1px}
+.drink-detail{margin-top:80px;display:grid;grid-template-columns:520px 1fr;gap:72px;align-items:center;padding:44px 64px 44px 48px;border-radius:var(--r-card);background:var(--paper-2);border:1px solid var(--rule)}
+.drink-detail .fig{position:relative;height:520px;display:flex;justify-content:center;align-items:flex-end}
+.drink-detail .fig .disc{position:absolute;left:50%;bottom:0;width:340px;height:520px;border-radius:170px 170px 14px 14px;background:var(--paper-3);background:radial-gradient(120% 78% at 50% 24%,color-mix(in srgb,var(--accent) 18%,#fff) 0%,color-mix(in srgb,var(--accent) 46%,#fff) 72%,color-mix(in srgb,var(--accent) 54%,#fff) 100%);transform:translateX(-50%)}
+.drink-detail .fig img{position:relative;width:400px;height:auto;margin-bottom:-6px}
+.drink-detail .body{display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+.drink-detail h3{font-size:48px;line-height:1.02;letter-spacing:-.012em}
+.drink-detail .desc{font-size:19px;line-height:1.6;color:var(--ink);max-width:52ch}
+.drink-detail .truth{font-size:15px;color:var(--ink-2);padding-top:18px;border-top:1px solid var(--rule);width:100%;max-width:56ch}
+.drink-detail .inside{font-size:14px;color:var(--ink-2);line-height:1.6;max-width:56ch}
+.drink-detail .inside b{font-weight:600;color:var(--ink);letter-spacing:.08em;text-transform:uppercase;font-size:11px;display:block;margin-bottom:4px}
+.drink-detail .tags{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.drink-detail.fade .fig,.drink-detail.fade .body{opacity:0;transform:translateY(8px)}
+.drink-detail .fig,.drink-detail .body{transition:opacity .45s ease,transform .45s ease}
+
+/* ---------------- INGREDIENTS ---------------- */
+.inside-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;list-style:none;margin:0;padding:0}
+.ing{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px}
+.ing .disc{width:84%;aspect-ratio:1;border-radius:50%;background:var(--tint,var(--paper-3));display:grid;place-items:center;overflow:hidden}
+.ing .disc img{width:72%;height:auto}
+.ing b{font-family:var(--serif);font-weight:500;font-size:28px}
+.ing p{font-size:15px;color:var(--ink-2);max-width:30ch;margin-top:-8px}
+.inside-foot{margin-top:56px;padding-top:24px;border-top:1px solid var(--rule);display:grid;grid-template-columns:1fr 1fr;gap:32px}
+
+/* ---------------- STORY ---------------- */
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:center}
+.story-media{position:relative;border-radius:var(--r-media);overflow:hidden;aspect-ratio:4/4.7;background:#101a22}
+.story-media img{position:absolute;inset:-5% 0;width:100%;height:110%;object-fit:cover;object-position:55% 50%}
+.story-text{display:flex;flex-direction:column;gap:26px;align-items:flex-start;padding-right:24px}
+.story-text .h2{max-width:11ch}
+.story-text p{font-size:18px;line-height:1.65;color:var(--ink-2);max-width:50ch}
+.story-inset{display:flex;gap:22px;align-items:center;margin-top:12px;padding-top:28px;border-top:1px solid var(--rule)}
+.story-inset img{width:150px;height:100px;object-fit:cover;object-position:50% 40%;border-radius:16px;flex:none}
+.story-inset .tiny{max-width:30ch}
+
+/* ---------------- SERVE ---------------- */
+.serve-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;list-style:none;margin:0;padding:0}
+.serve{display:flex;flex-direction:column;gap:22px}
+.serve .photo{position:relative;aspect-ratio:3/4;border-radius:var(--r-card);overflow:hidden;background:#1a2a1e}
+.serve .photo img{position:absolute;inset:-6% 0;width:100%;height:112%;object-fit:cover;object-position:var(--pos,50% 50%)}
+.serve .txt{display:flex;flex-direction:column;gap:8px}
+.serve .eyebrow{font-size:11px}
+.serve b{font-family:var(--serif);font-weight:500;font-size:32px;line-height:1.05}
+.serve p{font-size:15.5px;line-height:1.55;color:var(--ink-2);max-width:34ch}
+.serve .tiny{margin-top:6px}
+
+/* ---------------- FIND ---------------- */
+.find-grid{display:grid;grid-template-columns:1fr 520px;gap:88px;align-items:center}
+.map-card{position:relative;border-radius:var(--r-media);background:#DCEFE9;padding:44px 48px 32px;overflow:hidden}
+.map-card svg{width:100%;height:auto;display:block}
+.map-card .coq-pr-land{fill:#FBF6F2;stroke:var(--leaf-deep);stroke-width:2}
+.map-card .pin circle{fill:var(--flamboyan)}
+.map-card .pin text{font-family:var(--sans);font-size:15px;font-weight:600;fill:var(--ink);letter-spacing:.02em}
+.map-card .pin tspan.s{font-weight:400;fill:var(--ink-2)}
+.map-card .tiny{margin-top:14px}
+.find-text{display:flex;flex-direction:column;gap:24px;align-items:flex-start}
+.form{width:100%;display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.form label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--ink-2)}
+.form .row{display:flex;gap:10px}
+.form input{flex:1;height:52px;border-radius:var(--r-pill);border:1.5px solid var(--rule-2);background:#fff;padding:0 22px;font:inherit;font-size:16px;color:var(--ink);outline:none}
+.form input:focus{border-color:var(--ink)}
+.form .status{font-size:14px;color:var(--leaf-deep);min-height:1.4em}
+
+/* ---------------- FAQ ---------------- */
+.faq-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:80px;align-items:start}
+.faq .sec-head{margin-bottom:0;position:sticky;top:120px}
+.faq-list{border-top:1px solid var(--rule-2)}
+.faq-list details{border-bottom:1px solid var(--rule-2)}
+.faq-list summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:26px 0;font-family:var(--serif);font-size:28px;font-weight:500;line-height:1.2}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary::after{content:"+";font-family:var(--sans);font-weight:400;font-size:26px;color:var(--ink-2);flex:none;width:28px;text-align:center;transition:transform .3s}
+.faq-list details[open] summary::after{transform:rotate(45deg)}
+.faq-list .a{padding:0 64px 28px 0;font-size:17px;line-height:1.65;color:var(--ink-2);max-width:66ch}
+
+/* ---------------- JOIN + FOOTER ---------------- */
+.join{padding-top:var(--sec)}
+.join-card{background:var(--paper-2);border:1px solid var(--rule);border-radius:var(--r-media);padding:44px 64px 40px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px}
+.join-card .h2{font-size:52px}
+.join-card .lead{max-width:48ch}
+.join-card .news{width:min(560px,100%);display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.join-card .news .row{display:flex;gap:8px}
+.join-card .news input{flex:1;height:52px;border-radius:var(--r-pill);border:1.5px solid var(--rule-2);background:#fff;padding:0 22px;font:inherit;font-size:16px;color:var(--ink);outline:none}
+.join-card .news input:focus{border-color:var(--ink)}
+.join-card .status{font-size:14px;color:var(--leaf-deep);min-height:1.4em}
+.footer{margin-top:120px;background:var(--leaf-deep);color:var(--paper);padding:64px 0 36px}
+.footer .brand{color:var(--paper);font-size:24px;justify-content:center;width:100%}
+.footer .brand img{filter:brightness(0) invert(1);opacity:.9}
+.footer .concept{font-family:var(--serif);font-size:24px;font-weight:500;text-align:center;margin-top:18px;opacity:.95}
+.footer .links{display:flex;justify-content:center;gap:34px;list-style:none;margin:34px 0 0;padding:0;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+.footer .links a{opacity:.85}.footer .links a:hover{opacity:1}
+.footer .social{display:flex;justify-content:center;gap:28px;margin-top:22px;font-size:13px;opacity:.7}
+.footer .bottom{margin-top:44px;padding-top:22px;border-top:1px solid rgba(251,246,242,.18);display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;font-size:12.5px;opacity:.7}
+
+/* ---------------- REVEAL (JS adds .js) ---------------- */
+.js .reveal{opacity:0;transform:translateY(26px)}
+.js .reveal.in{opacity:1;transform:none;transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.js .reveal-img{opacity:0;transform:translateY(26px) scale(1.02)}
+.js .reveal-img.in{opacity:1;transform:none;transition:opacity 1.1s ease,transform 1.1s cubic-bezier(.2,.7,.2,1)}
+@media (prefers-reduced-motion:reduce){
+  .js .reveal,.js .reveal-img{opacity:1;transform:none;transition:none}
+  .kinetic{transform:translateX(6%)}
+  *{transition-duration:0s!important;animation:none!important}
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+@media (max-width:1560px){
+  :root{--container:1280px;--gutter:40px}
+  .hero h1{font-size:80px}
+  .can-l{--w:420px}.can-c{--w:465px}.can-r{--w:420px}
+  .media{height:760px}.kinetic{font-size:150px}
+  .drink-detail{grid-template-columns:440px 1fr;gap:56px}
+}
+@media (max-width:1280px){
+  :root{--sec:120px}
+  .h2{font-size:54px}
+  .hero-copy{top:24%}
+  .hero h1{font-size:68px}
+  .can-l{--w:340px;--x:57%}.can-c{--w:380px;--x:68%}.can-r{--w:340px;--x:79%}
+  .media{height:640px}.kinetic{font-size:120px}
+  .drink-grid{grid-template-columns:repeat(4,1fr)}
+  .drink-detail{grid-template-columns:1fr;gap:32px;padding:40px}
+  .drink-detail .fig{height:420px}
+  .story-grid,.find-grid{gap:56px}
+  .find-grid{grid-template-columns:1fr 440px}
+}
+@media (max-width:960px){
+  :root{--gutter:24px;--sec:96px}
+  .nav-links,.nav .cta{display:none}
+  .nav-toggle{display:inline-block}
+  .nav.open .nav-links{display:flex;position:fixed;inset:72px 0 auto 0;background:var(--paper);color:var(--ink);flex-direction:column;gap:0;padding:12px 24px 24px;box-shadow:0 1px 0 var(--rule)}
+  .nav.open .nav-links a{display:block;padding:14px 0;border-bottom:1px solid var(--rule)}
+  .nav.open{background:var(--paper);color:var(--ink)}
+  .nav.open .brand img{filter:none}
+  .hero{min-height:clamp(640px,100svh,900px)}
+  .hero-copy{left:var(--gutter);right:var(--gutter);top:112px;max-width:none}
+  .hero h1{font-size:56px}
+  .hero .sub{font-size:17px}
+  .can-l{--w:230px;--x:26%;--b:calc(9.2% - 12px)}.can-c{--w:250px;--x:50%;--b:calc(8% - 13px)}.can-r{--w:230px;--x:74%;--b:calc(9.2% - 12px)}
+  .hero-foot{display:none}
+  .statement{padding:72px 0 56px}.statement p{font-size:15px;letter-spacing:.16em}
+  .media{height:520px;border-radius:24px}.kinetic{font-size:76px;top:8%}
+  .media .cap{left:24px;bottom:20px}
+  .benefit-row{flex-direction:column;align-items:center;gap:36px}.benefit{width:100%;max-width:320px}.benefit .disc{width:96px;height:96px}
+  .drink-grid{grid-template-columns:repeat(2,1fr);gap:44px 20px}
+  .drink .name{font-size:21px}
+  .drink-detail{padding:28px 22px}
+  .drink-detail h3{font-size:36px}
+  .drink-detail .fig{height:360px}.drink-detail .fig .disc{width:220px;height:360px;border-radius:110px 110px 12px 12px}.drink-detail .fig img{width:270px}
+  .inside-grid{grid-template-columns:1fr;gap:40px}.ing .disc{width:70%}
+  .inside-foot{grid-template-columns:1fr}
+  .story-grid,.find-grid{grid-template-columns:1fr;gap:40px}
+  .story-media{aspect-ratio:4/3}
+  .serve-grid{grid-template-columns:1fr;gap:40px}
+  .faq-list summary{font-size:22px}
+  .faq-grid{grid-template-columns:1fr;gap:32px}.faq .sec-head{position:static}
+  .join-card{padding:44px 24px;border-radius:24px}.join-card .h2{font-size:38px}.join-card .news .row{flex-direction:column}
+  .footer .links{flex-wrap:wrap;gap:14px 22px}.footer .bottom{flex-direction:column;gap:8px}
+  .h2{font-size:42px}
+  .sec-head{margin-bottom:40px}
+}
+
+/* ---------------- LOWER-HALF POLISH (scoped; top half keeps --sec / markup) ----------------
+   One calm, consistent cadence across the closing sections. IDs beat .sec/.join, and this block
+   is last, so it wins without touching the approved top (#hero…#drinks). */
+#ingredients,#story,#serve,#find,#faq,#join{padding-top:130px}
+@media (max-width:1280px){ #ingredients,#story,#serve,#find,#faq,#join{padding-top:108px} }
+@media (max-width:960px){ #ingredients,#story,#serve,#find,#faq,#join{padding-top:84px} }
+/* every hairline rule in the lower half at one weight/colour (the crisp divider line) */
+.inside-foot,.story-inset{border-top-color:var(--rule-2)}
+/* visible keyboard focus on the accordion and both forms */
+.faq-list summary:focus-visible{outline:2px solid var(--leaf-deep);outline-offset:4px;border-radius:3px}
+.form input:focus-visible,.join-card .news input:focus-visible,.btn:focus-visible{outline:2px solid var(--leaf-deep);outline-offset:3px}
+/* mobile: stack the notify row so the button never clips; both forms match */
+@media (max-width:960px){
+  .form .row{flex-direction:column}
+  .form .row .btn,.join-card .news .row .btn{width:100%}
+}
+/* mobile: keep the little map's pin labels legible (city only; caption carries the status) */
+@media (max-width:600px){
+  .map-card{padding:22px 18px 16px}
+  .map-card .pin text{font-size:30px}
+  .map-card .pin tspan.s{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap-wide">
+    <a class="brand" href="#top" aria-label="Coquírico — back to top"><img src="assets/label/coqui-mark-ink.webp" alt="" aria-hidden="true" width="22" height="22">Coquírico</a>
+    <ul class="nav-links" aria-label="Main">
+      <li><a href="#drinks">Las latas</a></li>
+      <li><a href="#ingredients">Lo que lleva</a></li>
+      <li><a href="#story">El Yunque</a></li>
+      <li><a href="#serve">Cómo se sirve</a></li>
+      <li><a href="#find">Dónde</a></li>
+    </ul>
+    <a class="btn light sm cta" href="#find">Notify me</a>
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <div class="hero-bg" data-parallax>
+    <video class="hero-vid" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1" poster="assets/video/hero-ocean-poster.jpg">
+      <source src="assets/video/hero-ocean.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-scrim" aria-hidden="true"></div>
+
+  <div class="hero-stage" aria-hidden="false">
+    <figure class="can can-l" data-can>
+      <img src="assets/product/flamboyan-at-dusk-can@2x.webp" alt="Flamboyán at Dusk — an artist edition of the Coquetearte can" width="1080" height="1446" loading="eager">
+      <span class="shadow"></span><span class="cast"></span>
+      <span class="refl" aria-hidden="true"><img src="assets/product/flamboyan-at-dusk-can.webp" alt=""><img src="assets/product/flamboyan-at-dusk-can.webp" alt=""><img src="assets/product/flamboyan-at-dusk-can.webp" alt=""><img src="assets/product/flamboyan-at-dusk-can.webp" alt=""><img src="assets/product/flamboyan-at-dusk-can.webp" alt=""><img src="assets/product/flamboyan-at-dusk-can.webp" alt=""></span>
+    </figure>
+    <figure class="can can-c" data-can>
+      <img src="assets/product/coquetearte-can@2x.webp" alt="Coquetearte — the Coquírico coconut can" width="1080" height="1446" loading="eager" fetchpriority="high">
+      <span class="shadow"></span><span class="cast"></span>
+      <span class="refl" aria-hidden="true"><img src="assets/product/coquetearte-can.webp" alt=""><img src="assets/product/coquetearte-can.webp" alt=""><img src="assets/product/coquetearte-can.webp" alt=""><img src="assets/product/coquetearte-can.webp" alt=""><img src="assets/product/coquetearte-can.webp" alt=""><img src="assets/product/coquetearte-can.webp" alt=""></span>
+    </figure>
+    <figure class="can can-r" data-can>
+      <img src="assets/product/caribbean-night-01-can@2x.webp" alt="Caribbean Night No. 01 — an artist edition of the Coquetearte can" width="1080" height="1446" loading="eager">
+      <span class="shadow"></span><span class="cast"></span>
+      <span class="refl" aria-hidden="true"><img src="assets/product/caribbean-night-01-can.webp" alt=""><img src="assets/product/caribbean-night-01-can.webp" alt=""><img src="assets/product/caribbean-night-01-can.webp" alt=""><img src="assets/product/caribbean-night-01-can.webp" alt=""><img src="assets/product/caribbean-night-01-can.webp" alt=""><img src="assets/product/caribbean-night-01-can.webp" alt=""></span>
+    </figure>
+  </div>
+
+  <div class="hero-copy" data-hero-copy>
+    <p class="eyebrow" lang="es">Puerto Rico · Sin alcohol</p>
+    <h1 lang="es">Coco, isla y&nbsp;calma.</h1>
+    <p class="sub">A Puerto Rican coconut drink. No alcohol, no hurry — just the island, cold.</p>
+    <div class="actions">
+      <a class="btn" href="#drinks">Explore the drinks</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATEMENT ============ -->
+<section class="statement" id="statement">
+  <div class="wrap"><p class="reveal" lang="es">De noche, la isla canta. Nosotros solo la&nbsp;embotellamos.</p></div>
+</section>
+
+<!-- ============ MEDIA BLOCK ============ -->
+<section class="wrap-wide">
+  <div class="media reveal-img" id="media">
+    <img src="assets/serves/serve-rainline.webp" alt="A tall glass of Coquetearte over ice beside the can, in a rain-washed courtyard" width="1536" height="1024" loading="eager" data-media-img>
+    <div class="kinetic" lang="es" aria-hidden="true" data-kinetic><span>frío,</span><span>cremoso,</span><span>sin prisa —</span><span>frío,</span><span>cremoso,</span><span>sin prisa —</span></div>
+    <p class="cap">Coquetearte · sobre hielo</p>
+  </div>
+</section>
+
+<!-- ============ BENEFITS ============ -->
+<section class="benefits wrap">
+  <p class="eyebrow reveal">Puerto Rican style coconut drink</p>
+  <div class="benefit-row">
+    <div class="benefit reveal">
+      <div class="disc" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 10h14l1 4v22a4 4 0 0 1-4 4h-8a4 4 0 0 1-4-4V14z"/><path d="M16 14h16"/><path d="M14 30 34 16"/></svg></div>
+      <b lang="es">Sin alcohol</b>
+      <p class="tiny">Non-alcoholic — it says so on the can.</p>
+    </div>
+    <div class="benefit reveal">
+      <div class="disc" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="15"/><text x="24" y="29" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="15" font-weight="500" fill="currentColor" stroke="none">60</text></svg></div>
+      <b lang="es">60 calorías</b>
+      <p class="tiny">Per 8 fl oz / 240 ml can, as printed.</p>
+    </div>
+    <div class="benefit reveal">
+      <div class="disc" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="26" r="14"/><path d="M24 12c-2 4-2 8 0 14 2-6 2-10 0-14z"/><path d="M14.5 20.5c3 1 6 3.5 9.5 5.5M33.5 20.5c-3 1-6 3.5-9.5 5.5"/></svg></div>
+      <b lang="es">Coco de verdad</b>
+      <p class="tiny">Coconut water and coconut milk, first two on the list.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DRINKS ============ -->
+<section class="sec drinks" id="drinks">
+  <div class="wrap">
+    <div class="sec-head center">
+      <p class="eyebrow reveal" lang="es">Las latas</p>
+      <h2 class="h2 reveal">One island. Many expressions.</h2>
+      <p class="lead reveal">Two of these are real. The rest are studies, editions and ideas — and every card says which it is.</p>
+    </div>
+    <ul class="drink-grid" id="drink-grid" aria-label="Ten Coquírico drinks. Each card says whether it is real, an artist edition, a flavor study or a concept."></ul>
+    <div class="drink-detail" id="drink-detail" aria-live="polite">
+      <div class="fig"><span class="disc" aria-hidden="true"></span><img src="assets/product/coquetearte-can@2x.webp" alt="" width="1080" height="1446" loading="lazy"></div>
+      <div class="body">
+        <span class="pill real" data-d="pill">Real · en lata</span>
+        <h3 data-d="name">Coquetearte</h3>
+        <p class="desc" data-d="desc"></p>
+        <p class="truth" data-d="truth"></p>
+        <p class="inside" data-d="inside"></p>
+        <p class="tags" data-d="tags" lang="es"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INGREDIENTS ============ -->
+<section class="sec" id="ingredients">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow reveal" lang="es">Lo que lleva</p>
+      <h2 class="h2 reveal">What’s inside</h2>
+      <p class="lead reveal">Everything in Coquetearte, straight off the back of the can. Seven ingredients — and that list is the whole list.</p>
+    </div>
+    <ul class="inside-grid">
+      <li class="ing reveal" style="--tint:#E4E8D9"><div class="disc"><img src="assets/ingredients/ing-coconut-water-milk.webp" srcset="assets/ingredients/ing-coconut-water-milk.webp 300w, assets/ingredients/ing-coconut-water-milk@2x.webp 600w" sizes="320px" alt="A halved coconut, water and milk" width="300" height="300" loading="lazy"></div><b>Coconut water &amp; milk</b><p>The base. Both, so it drinks cool and creamy.</p></li>
+      <li class="ing reveal" style="--tint:#F1D8C3"><div class="disc"><img src="assets/ingredients/ing-cinnamon.webp" srcset="assets/ingredients/ing-cinnamon.webp 300w, assets/ingredients/ing-cinnamon@2x.webp 600w" sizes="320px" alt="Cinnamon quills" width="300" height="300" loading="lazy"></div><b>Cinnamon</b><p>Canela — the warm note under&nbsp;the&nbsp;coconut.</p></li>
+      <li class="ing reveal" style="--tint:#F3E6C3"><div class="disc"><img src="assets/ingredients/ing-vanilla-extract.webp" srcset="assets/ingredients/ing-vanilla-extract.webp 300w, assets/ingredients/ing-vanilla-extract@2x.webp 600w" sizes="320px" alt="Vanilla extract" width="300" height="300" loading="lazy"></div><b>Vanilla extract</b><p>The last soft edge before the finish.</p></li>
+    </ul>
+    <div class="inside-foot reveal">
+      <p class="small"><strong>Coquetearte:</strong> coconut water · coconut milk · cane sugar · agave syrup · natural flavors · cinnamon · vanilla extract.</p>
+      <p class="small">The artist editions are the same drink. The flavor studies are imagined, not bottled — they have no formula. No alcohol: the can’s gold band says it out loud — keep refrigerated · non-alcoholic.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STORY ============ -->
+<section class="sec" id="story">
+  <div class="wrap story-grid">
+    <div class="story-media reveal-img"><img src="assets/story/coqui-macro.webp" alt="A coquí on a wet leaf at night, a red hibiscus and the moon behind it" width="1122" height="1402" loading="lazy" data-parallax-img></div>
+    <div class="story-text">
+      <p class="eyebrow reveal" lang="es">De El Yunque</p>
+      <h2 class="h2 reveal">The frog that names us.</h2>
+      <p class="reveal">El Yunque is the rainforest that sits over the island — warm, wet, awake after dark. The coquí is the small tree frog who lives in it. At dusk he starts: two notes, <span lang="es">co… quí</span>, over and over, until the whole hillside is answering.</p>
+      <p class="reveal">That call is our name, our sound and our first ingredient. The rest is coconut — water and milk, a little cane and agave, cinnamon, vanilla. Cold, non-alcoholic, Puerto Rican. Everything we make starts on that hillside, after dark.</p>
+      <div class="story-inset reveal"><img src="assets/story/el-yunque-coast.webp" alt="Puerto Rico, from El Yunque down to the coast" width="150" height="100" loading="lazy"><p class="tiny">El Yunque, down to the coast. The coquí sings two notes, all night, from this hillside.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVE ============ -->
+<section class="sec" id="serve">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow reveal" lang="es">Cómo se sirve</p>
+      <h2 class="h2 reveal">How to serve</h2>
+      <p class="lead reveal">Serving suggestions, not recipes. Three ways we like it cold — no measurements, nothing to mix.</p>
+    </div>
+    <ul class="serve-grid">
+      <li class="serve">
+        <div class="photo reveal-img" style="--pos:52% 50%"><img src="assets/serves/serve-rainline.webp" alt="A tall glass of Coquetearte over ice beside the can" width="1536" height="1024" loading="lazy"></div>
+        <div class="txt reveal"><p class="eyebrow">Over ice</p><b lang="es">Sobre hielo</b><p>Straight from the can over a tall glass of ice. Nothing else.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
+      </li>
+      <li class="serve">
+        <div class="photo reveal-img" style="--pos:58% 50%"><img src="assets/serves/serve-golden-hour.webp" alt="A short glass of Coquetearte at sunset beside the can" width="1536" height="1024" loading="lazy"></div>
+        <div class="txt reveal"><p class="eyebrow">With coffee</p><b lang="es">Con café</b><p>Cold Coquetearte, a short espresso poured on top, stirred once.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
+      </li>
+      <li class="serve">
+        <div class="photo reveal-img" style="--pos:52% 50%"><img src="assets/serves/serve-dusk.webp" alt="A small glass of Coquetearte at dusk beside the can" width="1536" height="1024" loading="lazy"></div>
+        <div class="txt reveal"><p class="eyebrow">After dark</p><b lang="es">De noche</b><p>A short glass, ice, and the can opened at blue hour — when the coquí starts.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ FIND ============ -->
+<section class="sec" id="find">
+  <div class="wrap find-grid">
+    <div class="map-card reveal-img">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" role="img" aria-labelledby="pr-t pr-d">
+        <title id="pr-t">Puerto Rico</title>
+        <desc id="pr-d">A map of Puerto Rico with four pins: San Juan, Caguas, Ponce and Mayagüez. Each is an area Coquírico is working toward, not a store.</desc>
+        <g class="land">
+          <path class="coq-pr-land" d="M812.9 176 808 179.6 807.4 183.7 803.2 184.1 798.6 176.8 793.4 176.9 791.6 182.1 796.2 188.4 791.7 192.2 786.1 191.2 778.2 187.1 770 189.9 761.4 194.1 752.2 196.3 744.4 199.9 736.3 208 719.6 233.9 718.3 246.9 711.8 255.5 709.3 256.9 698.5 259.3 696 262.4 700.8 276.9 691.7 285.4 674.1 296.3 649.7 304.8 639.1 304.6 628.4 302.3 618.7 301.3 613.1 302.6 599.2 308.1 581.6 308.1 571.9 310.5 544.4 325.3 528.9 326 525.1 328.4 522.5 323.9 522.2 321.6 527.3 320.1 528.5 317.7 526.6 314.7 522.2 311.5 513.1 319.7 507.7 321.2 501 319.6 488.1 318.2 483.6 317.1 477 308.1 471.1 304.9 466.9 303.9 459.2 304.4 448.3 307 435 316.3 425.4 315.2 416.3 308 408.7 299.1 400.7 293.9 385.2 296.6 380.3 299.1 373.5 300.5 358 301.3 348.3 307.1 342.7 308.3 335.3 304.4 328.6 308.1 325.4 302.5 317.3 301.8 298.1 304.4 280.5 298 261.2 298 261.6 291.2 257.4 289.2 251.1 290.6 245.2 294.3 245.2 298 251.6 298 246.2 305.4 236.9 310.5 226.2 313.6 216.3 315.2 201.7 314.6 194.6 315.4 186.9 315.2 185 317.2 183.9 325.3 175.2 324.3 168.5 319.4 158 308.1 148.5 307.6 137.8 305.8 126.5 306 119.8 303.8 113.2 309.4 105.5 313.5 98.6 315.2 76.8 312.7 66.5 307 61.4 311 64.7 322.3 59.6 322 50.3 306.9 50.5 293.1 73 282.8 74.6 279.1 72.7 276.4 68.2 274.1 61.9 275.2 55.9 272.6 56.3 263.3 59.4 258.7 64 255.4 60.2 242.1 65.2 237 64.9 221 69.6 203.1 77.2 195.4 79.9 189.6 76.8 184.4 70.8 179 63.4 155.3 58.9 146.1 39.9 141.9 32.5 127.3 27.9 120.2 24 111.3 24.9 107.8 38.4 103.8 58 95.5 64.7 91.3 76.3 82 77 71 72 62.4 71.4 49.8 80 38.5 103.5 31.6 128.5 32.4 145.4 40.1 194.8 50.2 243.6 43.8 250.3 44.6 267.9 50.8 274.9 51.2 293.3 47.1 320 44.7 332.5 46.3 344.9 50.8 352.6 49.3 382.9 49.6 401.5 55.1 441.4 47.1 478.3 58.3 499.8 52.1 524.7 60 529.9 56 536.1 57 541.2 64 545.2 66 549.7 63.3 553.4 58.4 558.1 59.8 556.5 66.3 565.6 71.1 570.1 82.2 577.3 82.6 592.8 77.8 592.8 74.2 585 73.1 576.5 68.8 563.9 56 594.8 65.8 615.4 70.6 622.2 67.5 626.3 61.2 637 63.5 658.5 69.7 665.8 64.7 671.5 65.9 677.2 70.2 692.4 73.6 700.6 78.2 709.1 87.2 714.3 84.7 717.8 79.8 720.5 80.9 721.1 83.3 718.7 86.1 716.8 89.9 725.2 87.1 728.2 85.2 736.2 96.8 744.1 101.1 750.4 96.7 763 106.7 779.3 109 795.2 96.8 799 97.8 799.2 101.1 794.6 125.6 793.5 146.3 795.5 152.1 793.6 158.2 796.9 161.7 800.8 163.4 807.3 160.2 805.9 164.8 807.3 168.4Z"/>
+          <path class="coq-pr-land" d="M818.2 229.8 827.9 229.8 837.1 229 846.5 225.5 855 220.4 861.7 214.9 866.1 212.5 903.7 206.5 909.7 207.5 926 213.2 950.6 214.2 956.8 216.6 961.4 222.4 957.9 224.2 945.4 223.4 942.2 224.5 933.3 230.7 930.8 233.5 927.6 233.5 923.4 229.5 916.5 231.1 907.6 234.8 870.8 243.5 863.4 247 853.7 243.9 839.1 245.7 825.4 243.8Z"/>
+          <path class="coq-pr-land" d="M934 121.7 945.5 121.7 958.9 124.4 970.3 130 976 138.6 974.6 138.9 969.6 138.6 972.8 142 967.8 142.2 963.9 141.1 961.2 138.7 959.9 134.9 956.8 134.9 961 143.3 961.8 147.3 959.9 152.1 953.5 141.9 933.8 123.5Z"/>
+        </g>
+        <g class="pin"><circle cx="612" cy="78" r="7"/><text x="600" y="46">San Juan <tspan class="s">— coming soon</tspan></text></g>
+        <g class="pin"><circle cx="612" cy="180" r="7"/><text x="600" y="185" text-anchor="end">Caguas <tspan class="s">— coming soon</tspan></text></g>
+        <g class="pin"><circle cx="470" cy="288" r="7"/><text x="470" y="348" text-anchor="middle">Ponce <tspan class="s">— coming soon</tspan></text></g>
+        <g class="pin"><circle cx="84" cy="196" r="7"/><text x="100" y="201">Mayagüez <tspan class="s">— coming soon</tspan></text></g>
+      </svg>
+      <p class="tiny">Areas we’re working toward. Not stockists.</p>
+    </div>
+    <div class="find-text">
+      <p class="eyebrow reveal" lang="es">Llegando a colmados</p>
+      <h2 class="h2 reveal">Where to find us</h2>
+      <p class="lead reveal">Nothing is on shelves yet. These are the parts of the island we’re working toward — colmados first, the way it should be.</p>
+      <form class="form reveal" id="notify" novalidate>
+        <label for="email">Email</label>
+        <div class="row"><input id="email" name="email" type="email" autocomplete="email" required><button class="btn" type="submit">Notify me</button></div>
+        <p class="status" role="status" id="notify-status"></p>
+        <p class="tiny">Presentation only — nothing is sent and no address is stored.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="sec faq" id="faq">
+  <div class="wrap faq-grid">
+    <div class="sec-head">
+      <p class="eyebrow reveal" lang="es">Preguntas</p>
+      <h2 class="h2 reveal">Questions</h2>
+      <p class="lead reveal">Three we get most, open. The rest, a tap away.</p>
+    </div>
+    <div class="faq-list reveal">
+      <details open><summary>Is Coquírico alcoholic?</summary><p class="a">No. Coquetearte is a non-alcoholic coconut drink — it says so on the can. The two exceptions are El Original, our holiday coquito, which is made with coconut and white rum, and the Rum Expression, which is a 21+ concept we have not made.</p></details>
+      <details open><summary>What is coquito?</summary><p class="a">Coquito is Puerto Rico’s holiday coconut drink, shared at Christmas. El Original is our 750 mL bottle of it. Coquetearte is the everyday, coquito-style cooler — same island, no alcohol.</p></details>
+      <details open><summary>Are the flavor studies real drinks?</summary><p class="a">No. Brisa de Parcha, Guayaba Rosada and Café y Canela are flavor studies — imagined, not bottled. There is no formula behind them. The artist editions are the opposite: those are the real Coquetearte recipe wearing different art.</p></details>
+      <details><summary>Where can I find it?</summary><p class="a">Nowhere yet. This is a concept site — presentation only. We’re working toward colmados across the island. Leave an email and we’ll say when.</p></details>
+      <details><summary>Is it vegan? Is there dairy in it?</summary><p class="a">El Original’s own label says vegan coquito. For Coquetearte we only publish what’s printed on the can — coconut water, coconut milk, cane sugar, agave syrup, natural flavors, cinnamon and vanilla extract. The only milk on that list is coconut milk.</p></details>
+      <details><summary>Does it have caffeine?</summary><p class="a">We don’t publish a caffeine figure, so we won’t guess at one. What we do publish is the whole ingredient list above: no coffee and no tea are in it. Café y Canela is a flavor study — a drawing of a coffee idea, not a drink.</p></details>
+      <details><summary>What does coquí mean?</summary><p class="a">The coquí is Puerto Rico’s small tree frog. He sings two notes — co… quí — all night, and he lends the brand its name. Hear him once and you’ll know why the island is loud after dark.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ JOIN ============ -->
+<section class="join" id="join">
+  <div class="wrap">
+    <div class="join-card reveal">
+      <p class="eyebrow" lang="es">Te avisamos</p>
+      <h2 class="h2">Leave an address.</h2>
+      <p class="lead">We’ll say when the first colmado gets it — and nothing else. No list exists yet; this page is a presentation.</p>
+      <form class="news" id="news" novalidate>
+        <div class="row"><input id="news-email" type="email" autocomplete="email" aria-label="Email"><button class="btn" type="submit">Notify me</button></div>
+        <p class="status" role="status" id="news-status"></p>
+        <p class="tiny">Presentation only — nothing is sent and no address is stored.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer" id="footer">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/label/coqui-mark-ink.webp" alt="" aria-hidden="true" width="22" height="22">Coquírico</a>
+    <p class="concept">Concept site — presentation only.</p>
+    <ul class="links"><li><a href="#drinks">Las latas</a></li><li><a href="#ingredients">Lo que lleva</a></li><li><a href="#story">El Yunque</a></li><li><a href="#serve">Cómo se sirve</a></li><li><a href="#find">Dónde</a></li><li><a href="#faq">Preguntas</a></li></ul>
+    <div class="social"><span>Instagram — coming soon</span><span>TikTok — coming soon</span></div>
+    <div class="bottom">
+      <p>© 2026 Coquírico — concept presentation. Nothing on this site is sold, and nothing is an offer. Puerto Rico.</p>
+      <p lang="es">Hecho con cariño y muchos coquís.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="handoff/assets/vendor/gsap.min.js"></script>
+<script src="handoff/assets/vendor/ScrollTrigger.min.js"></script>
+<script src="handoff/assets/vendor/lenis.min.js"></script>
+<script>
+(function(){
+  'use strict';
+  var DRINKS = [
+    {id:'coquetearte', name:'Coquetearte', tier:'real', pill:'Real · en lata', short:'Coconut, cinnamon, vanilla — cold.', accent:'#CAA24C',
+     desc:'The one we actually make. Puerto Rican coconut, cool and creamy, zero alcohol — the real can that every study on this page is dreamed around.',
+     truth:'Core product — non-alcoholic.', inside:'Coconut water · coconut milk · cane sugar · agave syrup · natural flavors · cinnamon · vanilla extract.', insideLabel:'What’s inside',
+     tags:'Sabe a — cremoso · frío · sobre hielo · sin alcohol · boricua · de verdad', img:'coquetearte-can', alt:'Coquetearte — the Coquírico coconut can'},
+    {id:'el-original', name:'El Original', tier:'real', pill:'Real · en botella', short:'The holiday coquito, 750 mL.', accent:'#D39B5F',
+     desc:'Our coquito, and the one Coquírico that is not alcohol-free. The label says it plainly: vegan coquito, made with coconut and white rum. 750 mL, holiday only. Availability to be confirmed.',
+     truth:'Holiday bottle — made with coconut and white rum.', inside:'750 mL bottle, made with coconut and white rum.', insideLabel:'On the label',
+     tags:'Navidad — coquito · botella · coco · ron blanco · 750 ml · de verdad', img:'el-original-bottle-card', alt:'El Original — the 750 mL Coquírico coquito bottle'},
+    {id:'brisa-de-parcha', name:'Brisa de Parcha', tier:'study', pill:'Flavor study', short:'Passionfruit, imagined.', accent:'#F6D859',
+     desc:'A parcha-bright daydream — passionfruit breeze drifting over coconut, tart gold meeting cream. We drew the can and named the feeling. There is no formula behind it, and there isn’t meant to be.',
+     truth:'A flavor study — imagined, not bottled.', inside:null,
+     tags:'Soñamos — brisa · parcha · dorado · viento · imaginado · un quizás', img:'brisa-de-parcha-can', alt:'Brisa de Parcha — a flavor study can, imagined not bottled'},
+    {id:'guayaba-rosada', name:'Guayaba Rosada', tier:'study', pill:'Flavor study', short:'Pink guava, imagined.', accent:'#FF927F',
+     desc:'Pink guava blushing through the cream, soft and floral as an island afternoon. A rose hour dreamed onto the coconut base — drawn, named, and left there. Nothing has been mixed or poured.',
+     truth:'A flavor study — imagined, not bottled.', inside:null,
+     tags:'Soñamos — rosa · guayaba · floral · atardecer · soñado · un quizás', img:'guayaba-rosada-can', alt:'Guayaba Rosada — a flavor study can, imagined not bottled'},
+    {id:'cafe-y-canela', name:'Café y Canela', tier:'study', pill:'Flavor study', short:'Coffee and cinnamon, imagined.', accent:'#D79760',
+     desc:'A cortadito curled into coconut — warm coffee, a whisper of canela, the colmado kettle remembered. It exists as a drawing and a wish. There is no recipe and no can on any shelf.',
+     truth:'A flavor study — imagined, not bottled.', inside:null,
+     tags:'Soñamos — café · canela · tibio · lento · soñado · por ahora', img:'cafe-y-canela-can', alt:'Café y Canela — a flavor study can, imagined not bottled'},
+    {id:'flamboyan-at-dusk', name:'Flamboyán at Dusk', tier:'artist', pill:'Artist edition', short:'Coquetearte, dressed in dusk.', accent:'#EE744E',
+     desc:'Lámina I. The flamboyán ablaze at dusk, pulled in silkscreen fire — coral, flame and dusk-plum wrapped around the can. The art is new. The drink inside is the Coquetearte you already know.',
+     truth:'An artist edition — the real Coquetearte recipe, different art.', inside:'Coconut water · coconut milk · cane sugar · agave syrup · natural flavors · cinnamon · vanilla extract.', insideLabel:'Inside · the Coquetearte recipe',
+     tags:'Misma receta — coral · llama · serigrafía · anochece · de noche', img:'flamboyan-at-dusk-can', alt:'Flamboyán at Dusk — an artist edition of the Coquetearte can'},
+    {id:'rain-on-palm', name:'Rain on Palm', tier:'artist', pill:'Artist edition', short:'Coquetearte, after the rain.', accent:'#68C3AE',
+     desc:'Lámina II. Warm rain sheeting off a broad palm, the whole island leaning in and exhaling at once. Deeper greens, wet light — and underneath the art, the same cold coconut pour.',
+     truth:'An artist edition — the real Coquetearte recipe, different art.', inside:'Coconut water · coconut milk · cane sugar · agave syrup · natural flavors · cinnamon · vanilla extract.', insideLabel:'Inside · the Coquetearte recipe',
+     tags:'Misma receta — lluvia · palma · verde · exhala · sobre hielo', img:'rain-on-palm-can', alt:'Rain on Palm — an artist edition of the Coquetearte can'},
+    {id:'coqui-chorus', name:'Coquí Chorus', tier:'artist', pill:'Artist edition', short:'Coquetearte, wearing the chorus.', accent:'#E9B666',
+     desc:'Lámina III. One coquí opens the dark, another answers, and the whole hillside sings. Warm gold laid over night-green — a nocturne you can hold in one hand, with the real recipe inside it.',
+     truth:'An artist edition — the real Coquetearte recipe, different art.', inside:'Coconut water · coconut milk · cane sugar · agave syrup · natural flavors · cinnamon · vanilla extract.', insideLabel:'Inside · the Coquetearte recipe',
+     tags:'Misma receta — co-quí · coro · noche · oro · canta', img:'coqui-chorus-can', alt:'Coquí Chorus — an artist edition of the Coquetearte can'},
+    {id:'caribbean-night-01', name:'Caribbean Night No. 01', tier:'artist', pill:'Artist edition', short:'Coquetearte, in blue and gold.', accent:'#8FA3D9',
+     desc:'Lámina IV, and the first of the Caribbean Night series. Indigo floods the can and one gold line finds the moon, low over a quiet coast. The same island after last light. The same drink.',
+     truth:'An artist edition — the real Coquetearte recipe, different art.', inside:'Coconut water · coconut milk · cane sugar · agave syrup · natural flavors · cinnamon · vanilla extract.', insideLabel:'Inside · the Coquetearte recipe',
+     tags:'Misma receta — índigo · luna · oro · No. 01 · de noche', img:'caribbean-night-01-can', alt:'Caribbean Night No. 01 — an artist edition of the Coquetearte can'},
+    {id:'future-rum', name:'Rum Expression', tier:'concept', pill:'21+ concept', short:'A bottle we have not made.', accent:'#A9B98A',
+     desc:'Kept for after dark: smoked emerald glass and a possibility, not a promise. Nothing is poured yet — no formula named, no date given. If it ever comes, it will be adult, quiet and unhurried.',
+     truth:'A 21+ concept. No recipe, no date.', inside:null,
+     tags:'De noche — vidrio ahumado · paciencia · adulto · sin prisa · un quizás', img:'future-rum-bottle', alt:'Rum Expression — a 21+ concept bottle, not made'}
+  ];
+
+  var grid = document.getElementById('drink-grid');
+  var detail = document.getElementById('drink-detail');
+  var current = null;
+
+  function el(tag, cls, html){ var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+
+  DRINKS.forEach(function(d){
+    var li = el('li', 'drink reveal');
+    li.setAttribute('data-id', d.id);
+    li.style.setProperty('--accent', d.accent);
+    var btn = el('button', 'field');
+    btn.type = 'button';
+    btn.setAttribute('aria-label', d.name + ' — open details');
+    var img = document.createElement('img');
+    /* ?g query: same file, distinct resource — a can that also stands in the hero otherwise
+       never paints here (Chrome shares the in-flight hero request and drops the second use). */
+    img.src = 'assets/product/' + d.img + '.webp?g';
+    img.srcset = 'assets/product/' + d.img + '.webp?g 540w, assets/product/' + d.img + '@2x.webp?g 1080w';
+    img.sizes = '(max-width:960px) 45vw, 380px';
+    img.width = 540; img.height = 723;
+    img.alt = d.alt;
+    btn.appendChild(img);
+    li.appendChild(btn);
+    li.appendChild(el('span', 'name', d.name));
+    li.appendChild(el('span', 'short', d.short));
+    li.appendChild(el('span', 'pill ' + d.tier, d.pill));
+    li.addEventListener('click', function(){ open(d.id); });
+    grid.appendChild(li);
+  });
+
+  function open(id){
+    if (id === current) return;
+    var d = DRINKS.filter(function(x){ return x.id === id; })[0];
+    if (!d) return;
+    current = id;
+    Array.prototype.forEach.call(grid.children, function(li){
+      li.classList.toggle('is-open', li.getAttribute('data-id') === id);
+    });
+    var apply = function(){
+      detail.style.setProperty('--accent', d.accent);
+      var im = detail.querySelector('.fig img');
+      im.src = 'assets/product/' + d.img + '@2x.webp'; im.alt = d.alt;
+      var pill = detail.querySelector('[data-d="pill"]');
+      pill.className = 'pill ' + d.tier; pill.textContent = d.pill;
+      detail.querySelector('[data-d="name"]').textContent = d.name;
+      detail.querySelector('[data-d="desc"]').textContent = d.desc;
+      detail.querySelector('[data-d="truth"]').textContent = d.truth;
+      var ins = detail.querySelector('[data-d="inside"]');
+      if (d.inside){ ins.innerHTML = '<b>' + d.insideLabel + '</b>' + d.inside; ins.hidden = false; } else { ins.innerHTML = ''; ins.hidden = true; }
+      detail.querySelector('[data-d="tags"]').textContent = d.tags;
+      detail.classList.remove('fade');
+    };
+    if (detail.classList.contains('ready')){
+      detail.classList.add('fade');
+      setTimeout(apply, 220);
+    } else { apply(); detail.classList.add('ready'); }
+  }
+  open('coquetearte');
+
+  /* forms — presentation only, nothing is sent */
+  function wireForm(formId, inputId, statusId){
+    var f = document.getElementById(formId); if (!f) return;
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      var v = document.getElementById(inputId).value.trim();
+      var s = document.getElementById(statusId);
+      if (!/^\S+@\S+\.\S+/.test(v) || /\s/.test(v)){ s.textContent = 'That doesn’t look like an email address.'; return; }
+      s.textContent = 'Gracias — we’ll let you know. (Nothing was sent.)';
+      document.getElementById(inputId).value = '';
+    });
+  }
+  wireForm('notify', 'email', 'notify-status');
+  wireForm('news', 'news-email', 'news-status');
+
+  /* nav */
+  var nav = document.getElementById('nav');
+  var toggle = document.getElementById('nav-toggle');
+  toggle.addEventListener('click', function(){
+    var o = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', o ? 'true' : 'false');
+  });
+  nav.addEventListener('click', function(e){ if (e.target.tagName === 'A') nav.classList.remove('open'); });
+
+  /* faq: reflect open/closed state to assistive tech (native summary keyboard toggle stays) */
+  Array.prototype.forEach.call(document.querySelectorAll('.faq-list details'), function(d){
+    var s = d.querySelector('summary'); if (!s) return;
+    var sync = function(){ s.setAttribute('aria-expanded', d.open ? 'true' : 'false'); };
+    sync();
+    d.addEventListener('toggle', sync);
+  });
+
+  /* ---------------- motion ---------------- */
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]motion=0/.test(location.search);
+  var hasGsap = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+  var html = document.documentElement;
+
+  function onScrollNav(y){ nav.classList.toggle('scrolled', y > 40); }
+
+  if (reduce || !hasGsap){
+    window.addEventListener('scroll', function(){ onScrollNav(window.scrollY); }, {passive:true});
+    onScrollNav(window.scrollY);
+    /* proof harness only: ?at=<id> brings a section to the top WITHOUT scrolling (headless capture
+       returns a blank viewport for scrolled pages). Layout is untouched; the page is shifted. */
+    var at = (location.search.match(/[?&]at=([\w-]+)/) || [])[1];
+    if (at && document.getElementById(at)){
+      var y = document.getElementById(at).getBoundingClientRect().top + window.scrollY - 40;
+      document.body.style.transform = 'translateY(' + (-Math.max(0, y)) + 'px)';
+      nav.classList.add('scrolled');
+    }
+    return;
+  }
+
+  html.classList.add('js');
+  gsap.registerPlugin(ScrollTrigger);
+
+  var lenis = null;
+  if (typeof Lenis !== 'undefined'){
+    lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    window.__lenis = lenis;   /* the EL LLAMADO overture needs to stop/start smooth scroll */
+    lenis.on('scroll', function(e){ ScrollTrigger.update(); onScrollNav(e.scroll); });
+    gsap.ticker.add(function(t){ lenis.raf(t * 1000); });
+    gsap.ticker.lagSmoothing(0);
+    document.querySelectorAll('a[href^="#"]').forEach(function(a){
+      a.addEventListener('click', function(e){
+        var id = a.getAttribute('href');
+        if (id.length < 2) return;
+        var t = document.querySelector(id); if (!t) return;
+        e.preventDefault();
+        lenis.scrollTo(t, { offset: id === '#top' ? 0 : -40, duration: 1.4 });
+      });
+    });
+  } else {
+    window.addEventListener('scroll', function(){ onScrollNav(window.scrollY); }, {passive:true});
+  }
+
+  /* reveals */
+  var reveals = document.querySelectorAll('.reveal, .reveal-img');
+  reveals.forEach(function(node){
+    ScrollTrigger.create({ trigger: node, start: 'top 88%', once: true, onEnter: function(){ node.classList.add('in'); } });
+  });
+  /* belt and braces: anything still hidden after 3s becomes visible */
+  setTimeout(function(){ reveals.forEach(function(n){ n.classList.add('in'); }); }, 3000);
+
+  /* hero: cans rise in, background drifts on scroll */
+  var cans = document.querySelectorAll('[data-can]');
+  gsap.set(cans, { y: 40, opacity: 0 });
+  gsap.to(cans, { y: 0, opacity: 1, duration: 1.4, ease: 'power3.out', stagger: 0.12, delay: 0.15 });
+  var hc = document.querySelector('[data-hero-copy]');
+  gsap.from(hc.children, { y: 24, opacity: 0, duration: 1.1, ease: 'power3.out', stagger: 0.1, delay: 0.25 });
+  gsap.to('[data-parallax]', { yPercent: 12, ease: 'none', scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true } });
+  gsap.to(cans, { yPercent: -10, ease: 'none', scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true } });
+
+  /* hero: every can is its own object. Hit-testing samples each can's real silhouette (alpha mask),
+     so the pointer only ever talks to the one can it is actually over — the others do not move.
+     Hover lifts and turns that can; click raises it and keeps it up until you pick another. */
+  var stage = document.querySelector('.hero-stage');
+  var bgLayers = document.querySelectorAll('.hero-bg img, .hero-bg video');
+  /* bring the shoreline to life — motion only; it fades over the still once it is actually playing */
+  var heroVid = document.querySelector('.hero-bg video');
+  if (heroVid){
+    var vp = heroVid.play(); if (vp && vp.catch) vp.catch(function(){});   // blocked autoplay just leaves the poster
+  }
+  var bgStill = document.querySelector('.hero-bg img');
+  var canData = [];
+  cans.forEach(function(fig, i){
+    var img = fig.querySelector('img'), shadow = fig.querySelector('.shadow');
+    fig.style.perspective = '1400px';
+    img.style.transformOrigin = '50% 82%';
+    img.style.transition = 'none';
+    fig.setAttribute('tabindex', '0');
+    fig.setAttribute('role', 'button');
+    fig.setAttribute('aria-pressed', 'false');
+    var c = { img: img, shadow: shadow, fig: fig, baseZ: getComputedStyle(fig).zIndex || 'auto',
+      phase: i * 1.9, amp: 5.5 + i * 1.4, speed: 0.5 + i * 0.06, sel: false, scale: 1, hot: false,
+      rotY: 0, rotX: 0, tx: 0, lift: 0, trotY: 0, trotX: 0, ttx: 0, tlift: 0, mask: null };
+    /* bake a small alpha map of this can so hit-testing follows the can, not its bounding box */
+    (function(){
+      var MW = 88, MH = 118;
+      function bake(){
+        try {
+          var cv = document.createElement('canvas'); cv.width = MW; cv.height = MH;
+          var cx2 = cv.getContext('2d', { willReadFrequently: true });
+          cx2.drawImage(img, 0, 0, MW, MH);
+          c.mask = cx2.getImageData(0, 0, MW, MH).data; c.mw = MW; c.mh = MH;
+        } catch (err){ c.mask = null; }
+      }
+      if (img.complete && img.naturalWidth) bake(); else img.addEventListener('load', bake, { once: true });
+    })();
+    fig.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggleCan(c); } });
+    canData.push(c);
+  });
+  var bg = { x: 0, tx: 0 };
+  var heroEl = document.getElementById('hero');
+  function zOf(c){ return parseInt(c.fig.style.zIndex || c.baseZ, 10) || 0; }
+  /* topmost can whose actual pixel under (x,y) is opaque; null when the pointer is between cans */
+  function canAt(x, y){
+    var order = canData.slice().sort(function(a, b){ return zOf(b) - zOf(a); });
+    for (var i = 0; i < order.length; i++){
+      var c = order[i], r = c.img.getBoundingClientRect();
+      if (x < r.left || x > r.right || y < r.top || y > r.bottom) continue;
+      if (!c.mask) return c;
+      var u = Math.floor((x - r.left) / r.width * c.mw);
+      var v = Math.floor((y - r.top) / r.height * c.mh);
+      u = u < 0 ? 0 : (u > c.mw - 1 ? c.mw - 1 : u);
+      v = v < 0 ? 0 : (v > c.mh - 1 ? c.mh - 1 : v);
+      if (c.mask[(v * c.mw + u) * 4 + 3] > 40) return c;
+    }
+    return null;
+  }
+  function restAll(){ canData.forEach(function(c){ c.hot = false; c.trotY = c.trotX = c.ttx = c.tlift = 0; }); bg.tx = 0; }
+  window.addEventListener('pointermove', function(e){
+    var hit = canAt(e.clientX, e.clientY);
+    heroEl.style.cursor = hit ? 'pointer' : '';
+    canData.forEach(function(c){
+      if (c !== hit){ c.hot = false; c.trotY = 0; c.trotX = 0; c.ttx = 0; c.tlift = 0; return; }
+      c.hot = true;
+      var r = c.img.getBoundingClientRect();
+      var dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+      var dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+      c.trotY = Math.max(-12, Math.min(12, dx * 13));
+      c.trotX = Math.max(-7, Math.min(7, -dy * 7));
+      c.ttx = dx * 7;
+      c.tlift = -17;
+    });
+    bg.tx = -(e.clientX / window.innerWidth - 0.5) * 8;
+  }, { passive: true });
+  heroEl.addEventListener('pointerleave', restAll);
+  function toggleCan(c){
+    var was = c.sel;
+    canData.forEach(function(o){ o.sel = false; o.fig.style.zIndex = o.baseZ; o.fig.setAttribute('aria-pressed', 'false'); });
+    c.sel = !was;
+    c.fig.style.zIndex = c.sel ? '6' : c.baseZ;
+    c.fig.setAttribute('aria-pressed', c.sel ? 'true' : 'false');
+  }
+  heroEl.addEventListener('click', function(e){
+    var hit = canAt(e.clientX, e.clientY);
+    if (hit) toggleCan(hit);
+    else canData.forEach(function(o){ o.sel = false; o.fig.style.zIndex = o.baseZ; o.fig.setAttribute('aria-pressed', 'false'); });
+  });
+  gsap.ticker.add(function(time){
+    if (window.scrollY > window.innerHeight * 1.15) return;
+    var k = 0.11;
+    canData.forEach(function(c){
+      var targetLift = c.sel ? -46 : c.tlift;
+      var targetScale = c.sel ? 1.06 : 1;
+      c.rotY += (c.trotY - c.rotY) * k; c.rotX += (c.trotX - c.rotX) * k;
+      c.tx += (c.ttx - c.tx) * k; c.lift += (targetLift - c.lift) * k; c.scale += (targetScale - c.scale) * k;
+      var fy = Math.sin(time * c.speed + c.phase) * c.amp;
+      var ty = fy + c.lift, up = Math.max(0, -ty);
+      c.img.style.transform = 'translate(' + c.tx.toFixed(2) + 'px,' + ty.toFixed(2) + 'px) rotateY(' + c.rotY.toFixed(2) + 'deg) rotateX(' + c.rotX.toFixed(2) + 'deg) scale(' + c.scale.toFixed(3) + ')';
+      if (c.shadow){ c.shadow.style.transform = 'translate(-44%,-50%) scale(' + (1 - up * 0.012).toFixed(3) + ')'; c.shadow.style.opacity = (1 - up * 0.02).toFixed(3); }
+    });
+    bg.x += (bg.tx - bg.x) * 0.08;
+    var bt = 'translateX(' + bg.x.toFixed(2) + 'px)';
+    if (bgStill) bgStill.style.transform = bt;
+    /* a slow cinematic push on the footage so the shoreline is unmistakably alive, not a photo */
+    if (heroVid){ var kb = 1.05 + Math.sin(time * 0.21) * 0.05;
+      heroVid.style.transform = bt + ' scale(' + kb.toFixed(4) + ')'; }
+  });
+
+  /* media block: kinetic word slides across, image drifts */
+  gsap.fromTo('[data-kinetic]', { xPercent: 4 }, { xPercent: -46, ease: 'none', scrollTrigger: { trigger: '#media', start: 'top bottom', end: 'bottom top', scrub: true } });
+  gsap.fromTo('[data-media-img]', { yPercent: -6 }, { yPercent: 6, ease: 'none', scrollTrigger: { trigger: '#media', start: 'top bottom', end: 'bottom top', scrub: true } });
+  document.querySelectorAll('[data-parallax-img]').forEach(function(im){
+    gsap.fromTo(im, { yPercent: -5 }, { yPercent: 5, ease: 'none', scrollTrigger: { trigger: im.parentNode, start: 'top bottom', end: 'bottom top', scrub: true } });
+  });
+
+  /* hash on load */
+  if (location.hash && document.querySelector(location.hash)){
+    var target = document.querySelector(location.hash);
+    var jump = function(){ var y = target.getBoundingClientRect().top + window.scrollY - 40; if (lenis) lenis.scrollTo(y, { immediate: true }); else window.scrollTo(0, y); ScrollTrigger.refresh(); };
+    jump(); setTimeout(jump, 300); setTimeout(jump, 1200);
+  }
+  window.addEventListener('load', function(){ ScrollTrigger.refresh(); });
+})();
+</script>
+
+<style id="ov-css">
+/* ===== EL LLAMADO — the opening overture, ported from V1 + the spinning coquí token ===== */
+#ov{ position:fixed; inset:0; z-index:90; pointer-events:none; overflow:hidden; }
+#ov-veil{ position:absolute; inset:0; background:#0B1109; opacity:1; }
+#ov-ff{ position:absolute; inset:0; width:100%; height:100%; }
+#ov-wave{ position:absolute; inset:0; width:100%; height:100%; }
+#ov-spark{ position:absolute; inset:0; }
+#ov .spk{ position:absolute; width:26px; height:26px; margin:-13px 0 0 -13px; opacity:0; will-change:transform,opacity; }
+#ov .spk svg{ width:100%; height:100%; display:block; }
+/* the coquí token — a little medallion that spins a half-turn on every syllable */
+#ov-token{ position:absolute; left:50%; top:16%; width:88px; height:88px; margin:-44px 0 0 -44px; opacity:0; perspective:700px; }
+#ov-token .tok{ position:relative; width:100%; height:100%; transform-style:preserve-3d; will-change:transform; }
+#ov-token .tok-f,#ov-token .tok-b{ position:absolute; inset:0; border-radius:50%; display:grid; place-items:center;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden; box-shadow:0 12px 34px rgba(0,0,0,.42); }
+#ov-token .tok-f{ background:#F4EAD2; border:2px solid #CAA24C; }
+#ov-token .tok-b{ background:#CAA24C; border:2px solid #F4EAD2; transform:rotateY(180deg); }
+#ov-token img{ width:52%; height:auto; display:block; }
+#ov-token .tok-b img{ filter:brightness(0) invert(1); }
+#ov-type{ position:absolute; inset:0; }
+#ov .ovs{ position:absolute; left:50%; top:45%; font-family:var(--serif); font-style:italic; font-weight:600;
+  color:#F4EAD2; font-size:clamp(4rem,17vw,15rem); letter-spacing:-.02em; line-height:.9; opacity:0;
+  white-space:nowrap; will-change:transform,opacity,color; }
+#ov-wordmark{ position:absolute; left:50%; top:45%; font-family:var(--serif); font-weight:600;
+  font-size:clamp(2.4rem,9vw,7.5rem); letter-spacing:.08em; line-height:1; text-transform:uppercase;
+  opacity:0; white-space:nowrap; will-change:transform,opacity; text-shadow:0 0 46px rgba(202,162,76,.30); }
+#ov-wordmark span{ display:inline-block; color:#F4EAD2; will-change:transform,opacity,color; }
+#ov-frameL,#ov-frameR{ position:absolute; top:50%; transform:translateY(-50%); font-family:var(--sans); font-weight:600;
+  font-size:clamp(.58rem,.95vw,.8rem); letter-spacing:.34em; text-transform:uppercase; color:#CAA24C; opacity:0; }
+#ov-frameL{ left:1.8rem; } #ov-frameR{ right:1.8rem; }
+#ov-skip{ position:absolute; right:1.5rem; top:1.35rem; pointer-events:auto; font-family:var(--sans); font-weight:600;
+  font-size:.58rem; letter-spacing:.24em; text-transform:uppercase; color:#F4EAD2; opacity:.5;
+  background:none; border:1px solid rgba(244,234,210,.28); border-radius:20px; padding:.45rem .85rem; cursor:pointer; }
+#ov-skip:hover,#ov-skip:focus-visible{ opacity:.95; }
+html.ov-lock, html.ov-lock body{ overflow:hidden !important; height:100%; touch-action:none; }
+@media (prefers-reduced-motion:reduce){ #ov{ display:none !important; } }
+</style>
+<script id="ov-js">
+/* EL LLAMADO — the coquí's call pours the name up, a token spins with it, then it drains to the hero. */
+(function(){
+  if(/[?&]motion=0/.test(location.search) || !window.gsap) return;          // static mode → no overture
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var QA=/[?&]qa=1/.test(location.search);
+
+  var ov=document.createElement('div'); ov.id='ov'; ov.setAttribute('aria-hidden','true');
+  ov.innerHTML=''+
+    '<canvas id="ov-ff"></canvas>'+
+    '<div id="ov-veil"></div>'+
+    '<svg id="ov-wave" preserveAspectRatio="none"><path id="ov-wave-path" d=""></path></svg>'+
+    '<div id="ov-spark"></div>'+
+    '<div id="ov-token"><div class="tok">'+
+      '<div class="tok-f"><img src="assets/label/coqui-mark-ink.webp" alt=""></div>'+
+      '<div class="tok-b"><img src="assets/label/coqui-mark-ink.webp" alt=""></div>'+
+    '</div></div>'+
+    '<div id="ov-type"><span class="ovs" id="ovs0">CO</span><span class="ovs" id="ovs1">QUÍ</span>'+
+      '<span class="ovs" id="ovs2">RI</span><span class="ovs" id="ovs3">CO</span></div>'+
+    '<div id="ov-wordmark"><span>C</span><span>O</span><span>Q</span><span>U</span><span>Í</span><span>R</span><span>I</span><span>C</span><span>O</span></div>'+
+    '<div id="ov-frameL">de noche</div><div id="ov-frameR">canta —</div>'+
+    '<button id="ov-skip" type="button">Skip</button>';
+  document.body.appendChild(ov);
+
+  var veil=ov.querySelector('#ov-veil'), waveSvg=ov.querySelector('#ov-wave'), wavePath=ov.querySelector('#ov-wave-path'),
+      wordmark=ov.querySelector('#ov-wordmark'), wmLetters=wordmark.querySelectorAll('span'),
+      frameL=ov.querySelector('#ov-frameL'), frameR=ov.querySelector('#ov-frameR'), sparkLayer=ov.querySelector('#ov-spark'),
+      token=ov.querySelector('#ov-token'), tokInner=ov.querySelector('#ov-token .tok'), skipBtn=ov.querySelector('#ov-skip'),
+      syl=[ov.querySelector('#ovs0'),ov.querySelector('#ovs1'),ov.querySelector('#ovs2'),ov.querySelector('#ovs3')],
+      navbrand=document.querySelector('.nav .brand');
+
+  var SPARKS=[], SPK_POS=[[.28,.24],[.71,.22],[.20,.40],[.80,.38],[.36,.15],[.63,.15],[.50,.29]];
+  SPK_POS.forEach(function(p){ var d=document.createElement('div'); d.className='spk'; d.style.left=(p[0]*100)+'%'; d.style.top=(p[1]*100)+'%';
+    d.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 0C12.9 8 16 11.1 24 12 16 12.9 12.9 16 12 24 11.1 16 8 12.9 0 12 8 11.1 11.1 8 12 0Z" fill="#ecc978"/></svg>';
+    sparkLayer.appendChild(d); SPARKS.push(d); });
+
+  var lenis=window.__lenis, docEl=document.documentElement;
+  function prevent(e){ e.preventDefault(); }
+  function keyPrevent(e){ if([32,33,34,35,36,38,40].indexOf(e.keyCode)>=0) e.preventDefault(); }
+  function lock(){ docEl.classList.add('ov-lock'); if(lenis&&lenis.stop) lenis.stop(); try{ scrollTo(0,0);}catch(e){}
+    addEventListener('wheel',prevent,{passive:false}); addEventListener('touchmove',prevent,{passive:false}); addEventListener('keydown',keyPrevent,false); }
+  function unlock(){ docEl.classList.remove('ov-lock'); removeEventListener('wheel',prevent,{passive:false});
+    removeEventListener('touchmove',prevent,{passive:false}); removeEventListener('keydown',keyPrevent,false);
+    if(lenis){ if(lenis.start) lenis.start(); if(lenis.scrollTo) lenis.scrollTo(0,{immediate:true}); } }
+
+  /* wave engine — buildWavePath / easeWipe, the same shape V1 pours with */
+  var S={ wLevel:0.045, creamMix:0, bloom:0, waveOn:true };
+  function easeWipe(w){ var e=w<0.5?4*w*w*w:1-Math.pow(-2*w+2,3)/2; return e+Math.sin(w*Math.PI)*0.03*Math.sin(w*9.4); }
+  function buildWave(w,time,H,W){ var edge=(1-easeWipe(Math.min(1,w)))*H, amp=Math.sin(Math.PI*Math.min(1,w))*H*0.05+6;
+    var pts=['M0 '+H,'L0 '+edge.toFixed(1)],N=30;
+    for(var i=0;i<=N;i++){ var x=i/N*W, y=edge+Math.sin(i/N*Math.PI*2.6+time*1.7)*amp+Math.sin(i/N*Math.PI*5.2-time*1.1)*amp*0.45; pts.push('L'+x.toFixed(1)+' '+y.toFixed(1)); }
+    pts.push('L'+W+' '+H,'Z'); return pts.join(' '); }
+  function lerpHex(a,b,t){ function h(x){return [parseInt(x.substr(1,2),16),parseInt(x.substr(3,2),16),parseInt(x.substr(5,2),16)];}
+    var A=h(a),B=h(b); return 'rgb('+Math.round(A[0]+(B[0]-A[0])*t)+','+Math.round(A[1]+(B[1]-A[1])*t)+','+Math.round(A[2]+(B[2]-A[2])*t)+')'; }
+
+  var ff=ov.querySelector('#ov-ff'), fx=ff.getContext('2d'), FF=[], DPR=Math.min(devicePixelRatio,2), seed={x:.5,y:.5,on:0};
+  function sizeFF(){ ff.width=innerWidth*DPR; ff.height=innerHeight*DPR; }
+  sizeFF(); addEventListener('resize', sizeFF);
+  for(var i=0;i<46;i++){ FF.push({x:Math.random(),y:Math.random(),r:.6+Math.random()*1.7,vx:(Math.random()-.5)*6e-5,vy:-8e-5-Math.random()*12e-5,ph:Math.random()*6.28,sp:.6+Math.random()*1.2}); }
+  function drawFF(tSec){ fx.clearRect(0,0,ff.width,ff.height);
+    for(var i=0;i<FF.length;i++){ var f=FF[i]; f.x+=f.vx; f.y+=f.vy;
+      if(S.bloom>0){ f.x+=(f.x-seed.x)*S.bloom*.02; f.y+=(f.y-seed.y)*S.bloom*.02; }
+      if(f.y<-.05){f.y=1.05;f.x=Math.random();} if(f.x<-.05)f.x=1.05; if(f.x>1.05)f.x=-.05;
+      var px=f.x*ff.width,py=f.y*ff.height,a=Math.min(1,(0.3+0.7*(0.5+0.5*Math.sin(tSec*f.sp+f.ph)))*(0.3+0.7*S.bloom+0.2)),R=f.r*DPR*(1+S.bloom*.5)*6;
+      var g=fx.createRadialGradient(px,py,0,px,py,R); g.addColorStop(0,'rgba(255,224,150,'+(a*.9).toFixed(3)+')'); g.addColorStop(1,'rgba(255,224,150,0)');
+      fx.fillStyle=g; fx.beginPath(); fx.arc(px,py,R,0,6.2832); fx.fill(); }
+    if(seed.on>0){ var sx=seed.x*ff.width,sy=seed.y*ff.height,rr=(60+180*(1-seed.on))*DPR; var g2=fx.createRadialGradient(sx,sy,0,sx,sy,rr);
+      g2.addColorStop(0,'rgba(255,230,160,'+(.5*seed.on).toFixed(3)+')'); g2.addColorStop(1,'rgba(255,230,160,0)'); fx.fillStyle=g2; fx.beginPath(); fx.arc(sx,sy,rr,0,6.2832); fx.fill(); seed.on*=.94; if(seed.on<.01)seed.on=0; }
+  }
+
+  var t0=performance.now();
+  function render(){ var tSec=(performance.now()-t0)/1000, W=innerWidth, H=innerHeight;
+    waveSvg.setAttribute('viewBox','0 0 '+W+' '+H);
+    if(S.waveOn){ waveSvg.style.display='block'; wavePath.setAttribute('d', buildWave(S.wLevel,tSec,H,W)); wavePath.setAttribute('fill', lerpHex('#B5611F','#F4EAD2',S.creamMix)); }
+    else waveSvg.style.display='none';
+    drawFF(tSec);
+  }
+  gsap.ticker.add(render);
+
+  /* the coquí's own voice — synthesised, no audio files */
+  var AC=window.AudioContext||window.webkitAudioContext, ctx=null, master=null;
+  var gestured=false;   /* the site never makes a sound until the visitor actually interacts */
+  function audioOn(){ if(!AC || QA || !gestured) return;
+    if(!ctx){ ctx=new AC(); master=ctx.createGain(); master.gain.value=.85; master.connect(ctx.destination); } if(ctx.state==='suspended') ctx.resume(); }
+  function coqui(dist,pan){ if(!ctx) return; var t=ctx.currentTime+.02, vol=.24*(1-dist*.72), lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=6200-dist*4400;
+    var pn=ctx.createStereoPanner?ctx.createStereoPanner():null; if(pn){pn.pan.value=pan||0; lp.connect(pn); pn.connect(master);} else lp.connect(master);
+    [[1080,1120,t,.10,vol],[1480,2140,t+.185,.30,vol*1.15]].forEach(function(n){ var o=ctx.createOscillator(); o.type='sine'; var g=ctx.createGain();
+      o.frequency.setValueAtTime(n[0],n[2]); o.frequency.exponentialRampToValueAtTime(n[1],n[2]+n[3]*.8); g.gain.setValueAtTime(.0001,n[2]); g.gain.exponentialRampToValueAtTime(n[4],n[2]+.018); g.gain.exponentialRampToValueAtTime(.0001,n[2]+n[3]); o.connect(g); g.connect(lp); o.start(n[2]); o.stop(n[2]+n[3]+.05); }); }
+  var NOTES=[[1080,1120,.12],[1500,2100,.22],[1560,1450,.14],[1180,1240,.20]];
+  function brandNote(i){ if(!ctx) return; var n=NOTES[i], t=ctx.currentTime+.02, lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=5200; lp.connect(master);
+    var o=ctx.createOscillator(); o.type='sine'; var g=ctx.createGain(); o.frequency.setValueAtTime(n[0],t); o.frequency.exponentialRampToValueAtTime(n[1],t+n[2]*.8);
+    g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.27,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+n[2]); o.connect(g); g.connect(lp); o.start(t); o.stop(t+n[2]+.06); }
+
+  var done=false, tl=null;
+  function build(){
+    gsap.set(syl,{xPercent:-50,yPercent:-50}); gsap.set(wordmark,{xPercent:-50,yPercent:-50});
+    var ACC=['#CAA24C','#FF9D6B','#EAB86A','#F2C75D'];
+    syl.forEach(function(s,i){ gsap.set(s,{color:ACC[i]}); });
+    tl=gsap.timeline({ paused:QA, defaults:{ ease:'power3.out' }, onComplete:finish });
+    tl.to([frameL,frameR],{opacity:.82,duration:.6,ease:'power2.out'},0.25);
+    /* the token lands first, then turns a half-turn on every syllable */
+    tl.fromTo(token,{opacity:0,scale:.35,y:18},{opacity:1,scale:1,y:0,duration:.6,ease:'back.out(2.4)'},0.42);
+    tl.add(function(){ audioOn(); coqui(.45,0); seed.x=.5; seed.y=.28; seed.on=1; gsap.to(S,{bloom:.35,duration:.5,ease:'power2.out'}); },0.5);
+    SPARKS.forEach(function(d,i){
+      tl.fromTo(d,{opacity:0,scale:.2,rotate:-50},{opacity:1,scale:1,rotate:0,duration:.5,ease:'back.out(3)'},0.7+i*0.13);
+      tl.to(d,{opacity:.4,scale:.82,duration:.7,ease:'sine.inOut',yoyo:true,repeat:2},1.5+i*0.13);
+    });
+    var beats=[0.85,1.42,1.98,2.52], levels=[0.18,0.28,0.36,0.42], mixes=[0.35,0.62,0.82,1.0];
+    beats.forEach(function(bt,i){
+      tl.add(function(){ brandNote(i); },bt);
+      tl.to(tokInner,{rotationY:'+=180',duration:.52,ease:'power2.inOut'},bt);
+      tl.to(S,{wLevel:levels[i], creamMix:mixes[i], duration:(i<3?0.5:0.55), ease:'power2.inOut'},bt);
+      if(i>0) tl.to(syl[i-1],{opacity:0,yPercent:-96,duration:.30,ease:'power2.in'},bt);
+      tl.fromTo(syl[i],{opacity:0,xPercent:-50,yPercent:-12,scale:.66,rotate:-4},
+                       {opacity:1,xPercent:-50,yPercent:-50,scale:1,rotate:0,duration:.52,ease:'back.out(2.2)'},bt+0.04);
+    });
+    tl.to(S,{bloom:.7,duration:.7},2.0);
+    tl.to(syl[3],{opacity:0,yPercent:-96,duration:.32,ease:'power2.in'},2.98);
+    gsap.set(wordmark,{opacity:1});
+    tl.fromTo(wmLetters,{opacity:0,yPercent:44,scale:.5,rotate:-5,color:function(i){return ACC[i%ACC.length];}},
+                        {opacity:1,yPercent:0,scale:1,rotate:0,duration:.5,ease:'back.out(2.3)',stagger:.045},3.02);
+    tl.to(wmLetters,{color:'#F4EAD2',duration:.55,ease:'power1.inOut',stagger:.028},3.42);
+    tl.to([frameL,frameR],{opacity:0,duration:.5,ease:'power2.in'},3.5);
+    tl.to(SPARKS,{opacity:0,scale:.4,duration:.55,ease:'power2.in'},3.5);
+    tl.to(token,{opacity:0,y:-36,scale:.72,duration:.6,ease:'power2.in'},3.5);
+    tl.to(S,{wLevel:0.045,duration:.8,ease:'power2.inOut'},3.55);
+    tl.to(veil,{opacity:0,duration:.9,ease:'power2.inOut'},4.05);
+    tl.to(ff,{opacity:0,duration:.7,ease:'power2.out'},4.35);
+    tl.add(function(){ flipToHero(); },4.55);
+    tl.add(function(){ audioOn(); coqui(.25,-.2); },4.7);
+    tl.to({},{duration:.85},4.55);
+    window.__ov=tl;
+    window.__ovSeek=function(t){ done=false; S.waveOn=true; veil.style.display=''; waveSvg.style.display=''; ff.style.opacity=1;
+      gsap.set(veil,{opacity:1}); if(wordmark){ wordmark.style.display=''; gsap.set(wordmark,{clearProps:'x,y'}); }
+      tl.pause(); tl.time(t); render(); return {t:t,wLevel:+S.wLevel.toFixed(3),creamMix:+S.creamMix.toFixed(3),bloom:+S.bloom.toFixed(3)}; };
+    if(!QA) setTimeout(function(){ if(!done) finish(); }, 12000);   // never leave the page locked (QA holds frames)
+  }
+  function flipToHero(){
+    if(!navbrand) return;
+    var wr=wordmark.getBoundingClientRect(), nr=navbrand.getBoundingClientRect();
+    var wcx=wr.left+wr.width/2, wcy=wr.top+wr.height/2, ncx=nr.left+nr.width/2, ncy=nr.top+nr.height/2, sc=nr.width/Math.max(1,wr.width);
+    gsap.to(wordmark,{ x:(ncx-wcx), y:(ncy-wcy), scale:sc, opacity:0, duration:.7, ease:'power3.inOut' });
+  }
+  function finish(){ if(done) return; done=true;
+    S.waveOn=false; gsap.ticker.remove(render); unlock();
+    if(ov&&ov.parentNode) ov.parentNode.removeChild(ov);
+  }
+  function skip(){ audioOn(); if(tl) tl.pause(); finish(); }
+  skipBtn.addEventListener('click', function(e){ e.stopPropagation(); skip(); });
+  ['pointerdown','keydown','wheel','touchstart'].forEach(function(ev){ addEventListener(ev, function(){ gestured=true; audioOn(); }, {passive:true}); });
+
+  function boot(){ lock(); build(); }
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(boot); setTimeout(function(){ if(!tl) boot(); }, 1000); }
+  else boot();
+})();
+</script>
+</body>
+</html>

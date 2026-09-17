@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coquírico — Noche de Coquí</title>
+<meta name="description" content="Coquírico — a Puerto Rican coconut drink. No alcohol, no hurry. A concept presentation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap">
+<style>
+/* ══════════════════════════════════════════════════════════════════════════
+   NOCHE DE COQUÍ — the after-dark editorial
+   Day at the top of the page, night at the bottom. Scrolling is nightfall.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* day */
+  --cream:#F4E7C7; --cream-2:#F9F1DE; --paper:#F8F1E2;
+  --ink:#1A1510;   --ink-2:#5C4C3F;   --ink-3:#8A7A66;
+  /* night */
+  --night:#050F08; --night-2:#0A1B11; --night-3:#0E2416; --indigo:#050A16;
+  /* fire */
+  --ember:#E3482A; --ember-2:#C0421F; --cinnamon:#9B4E27;
+  --gold:#C7A03A;  --gold-2:#E9C46A;  --gold-3:#F6E0A8;
+  --palm:#2F6B3A;  --lime:#8CB357;
+  /* honesty tiers */
+  --t-real:#E9C46A; --t-artist:#EE744E; --t-study:#7FB6A0; --t-concept:#8E97AC;
+
+  --d:"Bodoni Moda",'Didot','Bodoni MT',Georgia,serif;
+  --g:"Bricolage Grotesque",'Helvetica Neue',Arial,sans-serif;
+  --m:"DM Mono",'SFMono-Regular',Consolas,monospace;
+  --pad:clamp(20px,5vw,104px);
+  --grain:url("../assets/tex/paper-grain-512.webp");
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--night); color:var(--ink);
+  font-family:var(--g); font-size:17px; line-height:1.55;
+  font-optical-sizing:auto; -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3,p,figure,ul{margin:0;padding:0}
+ul{list-style:none}
+
+/* ── shared type atoms ───────────────────────────────────────────────── */
+.mono{font-family:var(--m);font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:400}
+.disp{font-family:var(--d);font-weight:900;line-height:.86;letter-spacing:-.025em}
+.ital{font-style:italic}
+.ghost{
+  position:absolute; font-family:var(--d); font-weight:900; font-style:italic;
+  line-height:.72; pointer-events:none; user-select:none; z-index:0;
+  -webkit-text-fill-color:transparent; -webkit-text-stroke:2px currentColor;
+}
+
+/* honesty mark — a printed tag, not a UI pill */
+.tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--m);
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
+.tag::before{content:"";width:16px;height:3px;background:currentColor;flex:none}
+.tag.real{color:var(--t-real)} .tag.artist{color:var(--t-artist)}
+.tag.study{color:var(--t-study)} .tag.concept{color:var(--t-concept)}
+
+/* ══ NAV ═══════════════════════════════════════════════════════════════ */
+.nav{
+  position:fixed; inset:0 0 auto 0; z-index:60; display:flex; align-items:center;
+  gap:36px; padding:20px var(--pad) 18px; color:var(--ink); mix-blend-mode:normal;
+}
+.nav b{font-family:var(--d);font-weight:900;font-size:21px;letter-spacing:-.01em}
+.nav ul{display:flex;gap:26px;margin-left:auto}
+.nav a{text-decoration:none;opacity:.8}
+.nav .navcta{border:1px solid currentColor;padding:6px 14px;opacity:1}
+@supports (animation-timeline:scroll()){
+  @media (prefers-reduced-motion:no-preference){
+    .nav{animation:navink linear both;animation-timeline:scroll(root);animation-range:640px 1080px}
+    @keyframes navink{from{color:var(--ink)}to{color:var(--gold-3)}}
+  }
+}
+
+/* ══ BEAT 1 · THE COVER ════════════════════════════════════════════════ */
+#beat-1{
+  position:relative; height:100vh; min-height:990px; max-height:1000px; overflow:hidden;
+  background:
+    radial-gradient(85% 62% at 82% 76%, rgba(227,72,42,.60) 0%, rgba(227,72,42,.20) 42%, transparent 72%),
+    radial-gradient(52% 40% at 96% 88%, rgba(155,78,39,.55) 0%, transparent 70%),
+    linear-gradient(158deg,#FAF3E2 0%,#F4E7C7 30%,#EDD49C 52%,#E2A863 74%,#C4682E 100%);
+}
+#beat-1::after{content:"";position:absolute;inset:0;background:var(--grain) repeat;
+  opacity:.55;mix-blend-mode:multiply;pointer-events:none;z-index:5}
+.wrap{position:relative;max-width:1760px;margin:0 auto;padding:0 var(--pad);height:100%}
+
+/* rotated margin slug */
+.slug{
+  position:absolute; left:calc(var(--pad) - 46px); top:50%; transform:rotate(-90deg) translateX(-50%);
+  transform-origin:left center; color:var(--ink-2); white-space:nowrap; z-index:6;
+}
+.slug span{color:var(--ember-2)}
+
+/* headline */
+.cover{position:absolute;left:var(--pad);top:138px;z-index:12;max-width:1300px}
+.cover .kick{color:var(--ink-2);margin-bottom:26px}
+.h1{font-family:var(--d);font-weight:900;line-height:.82;letter-spacing:-.03em;color:var(--ink)}
+.h1 i{font-style:italic;display:block}
+.l1{font-size:clamp(46px,7.1vw,132px)}
+.l2{font-size:clamp(46px,7.1vw,132px);margin-left:.34em}
+.l3{
+  font-family:var(--d);font-weight:900;font-style:italic;color:var(--ember);
+  font-size:clamp(66px,14.4vw,276px);line-height:.78;letter-spacing:-.05em;
+  margin-left:1.55em; margin-top:-.03em; display:block; position:relative; z-index:14;
+  text-shadow:0 2px 30px rgba(255,238,205,.55);
+}
+.l3 em{font-style:italic;color:var(--gold);}
+.deck{
+  margin-top:44px;max-width:426px;font-size:21px;line-height:1.45;color:#4A3527;
+  font-weight:400;
+}
+.deck strong{font-weight:600;color:var(--ink)}
+.facts{margin-top:20px;padding-top:12px;border-top:1.5px solid rgba(26,21,16,.32);
+  max-width:544px;color:#6A5140;font-size:11.5px}
+
+/* the can */
+.can-hero{
+  position:absolute;right:calc(var(--pad) - 30px);bottom:88px;z-index:9;
+  width:min(41.5vw,566px);
+}
+.can-hero img{width:100%;height:auto;filter:drop-shadow(0 42px 60px rgba(74,26,10,.42))}
+.can-hero::before{
+  content:"";position:absolute;left:-24%;top:2%;width:148%;height:104%;z-index:-1;
+  background:radial-gradient(50% 46% at 50% 52%,rgba(255,205,120,.85) 0%,rgba(255,150,60,.34) 38%,transparent 72%);
+  filter:blur(6px);
+}
+.numeral-1{left:calc(var(--pad) + 236px);top:26px;font-size:min(31vw,438px);
+  color:rgba(150,72,32,.30);z-index:2;-webkit-text-stroke-width:2.5px}
+
+/* the ridge — where day ends */
+.ridge{position:absolute;left:0;right:0;bottom:-1px;z-index:9;pointer-events:none;
+  filter:drop-shadow(0 -12px 26px rgba(90,30,10,.25))}
+.ridge svg{display:block;width:100%;height:clamp(120px,17vw,232px)}
+.frog-ridge{
+  position:absolute;left:calc(var(--pad) + 2px);bottom:96px;z-index:12;width:104px;height:102px;
+}
+.frog-ridge img{width:104px;height:102px;object-fit:contain;filter:brightness(0) saturate(100%)}
+.frog-cap{position:absolute;left:calc(var(--pad) + 126px);bottom:100px;z-index:12;
+  color:rgba(60,26,12,.72);line-height:1.75}
+.frog-cap b{display:block;font-family:var(--d);font-style:italic;font-weight:400;
+  font-size:21px;letter-spacing:0;text-transform:none;color:#2B1409}
+.cue{position:absolute;right:var(--pad);bottom:36px;z-index:11;color:var(--gold-3);
+  display:flex;align-items:center;gap:12px}
+.cue i{width:44px;height:1px;background:currentColor;display:block}
+
+/* ══ NIGHTFALL — the transition ════════════════════════════════════════ */
+.nightfall{
+  position:relative;height:210px;overflow:hidden;
+  background:linear-gradient(180deg,#1A1510 0%,#14200F 26%,#0B1B10 62%,var(--night) 100%);
+}
+.nightfall .moon{
+  position:absolute;right:14%;top:26px;width:88px;height:88px;border-radius:50%;
+  box-shadow:inset -26px 6px 0 0 var(--gold-3);opacity:.9;
+}
+.nightfall .moon::after{content:"";position:absolute;inset:-46px;border-radius:50%;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(246,224,168,.22),transparent 70%)}
+.marq{position:absolute;left:0;right:0;top:76px;overflow:hidden;
+  mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.marq .run{display:flex;width:max-content;animation:run 34s linear infinite}
+.marq span{
+  font-family:var(--d);font-style:italic;font-weight:900;font-size:84px;line-height:1;
+  color:var(--gold-2);padding-right:.34em;letter-spacing:-.02em;
+}
+.marq span:nth-child(even){color:transparent;-webkit-text-stroke:1.4px rgba(233,196,106,.72)}
+@keyframes run{to{transform:translateX(-50%)}}
+.nightfall .stripe{position:absolute;left:0;right:0;bottom:26px;display:flex;
+  justify-content:space-between;padding:0 var(--pad);color:rgba(246,224,168,.6)}
+
+/* fireflies */
+.flies{position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden}
+.flies i{
+  position:absolute;width:5px;height:5px;border-radius:50%;background:var(--gold-3);
+  box-shadow:0 0 9px 3px rgba(246,224,168,.55);opacity:.75;
+  animation:drift var(--dur,15s) ease-in-out var(--del,0s) infinite alternate,
+            blink calc(var(--dur,15s)/3.4) ease-in-out var(--del,0s) infinite;
+}
+@keyframes drift{to{transform:translate(var(--dx,30px),var(--dy,-38px))}}
+@keyframes blink{0%,100%{opacity:.14}45%{opacity:.95}}
+@media (prefers-reduced-motion:reduce){
+  .flies i{animation:none;opacity:.6}
+  .marq .run{animation:none}
+}
+
+/* ══ BEAT 2 · THE SHELF ════════════════════════════════════════════════ */
+#beat-2{
+  position:relative;
+  background:
+    radial-gradient(74% 44% at 10% 5%, rgba(227,72,42,.30) 0%, transparent 62%),
+    radial-gradient(52% 34% at 96% 40%, rgba(199,160,58,.20) 0%, transparent 64%),
+    radial-gradient(64% 30% at 46% 100%, rgba(155,78,39,.30) 0%, transparent 68%),
+    linear-gradient(180deg,var(--night) 0%,var(--night-2) 40%,#071409 100%);
+  color:var(--cream); padding-bottom:24px; overflow:hidden;
+}
+#beat-2::after,#beat-3::after{content:"";position:absolute;inset:0;background:var(--grain) repeat;
+  opacity:.30;mix-blend-mode:overlay;pointer-events:none;z-index:1}
+.b2head{position:relative;z-index:4;padding:82px var(--pad) 0;max-width:1760px;margin:0 auto}
+.b2head .eyebrow{color:var(--gold-2)}
+.b2head h2{font-family:var(--d);font-weight:900;font-style:italic;color:var(--cream-2);
+  font-size:clamp(40px,4.8vw,88px);line-height:.86;letter-spacing:-.03em;margin-top:14px}
+.b2head h2 u{text-decoration:none;color:var(--gold-2)}
+.b2lead{margin-top:14px;max-width:520px;color:rgba(244,231,199,.78);font-size:18px;font-weight:350}
+.numeral-2{right:calc(var(--pad) - 14px);top:34px;font-size:min(26vw,362px);color:rgba(233,196,106,.30)}
+.legend{display:flex;flex-wrap:wrap;gap:26px;margin-top:20px;padding-top:12px;
+  border-top:1px solid rgba(233,196,106,.24)}
+
+/* sticky running head — colour shifts as the shelves pass */
+.runhead{
+  position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;
+  align-items:center;gap:20px;margin-top:20px;padding:9px var(--pad);
+  background:linear-gradient(180deg,rgba(5,15,8,.96),rgba(5,15,8,.72));
+  border-top:1px solid rgba(233,196,106,.3);border-bottom:1px solid rgba(233,196,106,.16);
+  color:var(--gold-2); backdrop-filter:blur(3px);
+}
+@supports (animation-timeline:view()){
+  @media (prefers-reduced-motion:no-preference){
+    .runhead{animation:runtint linear both;animation-timeline:view();animation-range:cover 4% cover 78%}
+    @keyframes runtint{from{color:var(--gold-2)}60%{color:var(--gold-3)}to{color:var(--t-artist)}}
+  }
+}
+
+.shelf{position:relative;z-index:4;max-width:1760px;margin:0 auto;padding:0 var(--pad)}
+.shelf-hd{display:flex;align-items:flex-end;gap:20px;margin-bottom:8px}
+.shelf-hd h3{font-family:var(--d);font-weight:900;font-style:italic;font-size:30px;
+  line-height:1;color:var(--cream-2);letter-spacing:-.02em}
+.shelf-hd p{font-size:14.5px;color:rgba(244,231,199,.62);max-width:430px;font-weight:350}
+.shelf-hd .rule{flex:1;height:1px;background:linear-gradient(90deg,rgba(233,196,106,.5),rgba(233,196,106,.05));
+  margin-bottom:9px}
+.row{display:flex;align-items:flex-end;gap:var(--gap,54px);position:relative;
+  border-bottom:1px solid rgba(233,196,106,.42);padding-bottom:0}
+.row.right{justify-content:flex-end}
+.pod{position:relative;text-align:left;width:max(calc(var(--h) * .747),162px)}
+.pod .lit{width:calc(var(--h) * .747)}
+.pod .lit{position:relative}
+.pod .cap .tag{margin-bottom:2px}
+.pod .lit::before{
+  content:"";position:absolute;left:-34%;top:6%;width:168%;height:96%;z-index:0;
+  background:radial-gradient(50% 44% at 50% 58%,var(--glow,rgba(233,196,106,.5)) 0%,transparent 70%);
+  filter:blur(4px);
+}
+.pod img.can{position:relative;z-index:1;width:100%;height:auto;
+  filter:drop-shadow(0 20px 24px rgba(0,0,0,.55))}
+.pod .refl{position:absolute;left:0;right:0;top:100%;height:74px;overflow:hidden;z-index:0;
+  opacity:.30;transform:scaleY(-1);transform-origin:top;
+  mask-image:linear-gradient(180deg,#000,transparent 78%);
+  -webkit-mask-image:linear-gradient(180deg,#000,transparent 78%)}
+.pod .refl img{width:100%}
+.pod .cap{padding-top:10px}
+.pod .cap h4{font-family:var(--d);font-weight:700;font-size:20px;line-height:1.08;
+  color:var(--cream-2);letter-spacing:-.01em;margin-bottom:5px}
+.pod .cap .one{font-size:13.5px;color:rgba(244,231,199,.62);font-weight:350;line-height:1.35;
+  margin-bottom:9px}
+.pod .cap .truth{font-family:var(--m);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:rgba(244,231,199,.42);margin-top:7px;line-height:1.5}
+
+/* tier art-direction — the honesty IS the treatment */
+.pod.study .lit{opacity:.72}
+.pod.study .lit::after{
+  content:"";position:absolute;inset:-14px -8px 4px;border:1px dashed rgba(127,182,160,.55);z-index:2;
+}
+.pod.concept .lit{opacity:.82;filter:saturate(.6) brightness(1.06)}
+.pod.concept .lit::after{content:"";position:absolute;inset:-12px -8px 4px;
+  background:linear-gradient(180deg,rgba(120,132,158,.16),rgba(10,20,30,.04));
+  border:1px solid rgba(142,151,172,.4);z-index:2}
+.pod.artist .cap h4::after{content:"";display:block;width:26px;height:2px;
+  background:var(--t-artist);margin-top:7px}
+.pod.real .cap h4{font-size:25px}
+.pod.real .cap{border-top:2px solid var(--t-real);margin-top:0;padding-top:14px}
+
+/* real shelf gets its own wall text */
+.shelf-1{display:flex;gap:64px;align-items:flex-end}
+.wallnote{flex:1;padding-bottom:14px;max-width:520px}
+.wallnote .q{font-family:var(--d);font-style:italic;font-weight:400;font-size:29px;
+  line-height:1.22;color:var(--gold-3);letter-spacing:-.01em}
+.wallnote p{margin-top:16px;font-size:15px;color:rgba(244,231,199,.66);font-weight:350}
+
+/* ══ INGREDIENT RAIL — transition into beat 3 ══════════════════════════ */
+.rail{
+  position:relative;overflow:hidden;padding:0;
+  background:linear-gradient(180deg,#071409 0%,#04100C 45%,var(--indigo) 100%);
+  border-top:1px solid rgba(233,196,106,.22);border-bottom:1px solid rgba(233,196,106,.14);
+}
+.rail .lbl{position:absolute;left:var(--pad);top:13px;color:var(--gold);z-index:3}
+.rail .run2{display:flex;width:max-content;animation:run 46s linear infinite;padding:40px 0 8px}
+.rail .run2 span{font-family:var(--d);font-weight:400;font-style:italic;font-size:36px;
+  color:rgba(246,224,168,.9);padding-right:.5em;white-space:nowrap;letter-spacing:-.01em}
+.rail .run2 span b{font-weight:900;color:var(--ember);font-style:normal;
+  font-size:20px;vertical-align:middle;padding:0 .35em;letter-spacing:.2em;font-family:var(--m)}
+.rail .foot{padding:0 var(--pad) 13px;color:rgba(246,224,168,.5)}
+@media (prefers-reduced-motion:reduce){.rail .run2{animation:none}}
+
+/* ══ BEAT 3 · DESDE EL YUNQUE ══════════════════════════════════════════ */
+#beat-3{
+  position:relative;color:var(--cream);overflow:hidden;padding:84px 0 0;
+  background:
+    radial-gradient(60% 44% at 78% 12%, rgba(199,160,58,.16) 0%, transparent 66%),
+    radial-gradient(70% 50% at 8% 78%, rgba(47,107,58,.24) 0%, transparent 68%),
+    linear-gradient(180deg,var(--indigo) 0%,#04101A 46%,#03080F 100%);
+}
+.b3{position:relative;z-index:4;max-width:1760px;margin:0 auto;padding:0 var(--pad);
+  display:grid;grid-template-columns:minmax(0,44fr) minmax(0,56fr);gap:66px;align-items:start}
+.numeral-3{left:calc(var(--pad) - 24px);top:auto;bottom:-56px;font-size:min(20vw,278px);color:rgba(233,196,106,.26)}
+
+.plate-stack{position:relative}
+.plate{position:relative;border:1px solid rgba(246,224,168,.28);
+  box-shadow:0 30px 60px rgba(0,0,0,.55)}
+.plate img{width:100%;height:auto}
+@supports (animation-timeline:view()){
+  @media (prefers-reduced-motion:no-preference){
+    .plate img{animation:unveil linear both;animation-timeline:view();animation-range:cover 2% cover 46%}
+    @keyframes unveil{from{clip-path:inset(0 9% 0 0)}to{clip-path:inset(0 0 0 0)}}
+  }
+}
+.plate .pcap{position:absolute;left:0;right:0;bottom:-30px;color:rgba(246,224,168,.6)}
+/* the coquí call, drawn — concentric gold rings behind the pasted print */
+.call{position:absolute;right:26px;bottom:20px;width:520px;height:520px;z-index:2;pointer-events:none}
+.call i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;
+  border:1px solid rgba(233,196,106,.30)}
+.call i:nth-child(1){width:150px;height:150px;border-color:rgba(233,196,106,.42)}
+.call i:nth-child(2){width:262px;height:262px}
+.call i:nth-child(3){width:374px;height:374px;border-color:rgba(233,196,106,.20)}
+.call i:nth-child(4){width:492px;height:492px;border-color:rgba(233,196,106,.12)}
+
+/* the pasted print — ink frog stays ink, on real paper */
+.paperplate{
+  position:absolute;right:-40px;bottom:-62px;width:228px;background:var(--cream-2);
+  padding:18px 18px 12px;transform:rotate(-3.4deg);
+  box-shadow:0 22px 44px rgba(0,0,0,.62);z-index:6;
+}
+.paperplate::after{content:"";position:absolute;inset:0;background:var(--grain) repeat;
+  opacity:.6;mix-blend-mode:multiply;pointer-events:none}
+.paperplate img{width:100%;height:auto;aspect-ratio:724/711;object-fit:contain;filter:brightness(0) saturate(100%)}
+.paperplate figcaption{font-family:var(--m);font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-2);margin-top:12px;text-align:center;line-height:1.6}
+
+.story .eyebrow{color:var(--gold-2)}
+.story h2{font-family:var(--d);font-weight:900;font-style:italic;font-size:clamp(38px,4.7vw,86px);
+  line-height:.9;letter-spacing:-.032em;color:var(--cream-2);margin-top:14px}
+.story p{margin-top:14px;max-width:640px;font-size:17.5px;line-height:1.62;
+  color:rgba(244,231,199,.76);font-weight:350}
+.story .quote{
+  margin-top:20px;padding-top:16px;border-top:1px solid rgba(233,196,106,.34);
+  font-family:var(--d);font-style:italic;font-weight:400;font-size:clamp(25px,2.4vw,43px);
+  line-height:1.14;color:var(--gold-2);letter-spacing:-.02em;max-width:660px;
+}
+.story .qattr{margin-top:14px;color:rgba(246,224,168,.44)}
+
+/* find us */
+.find{position:relative;z-index:4;max-width:1760px;margin:20px auto 0;padding:0 var(--pad) 32px;
+  display:grid;grid-template-columns:minmax(0,62fr) minmax(0,38fr);gap:64px;align-items:center;
+  border-top:1px solid rgba(233,196,106,.2);padding-top:26px}
+.map svg{width:100%;height:auto;display:block;overflow:visible}
+.map .land{fill:none;stroke:var(--gold);stroke-width:2.2;stroke-linejoin:round}
+.map .pin{fill:var(--ember)}
+.map .ring{fill:none;stroke:rgba(233,196,106,.5);stroke-width:1}
+.map .plabel{font-family:var(--m);font-size:15px;letter-spacing:.12em;
+  text-transform:uppercase;fill:rgba(246,224,168,.86);
+  paint-order:stroke;stroke:#04101A;stroke-width:6px;stroke-linejoin:round}
+.map figcaption{margin-top:16px;color:rgba(246,224,168,.5)}
+.findcopy .eyebrow{color:var(--gold-2)}
+.findcopy h3{font-family:var(--d);font-weight:900;font-style:italic;font-size:clamp(30px,3.1vw,54px);
+  line-height:.92;letter-spacing:-.03em;color:var(--cream-2);margin-top:12px}
+.findcopy p{margin-top:18px;color:rgba(244,231,199,.74);font-size:16.5px;font-weight:350}
+.notify{margin-top:30px;display:flex;align-items:flex-end;gap:0;border-bottom:1.5px solid var(--gold);
+  padding-bottom:9px}
+.notify label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.notify input{flex:1;background:none;border:0;color:var(--cream-2);font-family:var(--g);
+  font-size:17px;padding:6px 0;outline:none;min-width:0}
+.notify input::placeholder{color:rgba(244,231,199,.4)}
+.notify button{background:none;border:0;color:var(--gold-2);font-family:var(--m);font-size:11px;
+  letter-spacing:.2em;text-transform:uppercase;cursor:pointer;padding:6px 0 6px 18px}
+.formnote{margin-top:12px;color:rgba(246,224,168,.42)}
+
+/* ══ FOOTER ════════════════════════════════════════════════════════════ */
+footer{position:relative;background:#02060A;color:rgba(244,231,199,.62);
+  border-top:1px solid rgba(233,196,106,.2);padding:22px var(--pad) 18px;overflow:hidden}
+.f-top{display:flex;align-items:flex-end;gap:40px;flex-wrap:wrap;max-width:1760px;margin:0 auto}
+.f-top b{font-family:var(--d);font-weight:900;font-size:clamp(44px,6vw,104px);line-height:.8;
+  color:rgba(246,224,168,.9);letter-spacing:-.035em}
+.f-top .fl{flex:1;min-width:260px;padding-bottom:10px}
+.f-top .fl .cari{font-family:var(--d);font-style:italic;font-size:22px;color:rgba(246,224,168,.7)}
+.f-bot{display:flex;flex-wrap:wrap;gap:10px 42px;max-width:1760px;margin:16px auto 0;
+  padding-top:16px;border-top:1px solid rgba(233,196,106,.16)}
+.f-bot span{color:rgba(244,231,199,.5)}
+.f-bot .em{color:var(--gold-2)}
+
+/* ══ RESPONSIVE ════════════════════════════════════════════════════════ */
+@media (max-width:1280px){
+  .can-hero{width:36vw;bottom:150px}
+  .shelf-1{flex-direction:column;align-items:flex-start;gap:34px}
+  .wallnote{max-width:none}
+}
+@media (max-width:1000px){
+  .b3{grid-template-columns:1fr;gap:96px}
+  .find{grid-template-columns:1fr;gap:44px}
+  .numeral-3{left:auto;right:var(--pad)}
+  .paperplate{right:0;bottom:-60px;width:200px}
+}
+@media (max-width:760px){
+  body{font-size:16px}
+  .nav ul{display:none}
+  #beat-1{height:auto;min-height:0;padding-bottom:250px}
+  .slug{display:none}
+  .cover{position:static;padding-top:112px;max-width:none}
+  .l2{margin-left:0}
+  .l3{margin-left:0;font-size:19vw}
+  .can-hero{position:relative;right:auto;bottom:auto;width:74%;margin:34px 0 0 auto}
+  .numeral-1{right:6px;top:60px;font-size:44vw}
+  .facts,.deck{max-width:none}
+  .frog-ridge{left:20px;bottom:64px;width:74px}
+  .frog-cap{left:112px;bottom:74px}
+  .frog-cap b{font-size:16px}
+  .cue{display:none}
+  .nightfall{height:210px}
+  .marq span{font-size:52px}
+  .marq{top:78px}
+  .nightfall .moon{top:26px;right:8%;width:56px;height:56px;box-shadow:inset -17px 4px 0 0 var(--gold-3)}
+  .row{flex-wrap:wrap;gap:26px 22px;justify-content:flex-start!important}
+  .pod{width:calc(50% - 12px)}
+  .pod.real{width:calc(50% - 12px)}
+  .pod .lit{width:100%}
+  .shelf-1{flex-wrap:wrap;gap:26px}
+  .shelf-1 > div{flex-wrap:wrap;gap:22px!important;width:100%}
+  .wallnote{max-width:none!important;margin-right:0!important;padding-bottom:0!important}
+  .nightfall .stripe span:last-child{display:none}
+  .shelf-hd{flex-wrap:wrap;gap:8px 14px}
+  .shelf-hd .rule{display:none}
+  .b3{gap:58px}
+  .plate-stack{margin-bottom:64px}
+  .call{display:none}
+  .runhead{font-size:9px;letter-spacing:.14em}
+  .runhead span:last-child{display:none}
+  .rail .run2 span{font-size:32px}
+  .rail .run2{padding:56px 0 22px}
+  .paperplate{position:relative;right:auto;bottom:auto;margin:-40px 0 0 auto;transform:rotate(-2.4deg)}
+  .f-bot{gap:14px 26px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Main">
+  <b><a href="#top" style="text-decoration:none" aria-label="Coquírico — back to top">Coquírico</a></b>
+  <ul class="mono">
+    <li><a href="#beat-2">Drinks</a></li>
+    <li><a href="#rail">Ingredients</a></li>
+    <li><a href="#beat-3">Story</a></li>
+    <li><a href="#find">Find us</a></li>
+    <li><a class="navcta" href="#find">Notify me</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════ BEAT 1 · THE COVER ══════════════ -->
+<header id="beat-1" role="banner"><a id="top"></a>
+  <div class="wrap">
+    <p class="slug mono">Núm. 01 · La noche &nbsp;—&nbsp; <span>Puerto Rico · sin alcohol</span></p>
+    <div class="ghost numeral-1" aria-hidden="true">01</div>
+
+    <div class="cover">
+      <p class="kick mono">Coquírico — coco, isla y calma</p>
+      <h1 class="h1">
+        <i class="l1">De noche,</i>
+        <i class="l2">la isla</i>
+        <span class="l3">canta<em>.</em></span>
+      </h1>
+      <p class="deck"><strong>A Puerto Rican coconut drink.</strong> No alcohol, no hurry — just the island, cold.</p>
+      <p class="facts mono">Non-alcoholic · 60 calories · 8 fl oz / 240 ml</p>
+    </div>
+
+    <div class="can-hero">
+      <img src="../assets/product/coquetearte-can@2x.webp" width="1080" height="1446"
+           fetchpriority="high" decoding="async"
+           alt="Coquetearte — a Puerto Rican style coconut drink in an 8 fl oz can">
+    </div>
+  </div>
+
+  <figure class="frog-ridge" aria-hidden="true">
+    <img src="../assets/label/coqui-mark-ink.png" width="724" height="711" alt="">
+  </figure>
+  <p class="frog-cap mono"><b>co… quí</b>two notes, all night</p>
+  <p class="cue mono"><i></i>sigue bajando — anochece</p>
+
+  <div class="ridge" aria-hidden="true">
+    <svg viewBox="0 0 1920 232" preserveAspectRatio="none">
+      <path fill="#141009" d="M0,232 L0,146 C110,112 210,168 322,148 C424,130 466,86 556,96 C660,107 700,160 802,148 C902,136 950,78 1062,88 C1164,97 1204,154 1306,146 C1408,138 1452,92 1564,104 C1664,115 1722,162 1812,150 C1862,143 1898,128 1920,116 L1920,232 Z"/>
+    </svg>
+  </div>
+</header>
+
+<!-- ══════════════ TRANSITION · NIGHTFALL ══════════════ -->
+<section class="nightfall" aria-label="Nightfall">
+  <div class="moon" aria-hidden="true"></div>
+  <div class="flies" aria-hidden="true">
+    <i style="left:6%;top:58%;--dx:26px;--dy:-30px;--dur:13s;--del:.2s"></i>
+    <i style="left:14%;top:74%;--dx:-22px;--dy:-40px;--dur:17s;--del:1.4s"></i>
+    <i style="left:23%;top:64%;--dx:34px;--dy:-24px;--dur:11s;--del:.8s"></i>
+    <i style="left:31%;top:82%;--dx:18px;--dy:-46px;--dur:15s;--del:2.1s"></i>
+    <i style="left:44%;top:70%;--dx:-30px;--dy:-28px;--dur:19s;--del:.4s"></i>
+    <i style="left:52%;top:86%;--dx:24px;--dy:-34px;--dur:12s;--del:1.9s"></i>
+    <i style="left:63%;top:66%;--dx:-18px;--dy:-42px;--dur:16s;--del:1.1s"></i>
+    <i style="left:71%;top:80%;--dx:30px;--dy:-22px;--dur:14s;--del:2.6s"></i>
+    <i style="left:82%;top:72%;--dx:-26px;--dy:-36px;--dur:18s;--del:.6s"></i>
+    <i style="left:91%;top:88%;--dx:20px;--dy:-30px;--dur:13s;--del:1.6s"></i>
+  </div>
+  <div class="marq" aria-hidden="true">
+    <div class="run">
+      <span>co·quí</span><span>co·quí</span><span>co·quí</span><span>co·quí</span><span>co·quí</span><span>co·quí</span>
+      <span>co·quí</span><span>co·quí</span><span>co·quí</span><span>co·quí</span><span>co·quí</span><span>co·quí</span>
+    </div>
+  </div>
+  <div class="stripe mono">
+    <span>El Yunque · 19:41 · anochece</span>
+    <span>de noche, la isla canta — nosotros solo la embotellamos</span>
+  </div>
+</section>
+
+<!-- ══════════════ BEAT 2 · THE SHELF ══════════════ -->
+<section id="beat-2" aria-labelledby="b2h">
+  <div class="flies" aria-hidden="true" style="opacity:.6">
+    <i style="left:4%;top:12%;--dx:24px;--dy:-34px;--dur:16s;--del:.3s"></i>
+    <i style="left:11%;top:34%;--dx:-28px;--dy:-24px;--dur:13s;--del:1.7s"></i>
+    <i style="left:19%;top:66%;--dx:20px;--dy:-40px;--dur:18s;--del:.9s"></i>
+    <i style="left:29%;top:22%;--dx:-16px;--dy:-30px;--dur:12s;--del:2.4s"></i>
+    <i style="left:38%;top:88%;--dx:32px;--dy:-26px;--dur:15s;--del:.5s"></i>
+    <i style="left:47%;top:46%;--dx:-24px;--dy:-38px;--dur:19s;--del:1.2s"></i>
+    <i style="left:57%;top:16%;--dx:26px;--dy:-22px;--dur:14s;--del:2.9s"></i>
+    <i style="left:66%;top:74%;--dx:-30px;--dy:-32px;--dur:17s;--del:.7s"></i>
+    <i style="left:76%;top:38%;--dx:18px;--dy:-44px;--dur:11s;--del:2.2s"></i>
+    <i style="left:85%;top:60%;--dx:-22px;--dy:-28px;--dur:16s;--del:1.5s"></i>
+    <i style="left:93%;top:26%;--dx:28px;--dy:-36px;--dur:13s;--del:.1s"></i>
+    <i style="left:96%;top:82%;--dx:-20px;--dy:-24px;--dur:20s;--del:2.7s"></i>
+  </div>
+
+  <div class="b2head">
+    <div class="ghost numeral-2" aria-hidden="true">02</div>
+    <p class="eyebrow mono">La familia · diez latas</p>
+    <h2 id="b2h">Diez latas.<br><u>Cuatro verdades.</u></h2>
+    <p class="b2lead">Two of these are real. The rest are studies, editions and ideas — and the shelf itself
+      tells you which is which: the real ones are lit, the imagined ones are drawn in dashed line.</p>
+    <div class="legend">
+      <span class="tag real">Real</span>
+      <span class="tag artist">Artist edition — the real recipe</span>
+      <span class="tag study">Flavor study — imagined, not bottled</span>
+      <span class="tag concept">21+ concept — unbottled</span>
+    </div>
+  </div>
+
+  <p class="runhead mono"><span>La familia — diez latas, cuatro verdades</span><span>Coquírico · núm. 02 · de noche</span></p>
+
+  <!-- SHELF 1 — REAL -->
+  <div class="shelf" style="margin-top:16px">
+    <div class="shelf-hd">
+      <h3>De verdad</h3>
+      <p>The two we actually make.</p>
+      <span class="rule"></span>
+      <span class="tag real">Real · 2</span>
+    </div>
+    <div class="row shelf-1" style="--gap:60px">
+      <div style="display:flex;gap:60px;align-items:flex-end">
+        <figure class="pod real" style="--h:296px;--glow:rgba(246,224,168,.62)">
+          <div class="lit">
+            <img class="can" src="../assets/product/coquetearte-can@2x.webp" width="1080" height="1446"
+                 loading="lazy" decoding="async" alt="Coquetearte can">
+            <div class="refl" aria-hidden="true"><img src="../assets/product/coquetearte-can@2x.webp" alt=""></div>
+          </div>
+          <figcaption class="cap">
+            <span class="tag real">Real · en lata</span>
+            <h4 style="margin-top:9px">Coquetearte</h4>
+            <p class="one">Coconut, cinnamon, vanilla — cold.</p>
+            <p class="truth">Core product — non-alcoholic</p>
+          </figcaption>
+        </figure>
+        <figure class="pod real" style="--h:296px;--glow:rgba(211,155,95,.55)">
+          <div class="lit">
+            <img class="can" src="../assets/product/el-original-bottle-card@2x.webp" width="1080" height="1446"
+                 loading="lazy" decoding="async" alt="El Original vegan coquito, 750 mL bottle">
+            <div class="refl" aria-hidden="true"><img src="../assets/product/el-original-bottle-card@2x.webp" alt=""></div>
+          </div>
+          <figcaption class="cap">
+            <span class="tag real">Real · en botella</span>
+            <h4 style="margin-top:9px">El Original</h4>
+            <p class="one">The holiday coquito, 750 mL.</p>
+            <p class="truth">Holiday bottle — made with coconut and white rum</p>
+          </figcaption>
+        </figure>
+      </div>
+      <div class="wallnote">
+        <p class="q">“The one we actually make. Puerto Rican coconut, cool and creamy, zero alcohol — the real can
+          that every study on this page is dreamed around.”</p>
+        <p>Coconut water · coconut milk · cane sugar · agave syrup · natural flavors · cinnamon · vanilla extract.
+          That list is the whole list. El Original is the exception on this page — it is our holiday coquito,
+          and it is made with coconut and white rum.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHELF 2 — ARTIST EDITIONS -->
+  <div class="shelf" style="margin-top:22px">
+    <div class="shelf-hd">
+      <h3>Misma receta</h3>
+      <p>Same drink. Different art. Láminas I–IV.</p>
+      <span class="rule"></span>
+      <span class="tag artist">Edición de artista · 4</span>
+    </div>
+    <div class="row right" style="--gap:42px">
+      <div class="wallnote" style="max-width:390px;margin-right:auto;padding-bottom:16px">
+        <p class="q">“The art is new — the pour is the same one you know, cool coconut breaking over ice
+          as cinnamon lifts to the vanilla.”</p>
+        <p>Four láminas, one recipe. An artist edition is the real Coquetearte wearing a different skin —
+          nothing about the drink changes.</p>
+      </div>
+      <figure class="pod artist" style="--h:196px;--glow:rgba(238,116,78,.42)">
+        <div class="lit"><img class="can" src="../assets/product/flamboyan-at-dusk-can@2x.webp" width="1080" height="1446" loading="lazy" decoding="async" alt="Flamboyán at Dusk artist edition can">
+          <div class="refl" aria-hidden="true"><img src="../assets/product/flamboyan-at-dusk-can@2x.webp" alt=""></div></div>
+        <figcaption class="cap"><h4>Flamboyán at Dusk</h4><p class="one">Lámina I — Coquetearte, dressed in dusk.</p>
+          <span class="tag artist">Artist edition</span></figcaption>
+      </figure>
+      <figure class="pod artist" style="--h:196px;--glow:rgba(104,195,174,.38)">
+        <div class="lit"><img class="can" src="../assets/product/rain-on-palm-can@2x.webp" width="1080" height="1446" loading="lazy" decoding="async" alt="Rain on Palm artist edition can">
+          <div class="refl" aria-hidden="true"><img src="../assets/product/rain-on-palm-can@2x.webp" alt=""></div></div>
+        <figcaption class="cap"><h4>Rain on Palm</h4><p class="one">Lámina II — Coquetearte, after the rain.</p>
+          <span class="tag artist">Artist edition</span></figcaption>
+      </figure>
+      <figure class="pod artist" style="--h:196px;--glow:rgba(233,182,102,.44)">
+        <div class="lit"><img class="can" src="../assets/product/coqui-chorus-can@2x.webp" width="1080" height="1446" loading="lazy" decoding="async" alt="Coquí Chorus artist edition can">
+          <div class="refl" aria-hidden="true"><img src="../assets/product/coqui-chorus-can@2x.webp" alt=""></div></div>
+        <figcaption class="cap"><h4>Coquí Chorus</h4><p class="one">Lámina III — Coquetearte, wearing the chorus.</p>
+          <span class="tag artist">Artist edition</span></figcaption>
+      </figure>
+      <figure class="pod artist" style="--h:196px;--glow:rgba(150,168,224,.40)">
+        <div class="lit"><img class="can" src="../assets/product/caribbean-night-01-can@2x.webp" width="1080" height="1446" loading="lazy" decoding="async" alt="Caribbean Night No. 01 artist edition can">
+          <div class="refl" aria-hidden="true"><img src="../assets/product/caribbean-night-01-can@2x.webp" alt=""></div></div>
+        <figcaption class="cap"><h4>Caribbean Night No. 01</h4><p class="one">Lámina IV — Coquetearte, in blue and gold.</p>
+          <span class="tag artist">Artist edition</span></figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- SHELF 3 — STUDIES + CONCEPT -->
+  <div class="shelf" style="margin-top:22px">
+    <div class="shelf-hd">
+      <h3>Soñamos</h3>
+      <p>Drawn, named, and left there. Nothing has been mixed or poured.</p>
+      <span class="rule"></span>
+      <span class="tag study">Estudio · 3</span>
+      <span class="tag concept">Concepto · 1</span>
+    </div>
+    <div class="row" style="--gap:40px">
+      <figure class="pod study" style="--h:160px;--glow:rgba(246,216,89,.26)">
+        <div class="lit"><img class="can" src="../assets/product/brisa-de-parcha-can@2x.webp" width="1080" height="1446" loading="lazy" decoding="async" alt="Brisa de Parcha, a flavor study"></div>
+        <figcaption class="cap"><h4>Brisa de Parcha</h4><p class="one">Passionfruit, imagined.</p>
+          <span class="tag study">Flavor study</span>
+          <p class="truth">A flavor study — imagined, not bottled.</p></figcaption>
+      </figure>
+      <figure class="pod study" style="--h:160px;--glow:rgba(255,146,127,.26)">
+        <div class="lit"><img class="can" src="../assets/product/guayaba-rosada-can@2x.webp" width="1080" height="1446" loading="lazy" decoding="async" alt="Guayaba Rosada, a flavor study"></div>
+        <figcaption class="cap"><h4>Guayaba Rosada</h4><p class="one">Pink guava, imagined.</p>
+          <span class="tag study">Flavor study</span>
+          <p class="truth">A flavor study — imagined, not bottled.</p></figcaption>
+      </figure>
+      <figure class="pod study" style="--h:160px;--glow:rgba(215,151,96,.26)">
+        <div class="lit"><img class="can" src="../assets/product/cafe-y-canela-can@2x.webp" width="1080" height="1446" loading="lazy" decoding="async" alt="Café y Canela, a flavor study"></div>
+        <figcaption class="cap"><h4>Café y Canela</h4><p class="one">Coffee and cinnamon, imagined.</p>
+          <span class="tag study">Flavor study</span>
+          <p class="truth">A flavor study — imagined, not bottled.</p></figcaption>
+      </figure>
+      <figure class="pod concept" style="--h:160px;--glow:rgba(142,151,172,.24)">
+        <div class="lit"><img class="can" src="../assets/product/future-rum-bottle@2x.webp" width="1080" height="1446" loading="lazy" decoding="async" alt="Rum Expression, a 21+ concept bottle"></div>
+        <figcaption class="cap"><h4>Rum Expression</h4><p class="one">A bottle we have not made.</p>
+          <span class="tag concept">21+ concept</span>
+          <p class="truth">A 21+ concept. No recipe, no date.</p></figcaption>
+      </figure>
+      <div class="wallnote" style="max-width:330px;padding-bottom:26px">
+        <p class="q" style="font-size:23px">“We drew the can and named the feeling. There is no formula behind it,
+          and there isn’t meant to be.”</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ TRANSITION · THE INGREDIENT RAIL ══════════════ -->
+<section class="rail" id="rail" aria-label="What's inside Coquetearte">
+  <p class="lbl mono">Lo que lleva — Coquetearte, straight off the back of the can</p>
+  <div class="run2" aria-hidden="true">
+    <span>agua de coco<b>·</b>coconut milk<b>·</b>cane sugar<b>·</b>agave syrup<b>·</b>natural flavors<b>·</b>canela<b>·</b>vanilla extract<b>·</b></span>
+    <span>agua de coco<b>·</b>coconut milk<b>·</b>cane sugar<b>·</b>agave syrup<b>·</b>natural flavors<b>·</b>canela<b>·</b>vanilla extract<b>·</b></span>
+  </div>
+  <p class="foot mono">Seven ingredients — and that list is the whole list. No alcohol; the can’s gold band says it
+    out loud: keep refrigerated · non-alcoholic. The flavor studies have no formula.</p>
+</section>
+
+<!-- ══════════════ BEAT 3 · DESDE EL YUNQUE ══════════════ -->
+<section id="beat-3" aria-labelledby="b3h">
+  <div class="flies" aria-hidden="true">
+    <i style="left:5%;top:18%;--dx:22px;--dy:-32px;--dur:15s;--del:.4s"></i>
+    <i style="left:13%;top:52%;--dx:-26px;--dy:-26px;--dur:12s;--del:1.8s"></i>
+    <i style="left:22%;top:80%;--dx:30px;--dy:-38px;--dur:18s;--del:1.0s"></i>
+    <i style="left:34%;top:30%;--dx:-18px;--dy:-30px;--dur:14s;--del:2.5s"></i>
+    <i style="left:45%;top:64%;--dx:24px;--dy:-42px;--dur:16s;--del:.2s"></i>
+    <i style="left:56%;top:12%;--dx:-30px;--dy:-24px;--dur:11s;--del:2.0s"></i>
+    <i style="left:68%;top:44%;--dx:20px;--dy:-36px;--dur:19s;--del:1.3s"></i>
+    <i style="left:79%;top:74%;--dx:-24px;--dy:-28px;--dur:13s;--del:.8s"></i>
+    <i style="left:88%;top:24%;--dx:28px;--dy:-40px;--dur:17s;--del:2.8s"></i>
+    <i style="left:95%;top:58%;--dx:-20px;--dy:-30px;--dur:15s;--del:1.6s"></i>
+  </div>
+
+  <div class="b3">
+    <div class="ghost numeral-3" aria-hidden="true">03</div>
+
+    <div class="plate-stack">
+      <figure class="plate">
+        <img src="../assets/story/poster-serigraph@2x.webp" width="1300" height="728" loading="lazy" decoding="async"
+             alt="The coquí call drawn as a screen print — flamboyán blossoms, a low moon, two black frogs">
+        <figcaption class="pcap mono">Serigraph study — the call, printed</figcaption>
+      </figure>
+      <div class="call" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <figure class="paperplate">
+        <img src="../assets/label/coqui-mark-ink.png" width="724" height="711"
+             loading="lazy" decoding="async" alt="The coquí — the Coquírico mark, in ink">
+        <figcaption>El coquí — two notes, all night</figcaption>
+      </figure>
+    </div>
+
+    <div class="story">
+      <p class="eyebrow mono">Desde El Yunque</p>
+      <h2 id="b3h">The frog that names us.</h2>
+      <p>El Yunque is the rainforest that sits over the island — warm, wet, awake after dark. The coquí is the
+        small tree frog who lives in it. At dusk he starts: two notes, co… quí, over and over, until the whole
+        hillside is answering.</p>
+      <p>That call is our name, our sound and our first ingredient. The rest is coconut — water and milk, a little
+        cane and agave, cinnamon, vanilla. Cold, non-alcoholic, Puerto Rican. Everything we make starts on that
+        hillside, after dark.</p>
+      <p class="quote">De noche, la isla canta.<br>Nosotros solo la embotellamos.</p>
+      <p class="qattr mono">Coquírico — a dream of Pedro’s</p>
+    </div>
+  </div>
+
+  <div class="find" id="find">
+    <figure class="map">
+      <svg viewBox="0 0 1000 380" role="img" aria-labelledby="prt prd">
+        <title id="prt">Puerto Rico</title>
+        <desc id="prd">An outline map of Puerto Rico with four pins: San Juan, Caguas, Ponce and Mayagüez.
+          Each is an area Coquírico is working toward, not a store.</desc>
+        <g class="land">
+          <path d="M812.9 176 808 179.6 807.4 183.7 803.2 184.1 798.6 176.8 793.4 176.9 791.6 182.1 796.2 188.4 791.7 192.2 786.1 191.2 778.2 187.1 770 189.9 761.4 194.1 752.2 196.3 744.4 199.9 736.3 208 719.6 233.9 718.3 246.9 711.8 255.5 709.3 256.9 698.5 259.3 696 262.4 700.8 276.9 691.7 285.4 674.1 296.3 649.7 304.8 639.1 304.6 628.4 302.3 618.7 301.3 613.1 302.6 599.2 308.1 581.6 308.1 571.9 310.5 544.4 325.3 528.9 326 525.1 328.4 522.5 323.9 522.2 321.6 527.3 320.1 528.5 317.7 526.6 314.7 522.2 311.5 513.1 319.7 507.7 321.2 501 319.6 488.1 318.2 483.6 317.1 477 308.1 471.1 304.9 466.9 303.9 459.2 304.4 448.3 307 435 316.3 425.4 315.2 416.3 308 408.7 299.1 400.7 293.9 385.2 296.6 380.3 299.1 373.5 300.5 358 301.3 348.3 307.1 342.7 308.3 335.3 304.4 328.6 308.1 325.4 302.5 317.3 301.8 298.1 304.4 280.5 298 261.2 298 261.6 291.2 257.4 289.2 251.1 290.6 245.2 294.3 245.2 298 251.6 298 246.2 305.4 236.9 310.5 226.2 313.6 216.3 315.2 201.7 314.6 194.6 315.4 186.9 315.2 185 317.2 183.9 325.3 175.2 324.3 168.5 319.4 158 308.1 148.5 307.6 137.8 305.8 126.5 306 119.8 303.8 113.2 309.4 105.5 313.5 98.6 315.2 76.8 312.7 66.5 307 61.4 311 64.7 322.3 59.6 322 50.3 306.9 50.5 293.1 73 282.8 74.6 279.1 72.7 276.4 68.2 274.1 61.9 275.2 55.9 272.6 56.3 263.3 59.4 258.7 64 255.4 60.2 242.1 65.2 237 64.9 221 69.6 203.1 77.2 195.4 79.9 189.6 76.8 184.4 70.8 179 63.4 155.3 58.9 146.1 39.9 141.9 32.5 127.3 27.9 120.2 24 111.3 24.9 107.8 38.4 103.8 58 95.5 64.7 91.3 76.3 82 77 71 72 62.4 71.4 49.8 80 38.5 103.5 31.6 128.5 32.4 145.4 40.1 194.8 50.2 243.6 43.8 250.3 44.6 267.9 50.8 274.9 51.2 293.3 47.1 320 44.7 332.5 46.3 344.9 50.8 352.6 49.3 382.9 49.6 401.5 55.1 441.4 47.1 478.3 58.3 499.8 52.1 524.7 60 529.9 56 536.1 57 541.2 64 545.2 66 549.7 63.3 553.4 58.4 558.1 59.8 556.5 66.3 565.6 71.1 570.1 82.2 577.3 82.6 592.8 77.8 592.8 74.2 585 73.1 576.5 68.8 563.9 56 594.8 65.8 615.4 70.6 622.2 67.5 626.3 61.2 637 63.5 658.5 69.7 665.8 64.7 671.5 65.9 677.2 70.2 692.4 73.6 700.6 78.2 709.1 87.2 714.3 84.7 717.8 79.8 720.5 80.9 721.1 83.3 718.7 86.1 716.8 89.9 725.2 87.1 728.2 85.2 736.2 96.8 744.1 101.1 750.4 96.7 763 106.7 779.3 109 795.2 96.8 799 97.8 799.2 101.1 794.6 125.6 793.5 146.3 795.5 152.1 793.6 158.2 796.9 161.7 800.8 163.4 807.3 160.2 805.9 164.8 807.3 168.4Z"/>
+          <path d="M818.2 229.8 827.9 229.8 837.1 229 846.5 225.5 855 220.4 861.7 214.9 866.1 212.5 903.7 206.5 909.7 207.5 926 213.2 950.6 214.2 956.8 216.6 961.4 222.4 957.9 224.2 945.4 223.4 942.2 224.5 933.3 230.7 930.8 233.5 927.6 233.5 923.4 229.5 916.5 231.1 907.6 234.8 870.8 243.5 863.4 247 853.7 243.9 839.1 245.7 825.4 243.8Z"/>
+          <path d="M934 121.7 945.5 121.7 958.9 124.4 970.3 130 976 138.6 974.6 138.9 969.6 138.6 972.8 142 967.8 142.2 963.9 141.1 961.2 138.7 959.9 134.9 956.8 134.9 961 143.3 961.8 147.3 959.9 152.1 953.5 141.9 933.8 123.5Z"/>
+        </g>
+        <g aria-hidden="true">
+          <circle class="ring" cx="571.4" cy="60" r="15"/><circle class="ring" cx="571.4" cy="60" r="26"/>
+          <circle class="pin" cx="571.4" cy="60" r="5"/>
+          <text class="plabel" x="590" y="52">San Juan — coming soon</text>
+          <circle class="ring" cx="604.4" cy="174.4" r="13"/>
+          <circle class="pin" cx="604.4" cy="174.4" r="5"/>
+          <text class="plabel" x="626" y="180">Caguas — coming soon</text>
+          <circle class="ring" cx="332.6" cy="284.7" r="13"/>
+          <circle class="pin" cx="332.6" cy="284.7" r="5"/>
+          <text class="plabel" x="352" y="318">Ponce — coming soon</text>
+          <circle class="ring" cx="85.6" cy="190.7" r="13"/>
+          <circle class="pin" cx="85.6" cy="190.7" r="5"/>
+          <text class="plabel" x="10" y="232">Mayagüez — coming soon</text>
+        </g>
+      </svg>
+      <figcaption class="mono">Areas we’re working toward. Not stockists.</figcaption>
+    </figure>
+
+    <div class="findcopy">
+      <p class="eyebrow mono">Llegando a colmados</p>
+      <h3>Where to<br>find us</h3>
+      <p>Nothing is on shelves yet. These are the parts of the island we’re working toward — colmados first,
+        the way it should be.</p>
+      <form class="notify" onsubmit="return false">
+        <label for="em">Email</label>
+        <input id="em" type="email" placeholder="you@correo.com" autocomplete="email">
+        <button type="submit">Notify me</button>
+      </form>
+      <p class="formnote mono">Presentation only — nothing is sent and no address is stored.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-top">
+    <b>Coquírico</b>
+    <div class="fl">
+      <p class="cari">Hecho con cariño y muchos coquís.</p>
+      <p class="mono" style="margin-top:12px;color:rgba(246,224,168,.55)">Concept site — presentation only.</p>
+    </div>
+  </div>
+  <div class="f-bot mono">
+    <span class="em">Drinks</span><span class="em">Ingredients</span><span class="em">Story</span><span class="em">Find us</span>
+    <span>Instagram — coming soon</span><span>TikTok — coming soon</span>
+    <span>No products are for sale. Nothing on this site is an offer. Puerto Rico.</span>
+    <span>© 2026 Coquírico — concept presentation.</span>
+  </div>
+</footer>
+
+</body>
+</html>

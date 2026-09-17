@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coquírico — Folio Botánico</title>
+<meta name="description" content="A Puerto Rican coconut drink from the island of the coquí. Coquetearte, cold and non-alcoholic, plus the holiday coquito. Concept site — presentation only.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap">
+<style>
+/* ==========================================================================
+   COQUÍRICO · FOLIO BOTÁNICO
+   A 19th-century tropical botanical folio turned into a website.
+   Ivory plate paper · plate marks · foxing · deckle edges · engraved captions.
+   Colour comes out of the botanicals: scarlet, plate green, gold — on ivory.
+   ========================================================================== */
+
+:root{
+  --ivory:      #F6EFDC;
+  --ivory-2:    #FBF6EA;
+  --ivory-3:    #EFE5CB;
+
+  --ink:        #241812;
+  --ink-2:      #5C4C3F;
+  --ink-3:      #8A7A66;
+
+  --scarlet:    #B62B18;
+  --scarlet-d:  #8E1F10;
+  --leaf:       #1D4327;
+  --leaf-2:     #2C5F3C;
+  --gold:       #BA8C2E;
+  --gold-ink:   #6E5220;
+  --cream:      #FBEEDA;
+
+  --plate-line: rgba(36,24,18,.26);
+  --hair:       rgba(36,24,18,.16);
+
+  --disp: "Gloock", "Bodoni Moda", "Didot", "Playfair Display", Georgia, serif;
+  --lat:  "Cormorant Garamond", "EB Garamond", Georgia, serif;
+  --mono: "DM Mono", "Courier Prime", ui-monospace, "Courier New", monospace;
+
+  --pad: clamp(24px, 3.5vw, 66px);
+}
+
+*{ box-sizing:border-box; }
+html{ overflow-x:clip; }
+body{
+  position:relative;
+  margin:0; background:var(--ivory); color:var(--ink);
+  font-family:var(--lat); font-size:18px; line-height:1.5;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+img{ display:block; max-width:100%; }
+
+.grain{
+  position:absolute; top:0; left:0; width:100%; height:100%; z-index:60; pointer-events:none;
+  background:url("../assets/tex/paper-grain-512.webp") repeat;
+  opacity:.4; mix-blend-mode:multiply;
+}
+.foxing{
+  position:absolute; inset:0; pointer-events:none; z-index:2; opacity:.6;
+  background-image:
+    radial-gradient(7px 6px at 8% 14%,    rgba(150,104,44,.30), transparent 72%),
+    radial-gradient(4px 4px at 11% 15.4%, rgba(150,104,44,.24), transparent 70%),
+    radial-gradient(9px 7px at 92% 9%,    rgba(150,104,44,.20), transparent 72%),
+    radial-gradient(5px 5px at 88.5% 12%, rgba(150,104,44,.24), transparent 70%),
+    radial-gradient(6px 5px at 24% 88%,   rgba(150,104,44,.24), transparent 72%),
+    radial-gradient(11px 8px at 71% 93%,  rgba(150,104,44,.15), transparent 74%),
+    radial-gradient(5px 4px at 46% 6%,    rgba(150,104,44,.20), transparent 70%),
+    radial-gradient(8px 6px at 4% 62%,    rgba(150,104,44,.17), transparent 72%),
+    radial-gradient(6px 6px at 97% 55%,   rgba(150,104,44,.20), transparent 72%),
+    radial-gradient(4px 4px at 63% 41%,   rgba(150,104,44,.13), transparent 70%),
+    radial-gradient(9px 6px at 35% 70%,   rgba(150,104,44,.12), transparent 74%),
+    radial-gradient(5px 5px at 80% 74%,   rgba(150,104,44,.18), transparent 70%);
+}
+.platemark::after{
+  content:""; position:absolute; inset:20px; z-index:3; pointer-events:none;
+  border:1px solid var(--plate-line);
+  box-shadow: 0 1px 0 rgba(255,255,255,.55), inset 0 1px 0 rgba(255,255,255,.45);
+}
+.deckle{
+  position:absolute; left:-2vw; width:104vw; height:14px; z-index:12;
+  display:block; pointer-events:none;
+}
+.deckle--top{ top:-1px; }
+.deckle--bot{ bottom:-1px; transform:scaleY(-1); }
+
+/* ======================================================================== */
+/*  RUNNING HEAD                                                            */
+/* ======================================================================== */
+.rh{
+  position:fixed; top:0; left:0; right:0; z-index:70;
+  display:flex; align-items:center; gap:26px; padding:11px 24px 10px;
+  background:linear-gradient(var(--ivory-2), rgba(251,246,234,.94));
+  border-bottom:1px solid var(--plate-line);
+  box-shadow:0 1px 0 rgba(255,255,255,.7);
+}
+.rh__brand{
+  font-family:var(--disp); font-size:22px; line-height:1;
+  color:var(--ink); text-decoration:none; letter-spacing:-.012em;
+  display:flex; align-items:center; gap:9px; white-space:nowrap;
+}
+.rh__frog{ width:17px; height:auto; opacity:.92; }
+.rh__rule{ flex:1; height:1px; background:var(--hair); min-width:20px; }
+.rh__nav{ display:flex; gap:22px; }
+.rh a.lnk{
+  font-family:var(--mono); font-size:10px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--ink-2); text-decoration:none;
+  padding-bottom:3px; border-bottom:1px solid transparent;
+}
+.rh a.lnk:hover{ color:var(--scarlet); border-bottom-color:var(--scarlet); }
+.rh__fol{
+  font-family:var(--mono); font-size:9px; letter-spacing:.24em;
+  text-transform:uppercase; color:var(--ink-3); white-space:nowrap;
+}
+.rh__prog{
+  position:absolute; left:0; bottom:-1px; height:2px; width:100%;
+  background:var(--scarlet); transform-origin:0 50%; transform:scaleX(.05);
+}
+@supports (animation-timeline: scroll()){
+  .rh__prog{ animation:progress linear both; animation-timeline:scroll(root block); }
+}
+@keyframes progress{ from{ transform:scaleX(.05) } to{ transform:scaleX(1) } }
+
+/* ======================================================================== */
+/*  ENGRAVED TYPOGRAPHY                                                     */
+/* ======================================================================== */
+.eng{
+  font-family:var(--mono); font-size:10px; font-weight:400;
+  letter-spacing:.24em; text-transform:uppercase; color:var(--ink-2);
+}
+.eng--sm{ font-size:9px; letter-spacing:.22em; }
+.eng--cream{ color:rgba(251,238,218,.82); }
+h1,h2,h3,h4{ font-family:var(--disp); font-weight:400; margin:0; }
+.kicker{ display:flex; align-items:center; gap:14px; }
+.kicker .r{ width:70px; height:1px; background:var(--scarlet); flex:none; }
+
+.credits{
+  display:grid; grid-template-columns:1fr auto 1fr; align-items:baseline;
+  gap:24px; padding-top:11px; border-top:1px solid var(--hair);
+}
+.credits > :last-child{ text-align:right; }
+.credits__mid{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.34em;
+  text-transform:uppercase; color:var(--ink); white-space:nowrap;
+}
+.mark{
+  display:inline-flex; align-items:baseline; gap:9px;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.2em;
+  text-transform:uppercase; text-decoration:none; color:var(--ink);
+  padding-bottom:6px; border-bottom:2px solid var(--scarlet);
+}
+.mark em{ font-family:var(--lat); font-style:italic; letter-spacing:0;
+  text-transform:none; font-size:16px; color:var(--scarlet-d); }
+.mark:hover{ border-bottom-color:var(--ink); }
+.mark--quiet{ border-bottom:1px solid var(--ink-3); color:var(--ink-2); }
+
+/* ======================================================================== */
+/*  BEAT 1 — LÁMINA I                                                       */
+/* ======================================================================== */
+#beat-1{
+  position:sticky; top:0; z-index:1;
+  height:min(100vh, 920px); min-height:600px;
+  background:var(--ivory); overflow:hidden;
+}
+.plate1{
+  position:relative; height:100%; width:100%;
+  display:grid; grid-template-columns: 152px minmax(0,1fr) 39vw;
+}
+/* the green spine — a flat colour-block holding a botanical crop */
+.spine{ position:relative; background:var(--leaf); overflow:hidden; z-index:4; }
+.spine img{
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  height:106%; width:auto; max-width:none;
+}
+.spine .vt{
+  position:absolute; left:50%; bottom:24px; transform:translateX(-50%) rotate(180deg);
+  writing-mode:vertical-rl; z-index:3;
+  font-family:var(--mono); font-size:9px; letter-spacing:.34em;
+  text-transform:uppercase; color:rgba(251,238,218,.92);
+  text-shadow:0 1px 8px rgba(0,0,0,.72);
+}
+.spine::after{
+  content:""; position:absolute; inset:0; z-index:2;
+  background:linear-gradient(180deg, rgba(29,67,39,.7), rgba(29,67,39,0) 22%, rgba(29,67,39,0) 58%, rgba(29,67,39,.86));
+}
+
+.h1-wrap{
+  position:relative; z-index:4; padding:74px 44px 0 42px;
+  display:flex; flex-direction:column; justify-content:center; height:100%;
+}
+h1{
+  font-size:clamp(52px, 7.2vw, 134px);
+  line-height:.86; letter-spacing:-.03em; margin:18px 0 0; color:var(--ink);
+}
+h1 .it{
+  font-family:var(--lat); font-style:italic; font-weight:400;
+  font-size:1.1em; letter-spacing:-.014em; color:var(--scarlet-d);
+  display:block; margin-top:.01em;
+}
+.subrule{ display:flex; align-items:center; gap:16px; margin:20px 0 0; }
+.subrule .r{ flex:1; height:1px; background:var(--hair); }
+.lede{
+  max-width:40ch; margin:20px 0 0; font-size:19px; line-height:1.5;
+  color:var(--ink-2); font-weight:400;
+}
+.lede b{ font-weight:600; color:var(--ink); }
+.acts{ display:flex; align-items:flex-end; gap:32px; margin-top:28px; flex-wrap:wrap; }
+.printers-mark{
+  display:flex; align-items:flex-end; gap:13px; margin:44px 0 0; padding-bottom:0;
+}
+.printers-mark img{ width:46px; height:45px; opacity:.94; }
+.printers-mark .t{ padding-bottom:2px; max-width:22ch; line-height:1.7; }
+
+/* the specimen column — flat scarlet silkscreen block */
+.specimen{
+  position:relative; z-index:4; overflow:hidden;
+  background:linear-gradient(180deg,#C3311B 0%, #B62B18 46%, #8E1F10 100%);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:56px 2.2vw 0;
+}
+.specimen::before{
+  content:""; position:absolute; inset:0;
+  background:url("../assets/tex/paper-grain-512.webp") repeat;
+  opacity:.5; mix-blend-mode:multiply;
+}
+.specimen img.can{
+  position:relative; z-index:3; height:min(56vh, 528px); width:auto;
+  filter:drop-shadow(0 28px 40px rgba(30,10,4,.44)); margin-bottom:14px;
+}
+.pin{ position:absolute; width:14px; height:14px; z-index:4; }
+.pin::before,.pin::after{ content:""; position:absolute; background:rgba(255,255,255,.6); }
+.pin::before{ left:0; top:6.5px; width:14px; height:1px; }
+.pin::after{ left:6.5px; top:0; width:1px; height:14px; }
+.specimen .cap{ position:relative; z-index:3; text-align:center; width:min(30vw,470px); }
+.specimen .cap .n{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.44em;
+  text-transform:uppercase; color:rgba(255,240,222,.96);
+}
+.specimen .cap .b{
+  font-family:var(--lat); font-style:italic; font-size:17.5px; font-weight:400;
+  color:rgba(255,236,214,.82); margin-top:5px;
+}
+.specimen .cap .rule{ width:54px; height:1px; background:rgba(255,236,214,.5); margin:11px auto; }
+.specimen .cap .f{
+  font-family:var(--mono); font-size:9px; letter-spacing:.26em;
+  text-transform:uppercase; color:rgba(255,236,214,.68);
+}
+.plate1-foot{
+  position:absolute; left:152px; right:39vw; bottom:0; z-index:5;
+  display:flex; justify-content:space-between; gap:24px;
+  margin:0 44px 20px 42px; padding-top:11px; border-top:1px solid var(--hair);
+}
+
+/* ======================================================================== */
+/*  BEAT 2 — LÁMINA II                                                      */
+/* ======================================================================== */
+#beat-2{
+  position:relative; z-index:5; scroll-margin-top:0;
+  background:var(--leaf); padding:0;
+  box-shadow:0 -30px 58px rgba(15,8,3,.42);
+}
+#beat-2::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:url("../assets/tex/paper-grain-512.webp") repeat;
+  opacity:.32; mix-blend-mode:overlay;
+}
+/* the guard sheet — the tissue leaf between two plates */
+.guard{
+  position:relative; z-index:6; background:var(--scarlet); color:var(--cream);
+  padding:26px var(--pad) 24px;
+  display:grid; grid-template-columns:auto auto 1fr auto; align-items:center; gap:28px;
+}
+.guard::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:url("../assets/tex/paper-grain-512.webp") repeat;
+  opacity:.4; mix-blend-mode:multiply;
+}
+.guard > *{ position:relative; z-index:2; }
+.guard .num{
+  font-family:var(--disp); font-size:76px; line-height:.7;
+  color:rgba(255,233,207,.94); letter-spacing:-.04em;
+}
+.guard .vr{ width:1px; height:56px; background:rgba(255,233,207,.4); }
+.guard .a{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.4em;
+  text-transform:uppercase; color:rgba(255,233,207,.8);
+}
+.guard .b{
+  font-family:var(--lat); font-style:italic; font-weight:400;
+  font-size:25px; color:#FCEEDA; margin-top:3px;
+}
+.guard .rt{ text-align:right; max-width:40ch; }
+.guard .rt p{ margin:0; font-size:14.5px; line-height:1.5; color:rgba(255,233,207,.84); font-weight:400; }
+
+.b2-head{
+  position:relative; z-index:6; padding:30px var(--pad) 0;
+  display:grid; grid-template-columns: minmax(0,1fr) minmax(0,36ch);
+  gap:52px; align-items:end;
+}
+.b2-head h2{
+  font-size:clamp(40px, 4.8vw, 88px); line-height:.85; letter-spacing:-.03em; color:#F4E8CE;
+}
+.b2-head h2 .it{ font-family:var(--lat); font-style:italic; color:#E8B95E; display:block; font-size:1.06em; }
+.b2-head p{ margin:0 0 6px; color:rgba(244,232,206,.82); font-size:16px; line-height:1.55; font-weight:400; }
+
+/* the plate run — hand-set, never a grid */
+.run{
+  position:relative; z-index:6; margin:24px var(--pad) 0;
+  display:grid; grid-template-columns:repeat(12,1fr);
+  column-gap:22px; row-gap:0; align-items:start;
+}
+.sp{
+  position:relative; margin:0 0 16px; background:var(--ivory-2);
+  padding:16px 16px 15px;
+  box-shadow:0 13px 28px rgba(6,16,10,.36), 0 2px 0 rgba(255,255,255,.22);
+  transform:rotate(var(--rot,0deg));
+}
+.sp::after{ content:""; position:absolute; inset:7px; border:1px solid var(--plate-line); pointer-events:none; }
+.sp .fx{
+  position:absolute; inset:0; pointer-events:none; opacity:.5;
+  background-image:
+    radial-gradient(5px 4px at 14% 9%,  rgba(150,104,44,.28), transparent 70%),
+    radial-gradient(7px 5px at 86% 84%, rgba(150,104,44,.20), transparent 72%),
+    radial-gradient(4px 4px at 62% 21%, rgba(150,104,44,.18), transparent 70%);
+}
+.sp .fig{
+  position:absolute; top:-1px; left:16px; z-index:4;
+  font-family:var(--mono); font-size:9px; letter-spacing:.28em;
+  text-transform:uppercase; color:var(--ink-3);
+  background:var(--ivory-2); padding:0 7px; transform:translateY(-50%);
+}
+.sp figure{ margin:0; position:relative; z-index:2; }
+.sp img.spec{
+  width:auto; height:var(--ih, 240px); margin:0 auto 12px;
+  filter:drop-shadow(0 13px 17px rgba(30,20,8,.20));
+}
+.sp .base{ height:1px; background:var(--plate-line); margin:0 0 12px; }
+.sp .nm{ font-family:var(--disp); font-size:22px; line-height:1.04; letter-spacing:-.014em; margin:0 0 3px; }
+.sp .ll{ font-size:14.5px; font-style:italic; font-weight:400; color:var(--ink-2); margin:0 0 10px; }
+.sp .one{ margin:10px 0 0; font-size:14.5px; line-height:1.4; color:var(--ink-2); font-weight:400; }
+
+/* honesty stamp — a letterpress box, never a pill */
+.stamp{
+  display:inline-block; padding:5px 9px 4px;
+  font-family:var(--mono); font-size:8.5px; letter-spacing:.2em;
+  text-transform:uppercase; line-height:1;
+  border:1px solid currentColor;
+  box-shadow:0 0 0 2.5px var(--ivory-2), 0 0 0 3.5px currentColor;
+  transform:rotate(-2.4deg); transform-origin:0 50%;
+}
+.t-real   .stamp{ color:var(--scarlet-d); }
+.t-artist .stamp{ color:var(--gold-ink); }
+.t-study  .stamp{ color:var(--leaf-2); border-style:dashed; box-shadow:none; }
+.t-concept .stamp{ color:var(--ink); box-shadow:0 0 0 2.5px var(--ivory-2), 0 0 0 3.5px var(--ink-3); }
+
+.p1 { grid-column:1 / span 3;  --ih:302px; margin-top:0;    --rot:-.6deg; }
+.p2 { grid-column:4 / span 3;  --ih:266px; margin-top:40px; --rot:.6deg; }
+.p3 { grid-column:7 / span 2;  --ih:208px; margin-top:6px;  --rot:-.45deg; }
+.p4 { grid-column:9 / span 3;  --ih:254px; margin-top:56px; --rot:.4deg; }
+.p5 { grid-column:2 / span 2;  --ih:214px; margin-top:-4px; --rot:.55deg; }
+.p6 { grid-column:4 / span 3;  --ih:274px; margin-top:34px; --rot:-.5deg; }
+.p7 { grid-column:7 / span 2;  --ih:204px; margin-top:-8px; --rot:.7deg; }
+.p8 { grid-column:9 / span 3;  --ih:250px; margin-top:22px; --rot:-.35deg; }
+.p9 { grid-column:1 / span 3;  --ih:232px; margin-top:28px; --rot:-.5deg; }
+.p10{ grid-column:4 / span 3;  --ih:238px; margin-top:-2px; --rot:.5deg; }
+
+/* the plate key — the folio legend, carrying the four mandatory sentences */
+.key{
+  grid-column:8 / span 5; margin-top:26px; position:relative; z-index:6;
+  border-top:2px solid rgba(232,185,94,.75); padding-top:16px; color:#EEE1C4;
+}
+.key h3{
+  font-family:var(--mono); font-size:10px; letter-spacing:.34em;
+  text-transform:uppercase; color:#E8B95E; margin:0 0 14px;
+}
+.key dl{ margin:0; display:grid; grid-template-columns:auto 1fr; gap:10px 18px; align-items:baseline; }
+.key dt{
+  font-family:var(--mono); font-size:8.5px; letter-spacing:.2em; text-transform:uppercase;
+  border:1px solid currentColor; padding:4px 7px 3px; line-height:1; white-space:nowrap;
+}
+.key dt.k-real{ color:#F0A48F; } .key dt.k-art{ color:#E8B95E; }
+.key dt.k-stu{ color:#A9CFAE; border-style:dashed; } .key dt.k-con{ color:#C9BFA6; }
+.key dd{ margin:0; font-size:15px; font-weight:400; line-height:1.38;
+  color:rgba(238,225,196,.9); font-style:italic; }
+
+/* the second guard sheet — plate II gives way to plate III */
+.guard2{
+  position:relative; z-index:7; background:var(--scarlet); color:var(--cream);
+  margin-top:6px; padding:18px var(--pad) 16px;
+  display:grid; grid-template-columns:auto auto 1fr auto; align-items:center; gap:26px;
+}
+.guard2::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:url("../assets/tex/paper-grain-512.webp") repeat;
+  opacity:.4; mix-blend-mode:multiply;
+}
+.guard2 > *{ position:relative; z-index:2; }
+.guard2 .num{ font-family:var(--disp); font-size:64px; line-height:.7; color:rgba(255,233,207,.94); letter-spacing:-.04em; }
+.guard2 .vr{ width:1px; height:46px; background:rgba(255,233,207,.4); }
+.guard2 .b{ font-family:var(--lat); font-style:italic; font-size:23px; color:#FCEEDA; }
+.guard2 .a{ font-family:var(--mono); font-size:9px; letter-spacing:.4em; text-transform:uppercase; color:rgba(255,233,207,.78); }
+
+/* ======================================================================== */
+/*  BEAT 3 — LÁMINA III                                                     */
+/* ======================================================================== */
+#beat-3{
+  position:relative; z-index:9; background:var(--ivory);
+  margin-top:-6px; scroll-margin-top:0;
+  box-shadow:0 -26px 48px rgba(15,8,3,.38);
+}
+.b3-art{ position:relative; height:288px; overflow:hidden; background:var(--leaf); }
+.b3-art > img{ width:100%; height:100%; object-fit:cover; object-position:62% 44%; }
+.b3-art .scrim{
+  position:absolute; inset:0;
+  background:linear-gradient(90deg, rgba(8,20,14,.9) 0%, rgba(8,20,14,.66) 32%, rgba(8,20,14,.08) 62%, rgba(8,20,14,0) 100%);
+}
+.b3-art .over{ position:absolute; left:var(--pad); top:50%; transform:translateY(-50%); z-index:3; }
+.b3-art h2{
+  font-size:clamp(38px,4.1vw,78px); line-height:.87; letter-spacing:-.03em;
+  color:#F7ECD5; margin:14px 0 0;
+}
+.b3-art h2 .it{ font-family:var(--lat); font-style:italic; color:#E8B95E; display:block; font-size:1.06em; }
+.b3-art .capline{ position:absolute; right:var(--pad); bottom:18px; z-index:3; }
+.b3-art .kicker .r{ background:#E8B95E; }
+.b3-art .kicker .eng{ color:rgba(247,236,213,.88); }
+
+.b3-txt{
+  position:relative; padding:24px var(--pad) 22px;
+  display:grid; grid-template-columns: minmax(0,1.02fr) minmax(0,.98fr); gap:56px;
+}
+.b3-txt > div p{ font-size:16.5px; line-height:1.58; color:var(--ink-2); font-weight:400; margin:0 0 12px; max-width:54ch; }
+.b3-txt .pull{
+  margin:0; padding:14px 0 0; max-width:none; border-top:2px solid var(--scarlet);
+  font-family:var(--lat); font-style:italic; font-weight:400;
+  font-size:clamp(27px,2.9vw,50px); line-height:1.12; color:var(--scarlet-d);
+}
+
+/* what's inside — Fig. a–d on one engraved baseline */
+.inside{
+  position:relative; z-index:3; padding:30px var(--pad) 0;
+  background:var(--ivory-3); border-top:1px solid var(--plate-line);
+}
+.inside-head{ display:grid; grid-template-columns:auto 1fr; gap:38px; align-items:end; }
+.inside-head h3{ font-size:clamp(32px,3.2vw,56px); line-height:.9; letter-spacing:-.028em; }
+.inside-head p{ margin:0 0 4px; font-size:16px; color:var(--ink-2); font-weight:400; max-width:58ch; }
+.specimens{
+  margin-top:20px; display:grid; grid-template-columns:repeat(4,1fr);
+  border-bottom:1px solid var(--plate-line); align-items:end;
+}
+.specimens > div{ position:relative; padding:0 22px 18px; text-align:center; border-left:1px solid var(--hair); }
+.specimens > div:first-child{ border-left:0; padding-left:0; }
+.specimens img{ width:auto; height:112px; margin:0 auto 9px; }
+.specimens .g{ font-family:var(--mono); font-size:9px; letter-spacing:.28em; text-transform:uppercase; color:var(--scarlet-d); }
+.specimens .nm{ font-family:var(--disp); font-size:19px; margin:5px 0 2px; line-height:1.1; }
+.specimens .es{ font-family:var(--lat); font-style:italic; font-size:14.5px; color:var(--ink-2); }
+.specimens .en{ font-size:14px; color:var(--ink-2); font-weight:400; margin-top:5px; line-height:1.4; }
+.ing-note{ padding:12px 0 20px; display:grid; grid-template-columns:1fr 1fr; gap:38px; }
+.ing-note p{ margin:0; font-size:13.5px; line-height:1.55; color:var(--ink-2); font-weight:400; }
+.ing-note strong{ font-weight:600; color:var(--ink); }
+
+/* índice — where to find us */
+.indice{
+  position:relative; z-index:3; background:var(--ivory);
+  padding:26px var(--pad) 24px;
+  display:grid; grid-template-columns:1fr 1.1fr; gap:52px; align-items:start;
+  border-top:1px solid var(--plate-line);
+}
+.indice h3{ font-size:clamp(32px,3.2vw,58px); line-height:.9; letter-spacing:-.028em; margin:10px 0 12px; }
+.indice p.l{ font-size:16px; color:var(--ink-2); font-weight:400; max-width:46ch; margin:0 0 16px; }
+.pins{ list-style:none; margin:0; padding:0; border-top:1px solid var(--hair); max-width:46ch; }
+.pins li{ display:flex; justify-content:space-between; align-items:baseline; gap:16px;
+  padding:8px 0; border-bottom:1px solid var(--hair); }
+.pins .c{ font-family:var(--disp); font-size:20px; }
+.pins .s{ font-family:var(--mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-3); }
+.map{ position:relative; padding-top:8px; }
+.map img{ width:100%; opacity:.96; }
+.map .field{ position:relative; }
+.pin-dot{ position:absolute; width:10px; height:10px; border-radius:50%; background:var(--scarlet);
+  box-shadow:0 0 0 3px var(--ivory), 0 0 0 4px rgba(182,43,24,.35); transform:translate(-50%,-50%); }
+.pin-lab{ position:absolute; transform:translate(-50%,-50%); white-space:nowrap;
+  font-family:var(--mono); font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-2); }
+.notify{ margin-top:18px; display:flex; align-items:flex-end; gap:18px; flex-wrap:wrap; }
+.notify input{
+  font-family:var(--lat); font-size:18px; font-style:italic; color:var(--ink);
+  background:transparent; border:0; border-bottom:1px solid var(--ink-3);
+  padding:5px 2px; width:min(260px,60vw); outline:none;
+}
+
+/* colophon */
+.colophon{ position:relative; z-index:3; background:var(--ink); color:#E3D6BD; padding:0 0 18px; }
+.colophon::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:url("../assets/tex/paper-grain-512.webp") repeat;
+  opacity:.28; mix-blend-mode:overlay;
+}
+.marquee{
+  position:relative; overflow:hidden; margin:0 0 22px;
+  border-bottom:1px solid rgba(227,214,189,.26); padding:8px 0;
+}
+.marquee div{
+  display:inline-block; white-space:nowrap;
+  font-family:var(--mono); font-size:10px; letter-spacing:.4em; text-transform:uppercase;
+  color:rgba(227,214,189,.6); animation:march 46s linear infinite;
+}
+@keyframes march{ from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
+.colo-grid{ position:relative; z-index:2; display:grid; grid-template-columns:1.5fr 1fr 1fr 1.1fr;
+  gap:36px; padding:0 var(--pad); }
+.colo-grid h4{ font-family:var(--mono); font-size:9.5px; letter-spacing:.28em; text-transform:uppercase;
+  color:rgba(227,214,189,.55); margin:0 0 10px; font-weight:400; }
+.colo-grid a, .colo-grid span.i{ display:block; font-size:15px; color:rgba(227,214,189,.9);
+  text-decoration:none; font-weight:400; padding:2px 0; }
+.colo-grid a:hover{ color:#E8B95E; }
+.colo-brand{ font-family:var(--disp); font-size:32px; line-height:1; color:#F0E4CB; }
+.colo-note{ font-family:var(--lat); font-style:italic; font-size:17px; color:#E8B95E; margin:8px 0 0; }
+.colo-foot{
+  position:relative; z-index:2; margin:22px var(--pad) 0; padding-top:12px;
+  border-top:1px solid rgba(227,214,189,.22);
+  display:flex; justify-content:space-between; align-items:baseline; gap:24px; flex-wrap:wrap;
+}
+
+/* ======================================================================== */
+/*  SCROLL-DRIVEN POLISH — every start state stays legible                  */
+/* ======================================================================== */
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion: no-preference){
+    .set{ animation:set-in linear both; animation-timeline:view(); animation-range:entry 4% cover 28%; }
+    @keyframes set-in{ from{ letter-spacing:.5em; opacity:.6 } to{ letter-spacing:.24em; opacity:1 } }
+    .lift{ animation:lift linear both; animation-timeline:view(); animation-range:entry 2% cover 24%; }
+    @keyframes lift{ from{ transform:translateY(26px); opacity:.74 } to{ transform:none; opacity:1 } }
+    .sp{ animation:plate-in linear both; animation-timeline:view(); animation-range:entry 0% cover 22%; }
+    @keyframes plate-in{
+      from{ transform:translateY(32px) rotate(var(--rot,0deg)) }
+      to  { transform:translateY(0)    rotate(var(--rot,0deg)) }
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+
+/* ======================================================================== */
+/*  RESPONSIVE                                                              */
+/* ======================================================================== */
+@media (max-width:1240px){
+  .plate1{ grid-template-columns:112px minmax(0,1fr) 42vw; }
+  .plate1-foot{ left:112px; right:42vw; }
+  .b2-head{ grid-template-columns:1fr; gap:20px; }
+  .key{ grid-column:1 / span 12; }
+}
+@media (max-width:900px){
+  body{ font-size:17px; }
+  .rh__nav, .rh__fol{ display:none; }
+  #beat-1{ position:relative; height:auto; min-height:0; }
+  .plate1{ grid-template-columns:48px minmax(0,1fr); }
+  .h1-wrap, .specimen, .plate1-foot{ min-width:0; }
+  .credits{ grid-template-columns:1fr; gap:5px; }
+  .credits > :last-child{ text-align:left; }
+  .credits__mid{ white-space:normal; }
+  .specimen .cap{ max-width:100%; }
+  .spine{ grid-row:1 / span 2; }
+  .h1-wrap{ padding:76px 20px 24px; height:auto; }
+  .printers-mark{ margin-top:24px; padding-bottom:0; }
+  .specimen{ grid-column:1 / -1; padding:30px 18px 26px; }
+  .specimen img.can{ height:min(46vh,320px); }
+  .specimen .cap{ width:min(86vw,420px); }
+  .plate1-foot{ position:relative; left:auto; right:auto; margin:0 20px 18px; flex-direction:column; gap:5px; grid-column:1 / -1; }
+  .guard, .guard2{ grid-template-columns:auto 1fr; padding:20px 20px 18px; gap:14px; }
+  .guard .vr, .guard2 .vr{ display:none; }
+  .guard .rt{ grid-column:1 / -1; text-align:left; max-width:none; }
+  .b2-head{ padding:34px 20px 0; }
+  .run{ margin:26px 20px 0; grid-template-columns:repeat(2,1fr); column-gap:13px; }
+  .p1,.p2,.p3,.p4,.p5,.p6,.p7,.p8,.p9,.p10{ grid-column:auto / span 1; margin-top:0; --ih:168px; }
+  .p2,.p4,.p6,.p8,.p10{ margin-top:20px; }
+  .sp{ margin-bottom:20px; padding:12px; }
+  .sp .nm{ font-size:18px; }
+  .key{ grid-column:1 / -1; margin-top:10px; }
+  .key dl{ grid-template-columns:1fr; gap:4px 0; }
+  .key dt{ justify-self:start; margin-top:10px; }
+  .b3-art{ height:260px; }
+  .b3-art .over{ left:20px; right:20px; }
+  .b3-txt{ grid-template-columns:1fr; gap:22px; padding:28px 20px 28px; }
+  .inside{ padding:30px 20px 0; }
+  .inside-head{ grid-template-columns:1fr; gap:10px; }
+  .specimens{ grid-template-columns:repeat(2,1fr); row-gap:20px; }
+  .specimens > div{ padding:0 8px 16px; }
+  .specimens > div:nth-child(odd){ border-left:0; padding-left:0; }
+  .ing-note{ grid-template-columns:1fr; gap:12px; padding-bottom:28px; }
+  .indice{ grid-template-columns:1fr; gap:26px; padding:30px 20px 28px; }
+  .colo-grid{ grid-template-columns:1fr 1fr; gap:22px; padding:0 20px; }
+  .colo-foot{ margin:22px 20px 0; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="deckle" viewBox="0 0 1440 14" preserveAspectRatio="none">
+    <path d="M0,14 V6 L18,4 L34,7 L52,3 L70,6 L92,3 L110,8 L128,5 L150,8 L168,4 L190,7 L212,3 L230,6 L252,9 L272,5 L294,8 L316,3 L338,7 L358,9 L380,5 L402,8 L424,4 L446,7 L468,3 L490,6 L512,9 L534,5 L556,8 L578,3 L600,7 L622,9 L644,5 L666,8 L688,4 L710,7 L732,3 L754,6 L776,9 L798,5 L820,8 L842,3 L864,7 L886,9 L908,5 L930,8 L952,4 L974,7 L996,3 L1018,6 L1040,9 L1062,5 L1084,8 L1106,3 L1128,7 L1150,9 L1172,5 L1194,8 L1216,4 L1238,7 L1260,3 L1282,6 L1304,9 L1326,5 L1348,8 L1370,3 L1392,7 L1414,9 L1440,5 V14 Z"/>
+  </symbol>
+</svg>
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ===================== RUNNING HEAD =================================== -->
+<nav class="rh" aria-label="Main">
+  <a class="rh__brand" href="#top">
+    <img class="rh__frog" src="../assets/label/coqui-mark-ink.webp" width="362" height="356" alt="">
+    Coquírico
+  </a>
+  <span class="rh__fol">Folio botánico · lám. i–iii</span>
+  <span class="rh__rule"></span>
+  <div class="rh__nav">
+    <a class="lnk" href="#beat-2">Las láminas</a>
+    <a class="lnk" href="#beat-3">El Yunque</a>
+    <a class="lnk" href="#inside">Lo que lleva</a>
+    <a class="lnk" href="#find">Dónde</a>
+  </div>
+  <span class="rh__prog" aria-hidden="true"></span>
+</nav>
+
+<!-- ===================== BEAT 1 · LÁMINA I ============================== -->
+<header id="beat-1" class="platemark">
+  <a id="top"></a>
+  <div class="plate1">
+
+    <div class="spine" aria-hidden="true">
+      <img src="../assets/label/label-botanical-a@2x.webp" width="340" height="992" alt="">
+      <span class="vt">Coquírico · folio botánico de la isla</span>
+    </div>
+
+    <div class="h1-wrap">
+      <div class="foxing" aria-hidden="true"></div>
+      <div class="kicker">
+        <span class="r"></span>
+        <span class="eng set">Lámina I · Puerto Rico · sin alcohol</span>
+      </div>
+      <h1>Coco, isla<span class="it">y&nbsp;calma.</span></h1>
+      <div class="subrule">
+        <span class="eng eng--sm">Coquírico — lám. i de iii</span>
+        <span class="r"></span>
+      </div>
+      <p class="lede">A Puerto Rican coconut drink. <b>No alcohol, no hurry</b> — just the island, cold. Drawn the way the island was first drawn: one specimen to a plate, named underneath.</p>
+      <div class="acts">
+        <a class="mark" href="#beat-2">Las láminas <em>the ten drinks</em></a>
+        <a class="mark mark--quiet" href="#find">Dónde encontrarnos</a>
+      </div>
+      <div class="printers-mark">
+        <img src="../assets/label/coqui-mark-ink.png" width="724" height="711" alt="The coquí, the Puerto Rican tree frog, as an ink silhouette">
+        <span class="eng eng--sm t">Marca del impresor —<br>el coquí, de noche</span>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <span class="pin" style="top:13%;left:13%"></span>
+      <span class="pin" style="top:13%;right:13%"></span>
+      <span class="pin" style="bottom:29%;left:13%"></span>
+      <span class="pin" style="bottom:29%;right:13%"></span>
+      <img class="can" src="../assets/product/coquetearte-can@2x.webp" width="1080" height="1446"
+           fetchpriority="high" alt="Coquetearte — the Coquírico coconut can">
+      <div class="cap">
+        <div class="n set">Fig. 1 — Coquetearte</div>
+        <div class="b">Puerto Rican style coconut drink · lata de 240&nbsp;ml</div>
+        <div class="rule"></div>
+        <div class="f">Non-alcoholic · 60 calories · 8 fl oz / 240 ml</div>
+      </div>
+    </div>
+
+    <div class="plate1-foot">
+      <span class="eng eng--sm">Pintado del natural — El&nbsp;Yunque, P.R.</span>
+      <span class="eng eng--sm">Coquírico, editor</span>
+    </div>
+  </div>
+  <svg class="deckle deckle--bot" style="fill:var(--scarlet)" aria-hidden="true"><use href="#deckle"/></svg>
+</header>
+
+<!-- ===================== BEAT 2 · LÁMINA II ============================= -->
+<section id="beat-2">
+
+  <!-- guard sheet: the page turns from plate I to plate II -->
+  <div class="guard">
+    <span class="num">II</span>
+    <span class="vr"></span>
+    <div>
+      <div class="a set">Lámina II — la familia</div>
+      <div class="b">Diez láminas. Cuatro verdades.</div>
+    </div>
+    <div class="rt">
+      <p>Two of these are real. The rest are studies, editions and ideas — and every plate says which it is, underneath, in print.</p>
+    </div>
+  </div>
+  <svg class="deckle deckle--bot" style="fill:var(--leaf)" aria-hidden="true"><use href="#deckle"/></svg>
+
+  <div class="b2-head">
+    <h2 class="lift">Ten drinks.<span class="it">Four truths.</span></h2>
+    <p>Numbered, pinned and captioned like specimens, because that is what they are: two things we make, four the same drink wearing different art, three we only ever drew, and one we have not made at all.</p>
+  </div>
+
+  <div class="run">
+
+    <article class="sp t-real p1">
+      <span class="fx" aria-hidden="true"></span><span class="fig">Fig. 1</span>
+      <figure>
+        <img class="spec" decoding="sync" src="../assets/product/coquetearte-can.webp" width="540" height="723" alt="Coquetearte — the Coquírico coconut can">
+        <div class="base"></div>
+        <figcaption>
+          <h3 class="nm">Coquetearte</h3>
+          <p class="ll">Lám. i · en lata · 240 ml</p>
+          <span class="stamp">Real · en lata</span>
+          <p class="one">Coconut, cinnamon, vanilla — cold. The one we actually make.</p>
+        </figcaption>
+      </figure>
+    </article>
+
+    <article class="sp t-real p2">
+      <span class="fx" aria-hidden="true"></span><span class="fig">Fig. 2</span>
+      <figure>
+        <img class="spec" decoding="sync" src="../assets/product/el-original-bottle-card.webp" width="540" height="723" alt="El Original — the 750 mL Coquírico coquito bottle">
+        <div class="base"></div>
+        <figcaption>
+          <h3 class="nm">El Original</h3>
+          <p class="ll">Lám. ii · en botella · 750 ml</p>
+          <span class="stamp">Real · en botella</span>
+          <p class="one">The holiday coquito — vegan, made with coconut and white rum.</p>
+        </figcaption>
+      </figure>
+    </article>
+
+    <article class="sp t-study p3">
+      <span class="fx" aria-hidden="true"></span><span class="fig">Fig. 3</span>
+      <figure>
+        <img class="spec" decoding="sync" src="../assets/product/brisa-de-parcha-can.webp" width="540" height="723" alt="Brisa de Parcha — a flavor study can, imagined not bottled">
+        <div class="base"></div>
+        <figcaption>
+          <h3 class="nm">Brisa de Parcha</h3>
+          <p class="ll">Lám. iii · estudio</p>
+          <span class="stamp">Flavor study</span>
+          <p class="one">Passionfruit, imagined. No formula behind it.</p>
+        </figcaption>
+      </figure>
+    </article>
+
+    <article class="sp t-artist p4">
+      <span class="fx" aria-hidden="true"></span><span class="fig">Fig. 4</span>
+      <figure>
+        <img class="spec" decoding="sync" src="../assets/product/flamboyan-at-dusk-can.webp" width="540" height="723" alt="Flamboyán at Dusk — an artist edition of the Coquetearte can">
+        <div class="base"></div>
+        <figcaption>
+          <h3 class="nm">Flamboyán at Dusk</h3>
+          <p class="ll">Lám. iv · misma receta</p>
+          <span class="stamp">Artist edition</span>
+          <p class="one">Coquetearte, dressed in dusk. New art, same drink.</p>
+        </figcaption>
+      </figure>
+    </article>
+
+    <article class="sp t-study p5">
+      <span class="fx" aria-hidden="true"></span><span class="fig">Fig. 5</span>
+      <figure>
+        <img class="spec" decoding="sync" src="../assets/product/guayaba-rosada-can.webp" width="540" height="723" alt="Guayaba Rosada — a flavor study can, imagined not bottled">
+        <div class="base"></div>
+        <figcaption>
+          <h3 class="nm">Guayaba Rosada</h3>
+          <p class="ll">Lám. v · estudio</p>
+          <span class="stamp">Flavor study</span>
+          <p class="one">Pink guava, imagined. Drawn, named, and left there.</p>
+        </figcaption>
+      </figure>
+    </article>
+
+    <article class="sp t-artist p6">
+      <span class="fx" aria-hidden="true"></span><span class="fig">Fig. 6</span>
+      <figure>
+        <img class="spec" decoding="sync" src="../assets/product/caribbean-night-01-can.webp" width="540" height="723" alt="Caribbean Night No. 01 — an artist edition of the Coquetearte can">
+        <div class="base"></div>
+        <figcaption>
+          <h3 class="nm">Caribbean Night No.&nbsp;01</h3>
+          <p class="ll">Lám. vi · misma receta</p>
+          <span class="stamp">Artist edition</span>
+          <p class="one">Coquetearte, in blue and gold — one gold line finds the moon.</p>
+        </figcaption>
+      </figure>
+    </article>
+
+    <article class="sp t-study p7">
+      <span class="fx" aria-hidden="true"></span><span class="fig">Fig. 7</span>
+      <figure>
+        <img class="spec" decoding="sync" src="../assets/product/cafe-y-canela-can.webp" width="540" height="723" alt="Café y Canela — a flavor study can, imagined not bottled">
+        <div class="base"></div>
+        <figcaption>
+          <h3 class="nm">Café y Canela</h3>
+          <p class="ll">Lám. vii · estudio</p>
+          <span class="stamp">Flavor study</span>
+          <p class="one">A cortadito in coconut. A drawing and a wish.</p>
+        </figcaption>
+      </figure>
+    </article>
+
+    <article class="sp t-artist p8">
+      <span class="fx" aria-hidden="true"></span><span class="fig">Fig. 8</span>
+      <figure>
+        <img class="spec" decoding="sync" src="../assets/product/rain-on-palm-can.webp" width="540" height="723" alt="Rain on Palm — an artist edition of the Coquetearte can">
+        <div class="base"></div>
+        <figcaption>
+          <h3 class="nm">Rain on Palm</h3>
+          <p class="ll">Lám. viii · misma receta</p>
+          <span class="stamp">Artist edition</span>
+          <p class="one">Coquetearte, after the rain — the island exhaling.</p>
+        </figcaption>
+      </figure>
+    </article>
+
+    <article class="sp t-artist p9">
+      <span class="fx" aria-hidden="true"></span><span class="fig">Fig. 9</span>
+      <figure>
+        <img class="spec" decoding="sync" src="../assets/product/coqui-chorus-can.webp" width="540" height="723" alt="Coquí Chorus — an artist edition of the Coquetearte can">
+        <div class="base"></div>
+        <figcaption>
+          <h3 class="nm">Coquí Chorus</h3>
+          <p class="ll">Lám. ix · misma receta</p>
+          <span class="stamp">Artist edition</span>
+          <p class="one">Coquetearte, wearing the chorus — a nocturne in one hand.</p>
+        </figcaption>
+      </figure>
+    </article>
+
+    <article class="sp t-concept p10">
+      <span class="fx" aria-hidden="true"></span><span class="fig">Fig. 10</span>
+      <figure>
+        <img class="spec" decoding="sync" src="../assets/product/future-rum-bottle.webp" width="540" height="723" alt="Rum Expression — a 21+ concept bottle, not made">
+        <div class="base"></div>
+        <figcaption>
+          <h3 class="nm">Rum Expression</h3>
+          <p class="ll">Lám. x · sin receta, sin fecha</p>
+          <span class="stamp">21+ concept</span>
+          <p class="one">A bottle we have not made. A possibility, not a promise.</p>
+        </figcaption>
+      </figure>
+    </article>
+
+    <aside class="key">
+      <h3>Clave de las láminas — the key to the plates</h3>
+      <dl>
+        <dt class="k-real">Real</dt>
+        <dd>Core product — non-alcoholic. El Original is the holiday bottle, made with coconut and white rum.</dd>
+        <dt class="k-art">Artist edition</dt>
+        <dd>An artist edition — the real Coquetearte recipe, different art.</dd>
+        <dt class="k-stu">Flavor study</dt>
+        <dd>A flavor study — imagined, not bottled.</dd>
+        <dt class="k-con">21+ concept</dt>
+        <dd>A 21+ concept. No recipe, no date.</dd>
+      </dl>
+    </aside>
+
+  </div>
+
+  <!-- guard sheet: plate II gives way to plate III -->
+  <div class="guard2">
+    <span class="num">III</span>
+    <span class="vr"></span>
+    <div>
+      <div class="a set">Lámina III — desde El Yunque</div>
+      <div class="b">El que canta primero.</div>
+    </div>
+    <span class="eng eng--sm" style="color:rgba(255,233,207,.7)">Vuelta de página →</span>
+  </div>
+</section>
+
+<!-- ===================== BEAT 3 · LÁMINA III ============================ -->
+<section id="beat-3">
+  <svg class="deckle deckle--top" style="fill:var(--ivory)" aria-hidden="true"><use href="#deckle"/></svg>
+
+  <div class="b3-art">
+    <img src="../assets/story/poster-serigraph@2x.webp" width="1300" height="728" decoding="sync"
+         alt="The coquí call, drawn as a screen print — flamboyán blossoms and a low moon">
+    <span class="scrim" aria-hidden="true"></span>
+    <div class="over">
+      <div class="kicker"><span class="r"></span><span class="eng set">Desde El Yunque</span></div>
+      <h2>The frog<span class="it">that names us.</span></h2>
+    </div>
+    <span class="eng eng--sm capline eng--cream">Lám. III — el coro del coquí, serigrafía</span>
+  </div>
+
+  <div class="b3-txt">
+    <div>
+      <p>El Yunque is the rainforest that sits over the island — warm, wet, awake after dark. The coquí is the small tree frog who lives in it. At dusk he starts: two notes, co&#8230;&nbsp;quí, over and over, until the whole hillside is answering.</p>
+      <p>That call is our name, our sound and our first ingredient. The rest is coconut — water and milk, a little cane and agave, cinnamon, vanilla. Cold, non-alcoholic, Puerto Rican. Everything we make starts on that hillside, after dark.</p>
+    </div>
+    <p class="pull" lang="es">De noche, la isla canta.<br>Nosotros solo la embotellamos.</p>
+  </div>
+
+  <!-- what's inside — Fig. a–d on one engraved baseline -->
+  <div class="inside" id="inside">
+    <div class="inside-head">
+      <h3 class="lift">Lo que lleva</h3>
+      <p>Everything in Coquetearte, straight off the back of the can. Seven ingredients — and that list is the whole list.</p>
+    </div>
+    <div class="specimens">
+      <div>
+        <img src="../assets/ingredients/ing-coconut-water-milk@2x.webp" width="600" height="600" decoding="sync" alt="A halved coconut, water and milk">
+        <div class="g">Fig. a</div>
+        <div class="nm">Coconut water &amp; milk</div>
+        <div class="es" lang="es">El coco, dos voces</div>
+        <div class="en">The base. Both, so it drinks cool and creamy.</div>
+      </div>
+      <div>
+        <img src="../assets/ingredients/ing-cinnamon@2x.webp" width="600" height="600" decoding="sync" alt="Cinnamon quills">
+        <div class="g">Fig. b</div>
+        <div class="nm">Cinnamon</div>
+        <div class="es" lang="es">La línea de canela</div>
+        <div class="en">Canela — the warm note under the coconut.</div>
+      </div>
+      <div>
+        <img src="../assets/ingredients/ing-cane-sugar-agave@2x.webp" width="600" height="600" decoding="sync" alt="Cane sugar and agave syrup">
+        <div class="g">Fig. c</div>
+        <div class="nm">Cane sugar &amp; agave</div>
+        <div class="es" lang="es">Dulce en dos tiempos</div>
+        <div class="en">Sweetened lightly, the island way.</div>
+      </div>
+      <div>
+        <img src="../assets/ingredients/ing-vanilla-extract@2x.webp" width="600" height="600" decoding="sync" alt="Vanilla extract">
+        <div class="g">Fig. d</div>
+        <div class="nm">Vanilla extract</div>
+        <div class="es" lang="es">Sírvelo frío</div>
+        <div class="en">The last soft edge before the finish.</div>
+      </div>
+    </div>
+    <div class="ing-note">
+      <p><strong>Coquetearte:</strong> coconut water · coconut milk · cane sugar · agave syrup · natural flavors · cinnamon · vanilla extract. No alcohol — the can's gold band says it out loud: keep refrigerated · non-alcoholic.</p>
+      <p>The artist editions are the same drink. The flavor studies are imagined, not bottled — they have no formula. El Original is the exception on this page: it is made with coconut and white rum.</p>
+    </div>
+  </div>
+
+  <!-- índice — where to find us -->
+  <div class="indice" id="find">
+    <div>
+      <div class="kicker"><span class="r"></span><span class="eng set">Llegando a colmados</span></div>
+      <h3>Where to find us</h3>
+      <p class="l">Nothing is on shelves yet. These are the parts of the island we're working toward — colmados first, the way it should be.</p>
+      <ul class="pins">
+        <li><span class="c">San Juan</span><span class="s">Coming soon</span></li>
+        <li><span class="c">Caguas</span><span class="s">Coming soon</span></li>
+        <li><span class="c">Ponce</span><span class="s">Coming soon</span></li>
+        <li><span class="c">Mayagüez</span><span class="s">Coming soon</span></li>
+      </ul>
+      <form class="notify" onsubmit="return false">
+        <label>
+          <span class="eng eng--sm">Email</span>
+          <input type="email" aria-label="Email">
+        </label>
+        <a class="mark" href="#find">Notify me</a>
+      </form>
+      <p class="eng eng--sm" style="margin:12px 0 0">Presentation only — nothing is sent and no address is stored.</p>
+    </div>
+    <div class="map">
+      <div class="field">
+        <img src="../extras/puerto-rico.svg" width="1000" height="360" alt="An outline map of Puerto Rico">
+        <span class="pin-dot" style="left:57.1%;top:16.7%"></span><span class="pin-lab" style="left:57.1%;top:5%">San Juan</span>
+        <span class="pin-dot" style="left:60.4%;top:48.4%"></span><span class="pin-lab" style="left:74%;top:48.4%">Caguas</span>
+        <span class="pin-dot" style="left:33.3%;top:79.1%"></span><span class="pin-lab" style="left:33.3%;top:91%">Ponce</span>
+        <span class="pin-dot" style="left:8.6%;top:53%"></span><span class="pin-lab" style="left:9%;top:66%">Mayagüez</span>
+      </div>
+      <div class="credits">
+        <span class="eng eng--sm">Carta de la isla</span>
+        <span class="credits__mid">Areas we're working toward</span>
+        <span class="eng eng--sm">No stockists</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- colophon -->
+  <footer class="colophon">
+    <div class="marquee" aria-hidden="true"><div>Coquírico · folio botánico · coco, isla y calma · el coquí canta de noche · non-alcoholic · imagined, not bottled · Coquírico · folio botánico · coco, isla y calma · el coquí canta de noche · non-alcoholic · imagined, not bottled · </div></div>
+    <div class="colo-grid">
+      <div>
+        <div class="colo-brand">Coquírico</div>
+        <p class="colo-note" lang="es">Hecho con cariño y muchos coquís.</p>
+      </div>
+      <div>
+        <h4>El folio</h4>
+        <a href="#beat-2">Las láminas</a>
+        <a href="#inside">Lo que lleva</a>
+        <a href="#beat-3">El Yunque</a>
+        <a href="#find">Dónde encontrarnos</a>
+      </div>
+      <div>
+        <h4>Social</h4>
+        <span class="i">Instagram — coming soon</span>
+        <span class="i">TikTok — coming soon</span>
+      </div>
+      <div>
+        <h4>Small print</h4>
+        <span class="i">No products are for sale. Nothing on this site is an offer. Puerto Rico.</span>
+      </div>
+    </div>
+    <div class="colo-foot">
+      <span class="eng eng--sm" style="color:#E8B95E">Concept site — presentation only.</span>
+      <span class="eng eng--sm" style="color:rgba(227,214,189,.55)">© 2026 Coquírico — concept presentation</span>
+    </div>
+  </footer>
+</section>
+
+<script>
+/* Deep-link helper. Headless capture tools mis-paint a scrolled document, so a
+   hash jump shifts the folio up instead of scrolling it. Progressive: no JS, no
+   hash -> the page is a plain, readable, top-to-bottom document. */
+(function(){
+  function jump(){
+    var h=location.hash; if(!h||h.length<2) return;
+    var el=document.getElementById(h.slice(1)); if(!el) return;
+    document.body.style.top="0px";
+    var nav=document.querySelector(".rh");
+    var off=nav?Math.round(nav.getBoundingClientRect().height):0;
+    var y=Math.max(0,Math.round(el.getBoundingClientRect().top+window.pageYOffset)-off);
+    document.body.style.top=(-y)+"px";
+    window.scrollTo(0,0);
+  }
+  window.addEventListener("load",function(){ jump(); setTimeout(jump,250); setTimeout(jump,900); });
+  window.addEventListener("hashchange",jump);
+})();
+</script>
+</body>
+</html>
