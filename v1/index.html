@@ -6,6 +6,17 @@
   var A={'coquetearte':'#CAA24C','brisa-de-parcha':'#F6D859','guayaba-rosada':'#FF927F','cafe-y-canela':'#D79760','future-rum':'#A9B98A','flamboyan-at-dusk':'#EE744E','rain-on-palm':'#68C3AE','coqui-chorus':'#E9B666','caribbean-night-01':'#8FA3D9'};
   var q=new URLSearchParams(location.search); window.__HANDOFF = q.get('handoff')==='1' ? (A[q.get('drink')]||'#CAA24C') : null;
   if(window.__HANDOFF) document.documentElement.style.background=window.__HANDOFF;
+
+  /* The intro locks scrolling with html.ov-lock AND a non-passive touchmove blocker, and only its
+     own finish() can undo that. If anything interrupts that sequence the visitor is trapped with a
+     page that will not scroll. Record every touchmove listener so the watchdog below can always
+     unbind them — this runs before the site's own scripts, so nothing escapes it. */
+  window.__tmReg=[];
+  var _add=EventTarget.prototype.addEventListener;
+  EventTarget.prototype.addEventListener=function(type,fn,opts){
+    try{ if(type==='touchmove') window.__tmReg.push({t:this,fn:fn,opts:opts}); }catch(e){}
+    return _add.call(this,type,fn,opts);
+  };
 })();</script>
 <style>
 /* the deployed copy is client-facing: the dev readout never shows here (it stays in the source
@@ -1418,13 +1429,50 @@ function initCan(canvas){
     if(b){ b.click(); clearInterval(iv); reveal(); return; }
     if(Date.now()-t0>2200){ clearInterval(iv); reveal(); }
   }, 60);
-  [400,900,1600,2600,4200].forEach(function(ms){          /* if the intro builds late, skip it too */
-    setTimeout(function(){ var b=document.getElementById('ov-skip'); if(b) b.click(); }, ms);
-  });
+
+  /* SCROLL WATCHDOG — the visitor must never be left unable to scroll. For 14s: press Skip
+     whenever the lock is on, strip the lock class, and unbind every touchmove blocker that was
+     registered. Any one of these alone restores scrolling; together they cannot all fail. */
+  var de=document.documentElement, wd=setInterval(function(){
+    var b=document.getElementById('ov-skip');
+    if(de.classList.contains('ov-lock')){
+      if(b) b.click();
+      de.classList.remove('ov-lock');
+      (window.__tmReg||[]).forEach(function(l){ try{ l.t.removeEventListener('touchmove',l.fn,l.opts); }catch(e){} });
+      if(window.__lenis && window.__lenis.start) window.__lenis.start();
+    }
+  }, 150);
+  setTimeout(function(){
+    clearInterval(wd);
+    de.classList.remove('ov-lock');
+    (window.__tmReg||[]).forEach(function(l){ try{ l.t.removeEventListener('touchmove',l.fn,l.opts); }catch(e){} });
+  }, 14000);
   setTimeout(reveal, 3200);                                /* hard failsafe: never a stuck screen */
   ['pointerdown','touchstart','wheel','keydown'].forEach(function(ev){
     addEventListener(ev, reveal, {once:true, passive:true});   /* any touch dismisses it */
   });
+})();
+</script>
+<script>/* ?diag=1 — a live readout so a real phone can report what is actually happening */
+(function(){
+  if(new URLSearchParams(location.search).get('diag')!=='1') return;
+  var d=document.createElement('div');
+  d.style.cssText='position:fixed;left:8px;right:8px;bottom:8px;z-index:9999;background:rgba(6,10,6,.92);'+
+    'color:#F2E9D6;font:12px ui-monospace,Menlo,Consolas,monospace;padding:10px 12px;border-radius:10px;'+
+    'border:1px solid rgba(233,192,106,.5);line-height:1.5;pointer-events:none;white-space:pre-wrap';
+  document.body.appendChild(d);
+  var maxY=0, moves=0;
+  addEventListener('scroll', function(){ if(scrollY>maxY) maxY=scrollY; }, {passive:true});
+  addEventListener('touchmove', function(){ moves++; }, {passive:true});
+  setInterval(function(){
+    var de=document.documentElement;
+    d.textContent =
+      'SWIPE UP AND DOWN, THEN SCREENSHOT THIS\n'+
+      'scrollY '+Math.round(scrollY)+'  max '+Math.round(maxY)+'  docH '+de.scrollHeight+'  vh '+innerHeight+'\n'+
+      'touchmoves '+moves+'   ov-lock '+de.classList.contains('ov-lock')+'   veil '+!!document.getElementById('hand-veil')+'\n'+
+      'overflow '+getComputedStyle(de).overflow+'  touch-action '+getComputedStyle(de).touchAction+'\n'+
+      'tm-listeners '+((window.__tmReg||[]).length)+'  dpr '+devicePixelRatio+'  w '+innerWidth;
+  }, 250);
 })();</script>
 </body>
 </html>
