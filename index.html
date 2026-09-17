@@ -392,6 +392,16 @@ p{margin:0}
 @media (max-width:960px){
   .form .row{flex-direction:column}
   .form .row .btn,.join-card .news .row .btn{width:100%}
+  /* in a column flexbox, flex:1 turns into flex-basis:0 on the MAIN (vertical) axis and the
+     input collapses to ~21px — pin it back to its real height */
+  .form .row input,.join-card .news .row input{flex:none;width:100%}
+  /* the drink-detail is one column here: the arrow tour sits as its own centered row on top
+     instead of floating over the can */
+  .d-nav{position:static;order:-1;justify-content:center;margin-bottom:4px}
+}
+/* touch screens have no hover: the door into V1 must announce itself */
+@media (hover:none){
+  .drink-detail .fig::after{opacity:.92;transform:translate(-50%,0)}
 }
 /* mobile: keep the little map's pin labels legible (city only; caption carries the status) */
 @media (max-width:600px){
@@ -427,6 +437,13 @@ p{margin:0}
       <source src="assets/video/hero-beach-1080.mp4" type="video/mp4">
     </video>
   </div>
+  <script>
+  /* phones get the 6.7MB 720p encode instead of the 15MB desktop file */
+  (function(){ if (innerWidth <= 768){ var v = document.querySelector('.hero-vid');
+    v.poster = 'assets/video/hero-beach-poster-720.jpg';
+    v.querySelector('source').src = 'assets/video/hero-beach-720.mp4'; v.load();
+    var p = v.play(); if (p && p.catch) p.catch(function(){}); } })();
+  </script>
   <div class="hero-scrim" aria-hidden="true"></div>
 
   <div class="hero-stage" aria-hidden="false">
