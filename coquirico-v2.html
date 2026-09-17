@@ -320,6 +320,36 @@ p{margin:0}
   *{transition-duration:0s!important;animation:none!important}
 }
 
+/* ---------------- DE NOCHE ----------------
+   "De noche, la isla canta." One click of the moon and the island turns to night: deep jungle
+   greens and gold, the hero becomes molten-gold water, the coquí calls once. Same site, second act. */
+.mode-toggle{width:40px;height:40px;flex:none;border-radius:50%;border:1.5px solid rgba(255,255,255,.55);display:grid;place-items:center;color:inherit;transition:border-color .3s ease,background .3s ease,transform .35s cubic-bezier(.2,.7,.2,1)}
+.mode-toggle:hover{transform:translateY(-2px) rotate(-12deg)}
+.nav.scrolled .mode-toggle{border-color:var(--rule-2)}
+.moon{display:block;width:15px;height:15px;border-radius:50%;box-shadow:inset -5px -3.5px 0 0 currentColor;transition:box-shadow .3s ease,width .3s ease,height .3s ease}
+.mode-toggle[aria-pressed="true"] .moon{box-shadow:0 0 0 0 currentColor;background:currentColor;width:9px;height:9px;outline:1.5px solid currentColor;outline-offset:3.5px}
+:root[data-noche]{
+  --paper:#0C110D; --paper-2:#121A13; --paper-3:#19241A; --paper-deep:#202C20;
+  --ink:#F2E9D6; --ink-2:#CFC2A8; --ink-3:#9A927E;
+  --leaf:#8CA05C; --palm:#7FBF8A;
+  --rule:rgba(242,233,214,.15); --rule-2:rgba(242,233,214,.32);
+}
+:root[data-noche] .eyebrow{color:color-mix(in srgb,var(--theme) 52%,var(--ink-2))}
+:root[data-noche] .benefit .disc{background:var(--paper-2)}
+:root[data-noche] .form input,:root[data-noche] .join-card .news input{background:#121A13;border-color:var(--rule-2);color:var(--ink)}
+:root[data-noche] .form .status,:root[data-noche] .join-card .status{color:var(--palm)}
+:root[data-noche] .map-card{background:#13201C}
+:root[data-noche] .map-card .coq-pr-land{fill:#182518;stroke:var(--palm)}
+:root[data-noche] .map-card .pin text{fill:var(--ink)}
+:root[data-noche] .map-card .pin tspan.s{fill:var(--ink-2)}
+:root[data-noche] .nav.scrolled{background:rgba(12,17,13,.92);color:var(--ink)}
+:root[data-noche] .nav.scrolled .brand img{filter:brightness(0) invert(1)}
+:root[data-noche] .kinetic{color:#F6EEDD}
+:root[data-noche] .footer{background:#0A0F0A;color:#F2E9D6}
+:root[data-noche] .pill.real{background:#1C2A1C;border-color:#1C2A1C}
+:root[data-noche] .pill.concept{color:#E8DFC8}
+:root[data-noche] .drink .field img{filter:drop-shadow(0 18px 26px rgba(0,0,0,.5))}
+
 /* ---------------- RESPONSIVE ---------------- */
 @media (max-width:1560px){
   :root{--container:1280px;--gutter:40px}
@@ -423,6 +453,7 @@ p{margin:0}
       <li><a href="#serve">Cómo se sirve</a></li>
       <li><a href="#find">Dónde</a></li>
     </ul>
+    <button type="button" class="mode-toggle" id="mode-toggle" aria-pressed="false" aria-label="De noche — night mode" title="De noche"><span class="moon" aria-hidden="true"></span></button>
     <a class="btn light sm cta" href="#find">Notify me</a>
     <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
   </div>
@@ -928,6 +959,67 @@ p{margin:0}
       var fr = navBrand.querySelector('img');
       if (fr){ fr.classList.remove('hop'); void fr.offsetWidth; fr.classList.add('hop'); }
     });
+  }
+
+  /* DE NOCHE — the island's second act. The flip rides the same liquid wave; the hero trades
+     the beach for molten-gold water; the coquí calls once as night falls (a real click = a gesture). */
+  function setHeroVideo(noche){
+    var v = document.querySelector('.hero-vid'); if (!v) return;
+    var base = noche ? 'hero-gold' : 'hero-beach', res = innerWidth <= 768 ? '720' : '1080';
+    v.poster = 'assets/video/' + base + '-poster-' + res + '.jpg';
+    v.querySelector('source').src = 'assets/video/' + base + '-' + res + '.mp4';
+    v.load(); var p = v.play(); if (p && p.catch) p.catch(function(){});
+  }
+  var modeBtn = document.getElementById('mode-toggle');
+  function applyMode(noche){
+    document.documentElement.toggleAttribute('data-noche', noche);
+    if (modeBtn) modeBtn.setAttribute('aria-pressed', String(noche));
+    setHeroVideo(noche);
+    try { localStorage.setItem('coq-mode', noche ? 'noche' : 'dia'); } catch(e){}
+  }
+  var modeWaving = false;
+  if (modeBtn){
+    modeBtn.addEventListener('click', function(){
+      if (modeWaving) return;
+      var toNoche = !document.documentElement.hasAttribute('data-noche');
+      if (toNoche) coquiCall();
+      if (quietMotion){ applyMode(toNoche); return; }
+      modeWaving = true;
+      fPath.style.fill = toNoche ? '#0C110D' : '#FBF6F2';
+      fSvg.classList.add('on');
+      var t0 = performance.now(), UP = 460, DOWN = 500, swapped = false;
+      function frame(){
+        var now = performance.now(), el = now - t0;
+        if (el <= UP){ fPath.setAttribute('d', buildWavePath(Math.min(1, el/UP), now/1000, 600, 1000)); }
+        else {
+          if (!swapped){ swapped = true; applyMode(toNoche); }
+          fPath.setAttribute('d', buildWavePath(1 - Math.min(1, (el - UP)/DOWN), now/1000, 600, 1000));
+          if (el >= UP + DOWN){ gsap.ticker.remove(frame); fSvg.classList.remove('on'); modeWaving = false; }
+        }
+      }
+      gsap.ticker.add(frame);
+    });
+  }
+  try { if (localStorage.getItem('coq-mode') === 'noche') applyMode(true); } catch(e){}
+
+  /* scroll choreography — one signature entrance per section, played once, calm */
+  if (window.gsap && window.ScrollTrigger && !quietMotion && innerWidth > 760){
+    ['.benefit', '.ing', '.serve'].forEach(function(s){
+      document.querySelectorAll(s).forEach(function(el){ el.classList.remove('reveal'); });
+    });
+    var sm = document.querySelector('.story-media'); if (sm) sm.classList.remove('reveal-img');
+    gsap.set('.media img', { scale: 1.12 });
+    gsap.to('.media img', { scale: 1, ease: 'none',
+      scrollTrigger: { trigger: '.media', start: 'top 90%', end: 'top 12%', scrub: true } });
+    gsap.from('.benefit', { y: 34, opacity: 0, duration: .9, stagger: .14, ease: 'power3.out',
+      scrollTrigger: { trigger: '.benefit-row', start: 'top 84%' } });
+    gsap.from('.ing', { y: 44, opacity: 0, rotate: -2, duration: .9, stagger: .12, ease: 'power3.out',
+      scrollTrigger: { trigger: '.inside-grid', start: 'top 84%' } });
+    gsap.fromTo('.story-media', { clipPath: 'inset(9% 9% 9% 9% round 40px)' },
+      { clipPath: 'inset(0% 0% 0% 0% round 40px)', duration: 1.15, ease: 'power3.inOut',
+        scrollTrigger: { trigger: '.story-media', start: 'top 80%' } });
+    gsap.from('.serve', { y: 40, opacity: 0, duration: .95, stagger: .15, ease: 'power3.out',
+      scrollTrigger: { trigger: '.serve-grid', start: 'top 84%' } });
   }
 
   /* statement — the line assembles word by word as you scroll through it */
