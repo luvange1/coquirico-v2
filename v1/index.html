@@ -8,6 +8,9 @@
   if(window.__HANDOFF) document.documentElement.style.background=window.__HANDOFF;
 })();</script>
 <style>
+/* the deployed copy is client-facing: the dev readout never shows here (it stays in the source
+   file for Pedro's own desktop testing) */
+#debug{display:none!important}
 #hand-veil{position:fixed;inset:0;z-index:2000;pointer-events:none;opacity:1;
   display:grid;place-items:center;transition:opacity .7s ease}
 #hand-veil.out{opacity:0}
@@ -212,6 +215,28 @@
   /* Short small screens: the headline reaches lower, so the overlay drops beneath its band. */
   @media (max-width:1100px) and (max-height:1000px){
     .fam-reveal{ top:57%; }
+  }
+
+  /* ---------- PHONES ----------
+     This site is authored for wide screens: the 3D can sits centre-stage and the copy shares the
+     frame beside it. On a handset that stacks the can ON TOP of the text. Here the can is scaled
+     down and lifted (see COQ_SMALL in the frame loop) and the copy takes the lower third on its
+     own readable plate. */
+  @media (max-width:700px){
+    #debug{ display:none; }
+    nav{ padding:.5rem .75rem; gap:.5rem; }
+    .navbrand{ font-size:.92rem; letter-spacing:.04em; }
+    .navlinks{ display:none; }
+    #mute{ margin-left:0; padding:.5rem .7rem; }
+    .chapter{ justify-content:flex-end; padding-bottom:11vh; }
+    .chapter .inner,
+    .chapter[data-side="right"] .inner{ max-width:none; margin:0; text-align:left;
+      background:linear-gradient(180deg,rgba(8,14,8,0) 0%,rgba(8,14,8,.72) 9%,rgba(8,14,8,.93) 24%,rgba(8,14,8,.96) 100%);
+      padding:26px 16px 22px; border-radius:18px; }
+    .chapter[data-tone="light"] .inner{
+      background:linear-gradient(180deg,rgba(244,234,210,0) 0%,rgba(244,234,210,.78) 9%,rgba(244,234,210,.95) 24%,rgba(244,234,210,.97) 100%); }
+    .rit{ flex-wrap:wrap; }
+    .study{ flex:1 1 44%; }
   }
 
   /* merch stage */
@@ -1024,9 +1049,12 @@ function initCan(canvas){
     g.rotation.y = idleAngle + p*Math.PI*2 + dYaw;
     g.rotation.x = -0.02 + dPit;
     g.rotation.z = Math.sin(time*0.5)*0.02 + lip*0.05;
-    g.position.x = curCanX*2.2;
-    g.position.y = Math.sin(time*0.9)*0.035 - lip*0.16;
-    g.scale.setScalar(Math.max(0.001,curCanS*(1-lip*0.05)));
+    /* phones: pull the can toward the centre, shrink it and lift it so the copy owns the lower
+       third of the screen instead of being buried under the artwork */
+    var _mob = window.COQ_SMALL ? 1 : 0;
+    g.position.x = curCanX*2.2*(_mob?0.42:1);
+    g.position.y = Math.sin(time*0.9)*0.035 - lip*0.16 + (_mob?1.02:0);
+    g.scale.setScalar(Math.max(0.001,curCanS*(1-lip*0.05)*(_mob?0.55:1)));
     /* Fade the traveling can out DURING the final wipe into merch (last BOUNDS), so it's gone before the
        merch world fully arrives — scroll-driven, not a late class toggle. */
     var canFade = (wIdx>=BOUNDS.length) ? 1
