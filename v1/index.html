@@ -512,11 +512,16 @@ function initCan(canvas){
   bgRenderer.setSize(innerWidth,innerHeight,false);
   var bgScene=new THREE.Scene(), bgCam=new THREE.Camera();
   var NOISE=[
-'float hash(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}',
-'float vnoise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);',
+/* hash12: small constants survive mediump GPUs (the old fract(p.x*p.y) with 123.34/456.21
+   correlated along both axes and tiled the cream world into visible rectangles) */
+'float hash(vec2 p){vec3 q=fract(vec3(p.xyx)*0.13);q+=dot(q,q.yzx+33.33);return fract((q.x+q.y)*q.z);}',
+/* quintic interpolation — C2 continuous, so no grid creasing shows through smooth pale fields */
+'float vnoise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*f*(f*(f*6.-15.)+10.);',
 ' float a=hash(i),b=hash(i+vec2(1.,0.)),c=hash(i+vec2(0.,1.)),d=hash(i+vec2(1.,1.));',
 ' return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}',
-'float fbm(vec2 p){float s=0.,a=.5;for(int i=0;i<5;i++){s+=a*vnoise(p);p*=2.02;a*=.5;}return s;}'
+/* rotate + offset every octave so nothing stacks up axis-aligned */
+'float fbm(vec2 p){float s=0.,a=.5;mat2 R=mat2(.80,.60,-.60,.80);',
+' for(int i=0;i<5;i++){s+=a*vnoise(p);p=R*p*2.02+17.0;a*=.5;}return s;}'
   ].join('\n');
   var atmU={ uTime:{value:0}, uAspect:{value:innerWidth/innerHeight},
     uCol0:{value:new THREE.Color('#081008')}, uCol1:{value:new THREE.Color('#12271a')},
@@ -552,20 +557,22 @@ function initCan(canvas){
 '  q = R*q + uVel*infl*1.4;',
 '  vec2 r = vec2(fbm(uv*2.0 + 1.8*q + t*0.7), fbm(uv*2.0 + 1.8*q + vec2(6.2,3.3)));',
 '  float f = fbm(uv*2.0 + 2.2*r);',
-'  vec3 creamHi = vec3(0.980,0.950,0.870);',
-'  vec3 creamLo = vec3(0.815,0.715,0.540);',
-'  vec3 cinn    = vec3(0.545,0.265,0.100);',
-'  vec3 cinnHi  = vec3(0.730,0.405,0.175);',
+/* it is COQUITO: milk first, cinnamon as a swirl through it — not a field of tan */
+'  vec3 creamHi = vec3(0.992,0.974,0.930);',
+'  vec3 creamLo = vec3(0.905,0.850,0.745);',
+'  vec3 cinn    = vec3(0.560,0.300,0.130);',
+'  vec3 cinnHi  = vec3(0.730,0.430,0.200);',
 '  vec3 col = mix(creamLo, creamHi, smoothstep(0.16,0.90,f));',
 '  float spice = fbm(uv*3.1 + 2.6*q + 0.3*t);',
-'  float veins = smoothstep(0.50,0.70, spice);',
-'  col = mix(col, cinn, veins*0.50);',
+'  float veins = smoothstep(0.54,0.74, spice);',
+'  col = mix(col, cinn, veins*0.26);',
 '  float stir = smoothstep(0.42,0.86, r.y) * infl * uActive;',
-'  col = mix(col, cinnHi, stir*0.60);',
-'  col *= 0.88 + 0.24*f;',
+'  col = mix(col, cinnHi, stir*0.35);',
+'  col *= 0.94 + 0.12*f;',
+'  col += vec3(0.050,0.045,0.035)*smoothstep(0.55,0.95,f);',   /* the sheen on cream */
 '  col += vec3(0.08,0.06,0.035)*infl*uActive;',
 '  float vig = smoothstep(1.35,0.25, length(vUv-0.5)*1.7);',
-'  col *= mix(0.80,1.0,vig);',
+'  col *= mix(0.88,1.0,vig);',
 '  gl_FragColor = vec4(col, 1.0);','}'].join('\n') }));
   fluidMesh.visible=false;
   bgScene.add(fluidMesh);
@@ -1313,6 +1320,17 @@ function initCan(canvas){
   function boot(){ lock(); build(); }
   if(document.fonts && document.fonts.ready){ document.fonts.ready.then(boot); setTimeout(function(){ if(!tl) boot(); }, 1000); }
   else boot();
+})();
+</script>
+<script>/* the wordmark inside the V1 world always returns to the V2 home (injected) */
+(function(){
+  var nb = document.querySelector('.navbrand');
+  if (nb){
+    nb.setAttribute('href', '../');
+    nb.setAttribute('title', 'Volver a Coquírico');
+    /* capture phase so V1's own [data-nav]/.navbrand scroll handler never sees it */
+    nb.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); location.href = '../'; }, true);
+  }
 })();
 </script>
 <script>/* follow-the-bottle arrival (injected by stage-v1.mjs) */

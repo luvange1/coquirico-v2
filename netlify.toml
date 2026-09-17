@@ -1,0 +1,32 @@
+# Coquírico V2 — static deploy (this folder is the site root).
+# Netlify: set "Publish directory" to this folder and leave the build command empty.
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# fingerprinted-by-name media: safe to cache hard
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/v1/coquirico-handoff/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# the pages themselves must always revalidate, or a deploy looks like "nothing changed"
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
