@@ -287,6 +287,18 @@
        thing that reads as a card. Inline styles need !important to lose. */
     #merch > .inner{ margin:0 !important; max-width:none !important; width:100% !important; }
 
+    /* --- THE COQUI IS THE SHOT, and on a phone it was cropped clean out of frame. ---
+       Both films are 16:9 (1440x810 and 1920x1080) and `.filmlayer` is `object-fit:cover` over a
+       portrait screen, so the phone sees a ~26% wide centre SLICE of them:
+         cover scale = max(393/1440, 852/810) = 1.052  ->  rendered 1515x852
+         visible slice = 393/1515 = 26% of the source width, centred = source x 37%..63%
+       In filmA the coqui sits at x 64-75% — just outside that slice — so the chapter that reads
+       "the coqui calls at dusk" showed ferns and no frog, and the pulse of its glowing throat (the
+       motion in the background) was invisible. Re-aim the crop at the frog. In filmB the
+       right-hand frog (~67%) sits beside the moon (~60%), so one slice holds both. */
+    #filmA{ object-position:74% 50%; }
+    #filmB{ object-position:63% 52%; }
+
     /* the kinetic pour word is authored for a wide frame with the copy in a side column; here the
        plate is full-bleed, so the word printed straight through the body text */
     #word{ z-index:1; font-size:clamp(1.7rem,8vw,2.4rem); }
