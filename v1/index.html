@@ -278,6 +278,10 @@
     .chapter[data-tone="light"] .inner::after{
       background:linear-gradient(180deg,rgba(244,234,210,.98) 0%,rgba(244,234,210,.92) 26%,rgba(244,234,210,.64) 56%,rgba(244,234,210,0) 100%); }
     #world > .inner::after{ display:none; }
+    /* the merch inner carries an INLINE `margin:0 auto`, which beats the stylesheet and centred a
+       373px plate in a 375px chapter — a 1px hairline of film down each edge, which is exactly the
+       thing that reads as a card. Inline styles need !important to lose. */
+    #merch > .inner{ margin:0 !important; max-width:none !important; width:100% !important; }
 
     /* the kinetic pour word is authored for a wide frame with the copy in a side column; here the
        plate is full-bleed, so the word printed straight through the body text */
