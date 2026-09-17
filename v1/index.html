@@ -241,6 +241,9 @@
        desktop. On a phone your finger lands on the can (86vw wide) and the page simply refuses to
        scroll. pan-y gives the page vertical swipes back and keeps horizontal drags for turning. */
     .rit-canvas,#fam-canvas{ touch-action:pan-y; }
+    /* svh, not dvh: the chapter height must NOT change as the address bar hides, or every swipe
+       relayouts the page under the finger */
+    .chapter{ min-height:100svh; }
   }
 
   /* merch stage */
@@ -430,7 +433,9 @@
 window.COQ_SMALL = (innerWidth < 900) || (window.matchMedia && matchMedia('(hover:none)').matches);
 function initCan(canvas){
   var renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:!window.COQ_SMALL});
-  renderer.setPixelRatio(Math.min(devicePixelRatio, window.COQ_SMALL?1.25:2));
+  /* the can is the hero — render it at the device's real density so it stays crisp. (The cost
+     saving on phones comes from the fbm background renderer below, not from softening the product.) */
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 3));
   renderer.outputEncoding=THREE.sRGBEncoding;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure=0.98;
@@ -1089,7 +1094,21 @@ function initCan(canvas){
 
   gsap.ticker.add(function(time){ frame(prog.p, time); });
 
-  addEventListener('resize', function(){ can.setSize(innerWidth,innerHeight); bgRenderer.setSize(innerWidth,innerHeight,false); lenis.resize(); recomputeBounds(); ScrollTrigger.refresh(); });
+  /* On a phone, scrolling collapses/expands the browser's address bar, which fires `resize`.
+     Rebuilding both WebGL renderers + ScrollTrigger.refresh() on every one of those made the page
+     fight each swipe (it read as "I can't scroll"). Ignore height-only changes on small screens,
+     and debounce the real ones (rotation, desktop window drags). */
+  var _rzW=innerWidth, _rzH=innerHeight, _rzT=null;
+  function _applyResize(){
+    _rzW=innerWidth; _rzH=innerHeight;
+    can.setSize(innerWidth,innerHeight); bgRenderer.setSize(innerWidth,innerHeight,false);
+    lenis.resize(); recomputeBounds(); ScrollTrigger.refresh();
+  }
+  addEventListener('resize', function(){
+    var dw=Math.abs(innerWidth-_rzW), dh=Math.abs(innerHeight-_rzH);
+    if(window.COQ_SMALL && dw<2 && dh < innerHeight*0.28){ _rzH=innerHeight; return; }  // just the URL bar
+    clearTimeout(_rzT); _rzT=setTimeout(_applyResize, 180);
+  });
   document.addEventListener('visibilitychange', function(){
     if(document.hidden){ lenis.stop(); gsap.ticker.sleep(); filmA.pause(); filmB.pause(); if(ctx&&ctx.state==='running') ctx.suspend(); }
     else { gsap.ticker.wake(); lenis.start(); ScrollTrigger.refresh(); if(ctx&&!muted) ctx.resume(); } });
