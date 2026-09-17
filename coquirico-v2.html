@@ -1000,7 +1000,8 @@ p{margin:0}
       gsap.ticker.add(frame);
     });
   }
-  try { if (localStorage.getItem('coq-mode') === 'noche') applyMode(true); } catch(e){}
+  var forceNoche = new URLSearchParams(location.search).get('noche') === '1';
+  try { if (forceNoche || localStorage.getItem('coq-mode') === 'noche') applyMode(true); } catch(e){ if (forceNoche) applyMode(true); }
 
   /* scroll choreography — one signature entrance per section, played once, calm */
   if (window.gsap && window.ScrollTrigger && !quietMotion && innerWidth > 760){
