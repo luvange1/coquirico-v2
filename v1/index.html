@@ -1,0 +1,1312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COQUIRICO — Coquetearte · Puerto Rican Style Coconut Drink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Hanken+Grotesk:wght@400;600;700&display=swap">
+<style>
+  :root{ --amber:#d99a4e; --amber-b:#eab86a; --cream:#f4ead2; --ink:#2a1a0e; --gold:#caa24c;
+    --serif:"Fraunces", ui-serif, Georgia, serif; --sans:"Hanken Grotesk", ui-sans-serif, system-ui, sans-serif; }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;}
+  body{ background:#0c1a10; font-family:var(--sans); -webkit-font-smoothing:antialiased; }
+
+  /* stage layers */
+  #bg-canvas{ position:fixed; inset:0; width:100vw; height:100vh; height:100dvh; z-index:0; pointer-events:none; }
+  .filmlayer{ position:fixed; inset:0; width:100vw; height:100vh; height:100dvh; object-fit:cover; z-index:0; pointer-events:none; opacity:0; }
+  #filmB{ object-position:center 50%; }
+  #merchscrim{ position:fixed; inset:0; z-index:1; pointer-events:none; opacity:0; transition:opacity .6s ease;
+    background:
+      radial-gradient(60% 55% at 50% 54%, rgba(5,11,9,.55) 0%, rgba(5,11,9,.2) 58%, rgba(5,11,9,0) 80%),
+      radial-gradient(46% 38% at 70% 24%, rgba(5,11,9,.5) 0%, rgba(5,11,9,0) 70%),
+      linear-gradient(0deg, rgba(5,11,9,.55) 0%, rgba(5,11,9,.08) 30%, rgba(5,11,9,0) 52%),
+      radial-gradient(125% 105% at 50% 48%, rgba(5,11,9,0) 52%, rgba(5,11,9,.42) 100%),
+      rgba(6,14,14,.2); }
+  body.merch #merchscrim{ opacity:1; }
+  #storyscrim{ position:fixed; inset:0; z-index:1; pointer-events:none; opacity:0; transition:opacity .6s ease;
+    background:
+      linear-gradient(90deg, rgba(6,14,8,.74) 0%, rgba(6,14,8,.34) 30%, rgba(6,14,8,0) 60%),
+      linear-gradient(0deg, rgba(6,14,8,.5) 0%, rgba(6,14,8,.06) 32%, rgba(6,14,8,0) 58%); }
+  body.island #storyscrim{ opacity:1; }
+  #islandseq{ position:fixed; inset:0; width:100vw; height:100vh; height:100dvh; z-index:0; pointer-events:none;
+    opacity:0; background-position:center; background-size:cover; background-repeat:no-repeat; }
+  #islandseq.on{ opacity:1; }
+  #wave-svg{ position:fixed; inset:0; width:100vw; height:100vh; height:100dvh; z-index:1; pointer-events:none; }
+  #can-canvas{ position:fixed; inset:0; width:100vw; height:100vh; height:100dvh; z-index:2; pointer-events:none; }
+  body.merch #can-canvas{ opacity:0; }   /* the traveling can leaves the stage when the merch world takes over (screen-width-proof) */
+  #word{ position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:3;
+    font-family:var(--serif); font-style:italic; font-weight:700; font-size:clamp(2.8rem,10.5vw,9rem);
+    letter-spacing:.02em; white-space:nowrap; color:#fff; mix-blend-mode:difference; opacity:0; pointer-events:none;
+    font-variation-settings:"opsz" 144; }
+  #ripples{ position:fixed; inset:0; z-index:4; pointer-events:none; }
+  .ripple{ position:absolute; width:22px; height:22px; margin:-11px 0 0 -11px; border-radius:50%;
+    border:1.5px solid var(--amber-b); box-shadow:0 0 18px rgba(234,184,106,.55); will-change:transform,opacity; }
+  #grain{ position:fixed; inset:0; z-index:2; pointer-events:none; opacity:.32; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"); }
+
+  /* nav */
+  nav{ position:fixed; top:0; left:0; right:0; z-index:6; display:flex; align-items:center; justify-content:space-between;
+    padding:.95rem clamp(1rem,3.4vw,2.6rem); }
+  .navbrand{ font-family:var(--serif); font-weight:600; letter-spacing:.06em; color:var(--cream); font-size:1.05rem; text-decoration:none; }
+  .navlinks{ display:flex; gap:clamp(.8rem,2.4vw,1.8rem); }
+  .navlinks a{ color:var(--cream); text-decoration:none; font-size:.66rem; letter-spacing:.24em; text-transform:uppercase; font-weight:700; opacity:.85; }
+  .navlinks a:hover{ color:var(--amber-b); opacity:1; }
+  .navlinks a:focus-visible{ outline:2px solid var(--amber-b); outline-offset:3px; }
+  #mute{ margin-left:clamp(.8rem,2vw,1.4rem); font:700 .6rem var(--sans); letter-spacing:.16em; text-transform:uppercase;
+    color:var(--cream); background:rgba(10,17,9,.45); border:1px solid rgba(217,154,78,.45); border-radius:999px;
+    padding:.45rem .85rem; cursor:pointer; backdrop-filter:blur(6px); }
+  #mute[aria-pressed="true"]{ color:#0a1109; background:var(--amber); }
+
+  /* chapters */
+  .driver{ position:relative; z-index:2; }
+  .chapter{ min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; justify-content:center;
+    padding:clamp(4.6rem,9vw,6.5rem) clamp(1.2rem,5vw,6rem) clamp(2rem,6vw,4rem); box-sizing:border-box; }
+  .inner{ max-width:34rem; will-change:transform,opacity; }
+  .chapter[data-side="right"] .inner{ margin-left:auto; text-align:right; }
+  .eyebrow{ margin:0 0 1rem; font-size:.74rem; letter-spacing:.32em; text-transform:uppercase; font-weight:700; color:var(--amber); }
+  .sensory{ margin:0 0 1.2rem; font-family:var(--serif); font-style:italic; font-size:clamp(1.02rem,2.1vw,1.35rem); line-height:1.5; opacity:.85; }
+  h1,h2{ margin:0 0 1rem; font-family:var(--serif); font-weight:600; font-size:clamp(2.2rem,6.4vw,4.3rem); line-height:1.02; letter-spacing:-.01em; }
+  .body{ margin:0; font-size:clamp(.96rem,1.6vw,1.13rem); line-height:1.62; }
+  .chapter[data-tone="dark"]{ color:var(--cream); }
+  .chapter[data-tone="light"]{ color:var(--ink); }
+  .hintline{ margin-top:1rem; font-size:.68rem; letter-spacing:.24em; text-transform:uppercase; opacity:.6; }
+  .facts{ margin:1.1rem 0 0; font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; opacity:.75; line-height:2; }
+
+  /* rituals cards (DRINK) */
+  .rituals{ display:flex; gap:14px; margin-top:1.6rem; flex-wrap:wrap; }
+  .rit{ flex:1 1 200px; background:rgba(255,252,244,.6); border:1px solid rgba(42,26,14,.18); border-radius:12px;
+    padding:1rem; text-align:center; backdrop-filter:blur(4px); }
+  .chapter[data-tone="dark"] .rit{ background:rgba(10,16,8,.45); border-color:rgba(244,234,210,.22); }
+  .rit img{ height:120px; width:auto; max-width:100%; object-fit:contain; }
+  .rit-canvas{ width:100%; height:190px; display:block; touch-action:none; cursor:grab; outline:none; }
+  .rit-canvas:active{ cursor:grabbing; }
+  .rit h3{ font-family:var(--serif); font-style:italic; font-weight:600; margin:.5rem 0 .3rem; font-size:1.05rem; }
+  .status{ display:inline-block; font-size:.56rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700;
+    border:1px solid currentColor; border-radius:999px; padding:.28rem .7rem; opacity:.85; }
+
+  /* world studies */
+  .studies{ display:flex; gap:12px; margin-top:1.4rem; flex-wrap:wrap; }
+  .study{ flex:1 1 130px; max-width:180px; text-align:center; color:var(--cream); }
+  .study img{ height:130px; width:auto; max-width:100%; object-fit:contain; filter:drop-shadow(0 12px 18px rgba(0,0,0,.5)); }
+  .study h4{ font-family:var(--serif); font-style:italic; font-weight:600; margin:.45rem 0 .3rem; font-size:.92rem; }
+  /* AFTER DARK interactive product family */
+  .family{ display:flex; flex-direction:column; align-items:center; margin-top:1.1rem; width:100%; }
+  .fam-stage{ position:relative; display:flex; align-items:center; justify-content:center; width:100%; }
+  .fam-glow{ position:absolute; z-index:0; width:min(70vw,360px); aspect-ratio:1/1; border-radius:50%; pointer-events:none;
+    background:radial-gradient(closest-side, var(--fam-accent,#caa24c), transparent 70%); opacity:.32; filter:blur(28px); transition:background .5s ease; }
+  #fam-canvas{ position:relative; z-index:1; width:min(86vw,440px); height:clamp(300px,50vh,520px); display:block; touch-action:none; cursor:grab; outline:none; }
+  #fam-canvas:active{ cursor:grabbing; }
+  .fam-eyebrow{ margin:.6rem 0 0; font-size:.6rem; letter-spacing:.26em; text-transform:uppercase; font-weight:700; color:var(--amber); min-height:.85em; }
+  .fam-name{ font-family:var(--serif); font-style:italic; font-weight:600; font-size:clamp(1.3rem,3.2vw,2rem); margin:.15rem 0 .35rem; }
+  .fam-reveal .fam-name{ font-size:clamp(1.9rem,4.4vw,3.2rem); margin:0 0 .6rem; text-shadow:0 4px 26px rgba(0,0,0,.55); }
+  .fam-rail{ display:flex; gap:.55rem; margin-top:.8rem; max-width:min(94vw,720px); overflow-x:auto; padding:.4rem .3rem; -ms-overflow-style:none; scrollbar-width:none; }
+  .fam-rail::-webkit-scrollbar{ display:none; }
+  .fam-rail button{ flex:0 0 auto; display:flex; align-items:center; justify-content:center; background:rgba(10,16,8,.35);
+    border:1px solid rgba(244,234,210,.16); border-radius:12px; padding:.4rem .6rem; cursor:pointer; transition:all .22s ease; }
+  .fam-rail button img{ height:56px; width:auto; display:block; opacity:.55; filter:grayscale(.2) drop-shadow(0 6px 10px rgba(0,0,0,.45)); transition:all .22s ease; }
+  .fam-rail button:hover img{ opacity:.85; }
+  .fam-rail button[aria-selected="true"]{ background:rgba(217,154,78,.16); border-color:rgba(234,184,106,.7); transform:translateY(-3px); }
+  .fam-rail button[aria-selected="true"] img{ opacity:1; filter:grayscale(0) drop-shadow(0 10px 14px rgba(0,0,0,.55)); }
+  .fam-hint{ margin:.7rem 0 0; font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; opacity:.5; }
+  #world{ position:relative; }
+  .fam-reveal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); z-index:5; width:min(92vw,64rem);
+    text-align:center; pointer-events:none; opacity:0; transition:opacity .55s ease; }
+  .fam-reveal.show{ opacity:1; }
+  .fam-rail button{ perspective:520px; }
+  @keyframes famFloat{ 0%,100%{ transform:translateY(0) rotateY(-11deg); } 50%{ transform:translateY(-4px) rotateY(11deg); } }
+  .fam-rail button img{ animation:famFloat 3.6s ease-in-out infinite; will-change:transform; }
+  .fam-rail button[aria-selected="true"] img{ animation-duration:2.6s; }
+  .fam-desc{ max-width:52rem; margin:0 auto; font-family:var(--serif); font-style:italic; font-weight:500; font-size:clamp(1.6rem,3.8vw,3.4rem);
+    line-height:1.28; color:var(--cream); opacity:1; text-shadow:0 4px 30px rgba(0,0,0,.6); }
+  .fam-desc .w{ display:inline-block; opacity:0; transform:translateY(9px); animation:wordIn .5s forwards cubic-bezier(.2,.7,.2,1); }
+  @keyframes wordIn{ to{ opacity:1; transform:none; } }
+  .fam-desc.pop{ animation:famDescIn .55s cubic-bezier(.2,.7,.2,1); }
+  @keyframes famDescIn{ from{ opacity:0; transform:translateY(10px); } to{ opacity:.92; transform:none; } }
+  .fam-inside{ max-width:34rem; margin:1.1rem auto 0; font-size:.72rem; letter-spacing:.08em; line-height:1.8; color:var(--cream); opacity:.72; }
+  .fam-inside b{ display:block; margin-bottom:.25rem; color:var(--amber-b); font-weight:700; letter-spacing:.12em; text-transform:uppercase; font-size:.58rem; }
+
+  /* RESOLUTION FIT — the After Dark template is authored for ultrawide, where the fixed-centre reveal sits clear
+     to the right of the left picker. Below ~2300px wide the reveal's min(92vw,64rem) balloons to fill the screen
+     and crashes into the picker; below ~1000px tall the stage overflows. These two queries ONLY fix those cases —
+     ultrawide (2300px+ wide) keeps the authored layout exactly. Template unchanged, resolution matched. */
+  @media (max-width:2300px){
+    /* Proportional fit of the authored ultrawide reveal. The template look at 2560 wide: a ~64rem centred
+       block with big serif type, clearing the fixed 704px left column. As the screen narrows, keep the SAME
+       proportions: width tracks the corridor between the picker column and the right edge, the centre never
+       slides left of the picker (left edge pinned >= 700px), and the type scales with the viewport — the vw
+       values are chosen so they meet the authored caps near the 2300px boundary (no visual jump). */
+    /* The hero can's screen position comes from a fixed-FOV projection, so its LEFT edge sits at
+       50vw + 57.5vh at every size (offset from centre scales with viewport HEIGHT, verified against
+       the tuned 1920x985 frame: 960+566=1526 ~= measured 1527). Cap the description's right edge
+       45px short of that — the sidekick gap holds on every laptop, not just 1920. */
+    .fam-reveal{
+      width:min(47.5vw, calc(50vw + 57.5vh - 605px), 64rem);
+      left:max(50vw, calc(560px + min(47.5vw, 50vw + 57.5vh - 605px, 64rem)/2));
+      top:49%;
+    }
+    .fam-reveal .fam-name{ font-size:clamp(1.25rem,2vw,3.2rem); }
+    .fam-desc{ max-width:none; font-size:clamp(1rem,2.1vw,3.4rem); }
+    /* Left column hugs the BOTTOM-LEFT corner: the picker can + catalog rail align to the left edge AND sink
+       to the bottom of the screen (margin-top:auto absorbs the slack above them), while the headline stays up
+       top. The chapter's left padding tightens — the middle corridor belongs to the drink description. */
+    #world{ padding-left:clamp(1rem,2.2vw,3rem); }
+    #world > .inner{ flex:1 0 auto; display:flex; flex-direction:column; }
+    #world .family{ align-items:flex-start; margin-top:auto; }
+    #world .fam-stage{ justify-content:flex-start; }
+  }
+  /* 2026-07-22 (Pedro "move here"): the After Dark picker is PINNED to the bottom-left corner, absolutely.
+     No flex, no margin math — it is glued to left+bottom of the screen and physically cannot float up.
+     The headline sits at the top; the can is shrunk so the whole cluster tucks into the corner. */
+  @media (min-width:1101px){
+    #world{ justify-content:flex-start; }
+    #world .family{ position:absolute; left:clamp(1.2rem,2.6vw,3.6rem); bottom:clamp(1.3rem,4vh,3rem);
+      width:auto; max-width:min(42vw,480px); margin:0; align-items:flex-start; z-index:4; }
+    #world .fam-stage{ justify-content:flex-start; width:auto; }
+    #world #fam-canvas{ width:min(22vw,270px); height:clamp(170px,23vh,270px); }
+    #world .fam-glow{ width:min(24vw,280px); }
+    #world .fam-eyebrow{ margin-top:.4rem; }
+    #world .fam-rail{ margin-top:.5rem; }
+    #world .fam-rail button img{ height:44px; }
+    #world .fam-hint{ margin-top:.4rem; }
+    #world .hintline{ display:none; }
+  }
+  @media (max-height:1000px){
+    .chapter{ padding-top:clamp(4.5rem,7vh,6.5rem); padding-bottom:clamp(1.5rem,3vh,4rem); }
+    #fam-canvas{ height:clamp(190px,30vh,340px); }
+  }
+  /* Short screens (<=920px tall): the headline sits lower in the frame, so drop the description a notch
+     to keep the drink name below the headline band. On very short laptops (<=800) drop further. */
+  @media (max-width:2300px) and (max-height:920px){
+    .fam-reveal{ top:53%; }
+  }
+  @media (max-width:2300px) and (max-height:800px){
+    .fam-reveal{ top:58%; }
+  }
+  /* Small formats (tablet / phone / narrow windows): the side corridor no longer exists — the reveal
+     becomes a centred overlay in the upper-middle, riding above the picker with its authored text-shadow.
+     Same voice, stacked format. */
+  @media (max-width:1100px){
+    .fam-reveal{ left:50%; top:47%; width:min(84vw,32rem); text-align:center; }
+    .fam-reveal .fam-name{ font-size:clamp(1.25rem,3.4vw,1.9rem); text-shadow:0 4px 26px rgba(0,0,0,.65); }
+    .fam-desc{ font-size:clamp(.95rem,2.2vw,1.15rem); text-align:center; margin:0 auto;
+      text-shadow:0 3px 18px rgba(0,0,0,.7); }
+    #world .fam-inside{ display:none; }
+  }
+  /* Short small screens: the headline reaches lower, so the overlay drops beneath its band. */
+  @media (max-width:1100px) and (max-height:1000px){
+    .fam-reveal{ top:57%; }
+  }
+
+  /* merch stage */
+  #merchstage{ position:relative; display:flex; flex-direction:column; align-items:center; margin-top:.6rem; }
+  #mwrap{ position:relative; height:46vh; display:flex; align-items:center; justify-content:center; }
+  #mimg{ height:100%; width:auto; filter:drop-shadow(0 22px 30px rgba(8,4,1,.5)); transition:opacity .22s ease; }
+  #mshadow{ width:22vh; height:3.4vh; margin-top:-1vh; background:radial-gradient(50% 50% at 50% 50%, rgba(8,4,1,.5), transparent 70%); filter:blur(5px); }
+  .mrow{ display:flex; align-items:center; gap:1rem; margin-top:1rem; }
+  .marrow{ width:48px; height:48px; border-radius:50%; border:1.5px solid rgba(244,234,210,.7); background:rgba(14,9,4,.3);
+    color:var(--cream); font-size:1.05rem; cursor:pointer; backdrop-filter:blur(4px); transition:all .2s ease; }
+  .marrow:hover{ background:rgba(217,154,78,.5); }
+  .marrow:active{ transform:scale(.92); }
+  #mname{ font-family:var(--serif); font-style:italic; font-weight:600; font-size:clamp(1.3rem,3vw,2rem); color:var(--cream); min-width:9rem; text-align:center; }
+  #mdots{ display:flex; gap:.5rem; margin-top:.9rem; }
+  #mdots button{ width:32px; height:32px; border-radius:50%; border:1px solid rgba(244,234,210,.4); background:transparent;
+    color:var(--cream); font:700 .6rem var(--sans); cursor:pointer; transition:all .25s ease; }
+  #mdots button[aria-pressed="true"]{ background:var(--cream); color:#1a120a; }
+  #mnotify{ margin-top:1rem; font:700 .62rem var(--sans); letter-spacing:.16em; text-transform:uppercase;
+    border:1px solid var(--cream); background:transparent; color:var(--cream); border-radius:999px; padding:.55rem 1.1rem; cursor:pointer; }
+  #mnotify[aria-pressed="true"]{ background:var(--cream); color:#1a120a; }
+
+  /* footer */
+  .footer{ min-height:78vh; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;
+    padding:2rem clamp(1.2rem,5vw,6rem) 2.6rem; position:relative; z-index:2; color:var(--cream); text-align:center; }
+  .ghostmark{ font-family:var(--serif); font-style:italic; font-weight:700; font-size:clamp(3.4rem,13vw,11.5rem); line-height:1;
+    color:transparent; -webkit-text-stroke:1.5px rgba(244,234,210,.4); margin-bottom:1.6rem; user-select:none; }
+  .flinks{ display:flex; gap:1.6rem; flex-wrap:wrap; justify-content:center; margin-bottom:1.1rem; }
+  .flinks a{ color:var(--cream); text-decoration:none; font-size:.64rem; letter-spacing:.24em; text-transform:uppercase; font-weight:700; opacity:.8; }
+  .flinks a:hover{ color:var(--amber-b); }
+  .fnote{ font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; opacity:.55; line-height:2; }
+
+  #debug{ position:fixed; left:10px; bottom:10px; z-index:7; font-family:ui-monospace,Menlo,Consolas,monospace;
+    font-size:10.5px; color:var(--amber-b); background:rgba(10,8,4,.66); border:1px solid rgba(217,154,78,.35);
+    border-radius:6px; padding:5px 8px; pointer-events:none; }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<video id="filmA" class="filmlayer" muted loop playsinline preload="auto"
+  poster="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-LITHO-V1-POSTER.webp">
+  <source src="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-LITHO-V1-60FPS-1440.mp4" type="video/mp4">
+</video>
+<video id="filmB" class="filmlayer" muted loop playsinline preload="metadata"
+  poster="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-SERIGRAPH-DUO-V1-POSTER.webp">
+  <source src="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-SERIGRAPH-DUO-V1-SITE-1080.mp4" type="video/mp4">
+</video>
+<canvas id="islandseq" aria-hidden="true"></canvas>
+<div id="storyscrim" aria-hidden="true"></div>
+<div id="merchscrim" aria-hidden="true"></div>
+<svg id="wave-svg" preserveAspectRatio="none" aria-hidden="true"><path id="wave-path" d=""/></svg>
+<canvas id="can-canvas" aria-hidden="true"></canvas>
+<div id="grain" aria-hidden="true"></div>
+<div id="word" aria-hidden="true"></div>
+<div id="ripples" aria-hidden="true"></div>
+<div class="fam-reveal" id="fam-reveal" aria-live="polite">
+  <h4 class="fam-name" id="fam-name">&nbsp;</h4>
+  <p class="fam-desc" id="fam-desc"></p>
+  <p class="fam-inside" id="fam-inside"></p>
+</div>
+
+<nav>
+  <a class="navbrand" href="#hero">COQUÍRICO<sup>®</sup></a>
+  <div style="display:flex;align-items:center">
+    <div class="navlinks">
+      <a href="#drink" data-nav>Drink</a>
+      <a href="#story" data-nav>Story</a>
+      <a href="#world" data-nav>World</a>
+      <a href="#merch" data-nav>Merch</a>
+    </div>
+    <button id="mute" aria-pressed="false">Sound: off</button>
+  </div>
+</nav>
+
+<section class="driver" id="driver">
+
+  <div class="chapter" data-ch="0" data-tone="dark" id="hero">
+    <div class="inner">
+      <p class="eyebrow">Puerto Rican style coconut drink</p>
+      <p class="sensory">The rainforest exhales &mdash; warm wet air, the hush of leaves, and the first coqui calling into the dark.</p>
+      <h1>Sip a taste of the Caribbean.</h1>
+      <p class="body">Coquetearte &mdash; a light and refreshing Coquito-style cooler, crafted with 100% natural coconut water, a touch of coconut milk, and a sprinkle of cinnamon.</p>
+      <p class="facts">Non-alcoholic &middot; 60 calories &middot; 8 fl oz / 240 ml</p>
+    </div>
+  </div>
+
+  <div class="chapter" data-ch="1" data-tone="dark" id="world">
+    <div class="inner" style="max-width:44rem">
+      <p class="eyebrow">04 / After Dark</p>
+      <p class="sensory">The coqui&rsquo;s song settles into rhythm &mdash; and the can is the beginning, not the boundary.</p>
+      <h2>One island. Many expressions.</h2>
+      <div class="family" id="family">
+        <div class="fam-stage">
+          <div class="fam-glow" aria-hidden="true"></div>
+          <canvas id="fam-canvas" tabindex="0" aria-label="Interactive 3D concept product — drag to rotate"></canvas>
+        </div>
+        <p class="fam-eyebrow" id="fam-eyebrow"></p>
+        <span class="status" id="fam-status"></span>
+        <div class="fam-rail" id="fam-rail" role="tablist" aria-label="Concept expressions"></div>
+        <p class="fam-hint">Drag to turn &middot; tap a can &mdash; then scroll to enter its world &darr;</p>
+      </div>
+      <p class="hintline">Tap the night &mdash; a coqu&iacute; answers from where you touch</p>
+    </div>
+  </div>
+
+  <div class="chapter" data-ch="2" data-tone="dark" id="story">
+    <div class="inner">
+      <p class="eyebrow">02 / The Island</p>
+      <p class="sensory">The story breathes &mdash; the can steps aside, and the island itself takes the screen.</p>
+      <h2>Born of El Yunque</h2>
+      <p class="body">The coqu&iacute; calls at dusk &mdash; the sound the island is named for.</p>
+    </div>
+  </div>
+
+  <div class="chapter" data-ch="2" data-tone="light" data-side="right" id="drink">
+    <div class="inner">
+      <p class="eyebrow">03 / The Pour</p>
+      <p class="sensory">Cool coconut breaks over ice, and a thread of cinnamon lifts to meet the vanilla.</p>
+      <h2>What waits inside</h2>
+      <p class="body">Coconut water &middot; coconut milk &middot; cane sugar &middot; agave syrup &middot; natural flavors &middot; cinnamon &middot; vanilla extract.</p>
+      <div class="rituals">
+        <div class="rit">
+          <canvas class="rit-canvas" data-product="coquetearte" tabindex="0" aria-label="Coquetearte can — drag to rotate"></canvas>
+          <h3>Coquetearte</h3>
+          <span class="status">Core product &middot; non-alcoholic</span>
+        </div>
+        <div class="rit">
+          <canvas class="rit-canvas" data-product="el-original" tabindex="0" aria-label="El Original bottle — drag to rotate"></canvas>
+          <h3>El Original</h3>
+          <span class="status">Holiday &middot; availability TBC</span>
+        </div>
+      </div>
+      <p class="hintline">Move your cursor &mdash; stir the pour</p>
+    </div>
+  </div>
+
+  <div class="chapter" data-ch="4" data-tone="dark" id="merch">
+    <div class="inner" style="max-width:100%;text-align:center;margin:0 auto">
+      <p class="eyebrow">05 / Isla Drop 01</p>
+      <h2 style="margin-bottom:.2rem">Wear the Rainforest</h2>
+      <p class="body" style="opacity:.75;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase">Concept drop &middot; presentation only</p>
+      <div id="merchstage">
+        <div id="mwrap"><img id="mimg" src="coquirico-handoff/assets/concept/merch/products/carousel-stage/01-hoodie-stage-v1.webp" alt="COQUIRICO Hoodie — concept garment"></div>
+        <div id="mshadow"></div>
+        <div class="mrow">
+          <button class="marrow" id="mprev" aria-label="Previous garment">&#8592;</button>
+          <div id="mname">Hoodie</div>
+          <button class="marrow" id="mnext" aria-label="Next garment">&#8594;</button>
+        </div>
+        <div id="mdots"></div>
+        <button id="mnotify" aria-pressed="false">Notify me</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer" id="findus">
+    <div class="ghostmark" aria-hidden="true">Coqu&iacute;rico</div>
+    <div class="flinks">
+      <a href="#drink" data-nav>Drink</a><a href="#story" data-nav>Story</a><a href="#world" data-nav>World</a><a href="#merch" data-nav>Merch</a>
+    </div>
+    <p class="fnote">Concept site &mdash; presentation only &middot; no orders taken<br>Coquetearte &middot; Puerto Rican style coconut drink &middot; keep refrigerated &middot; non-alcoholic</p>
+  </div>
+
+</section>
+
+<div id="debug">site —</div>
+
+<script src="coquirico-handoff/assets/three.min.js"></script>
+<script>/* Motion is this site's default (see reduced() note). Neutralize ONLY the reduced-motion media query so the
+   3D product runtime + libs idle-animate even on machines/OSes that force reduce-motion. The static fallback is
+   still available via ?motion=0 (handled by the site's own reduced(), which reads the URL, not matchMedia). */
+(function(){ if(!window.matchMedia){ return; } var orig=window.matchMedia.bind(window);
+  window.matchMedia=function(q){ if(typeof q==='string' && /prefers-reduced-motion/i.test(q)){
+    return { matches:false, media:q, onchange:null, addEventListener:function(){}, removeEventListener:function(){},
+      addListener:function(){}, removeListener:function(){}, dispatchEvent:function(){ return false; } }; }
+    return orig(q); }; })();</script>
+<script src="coquirico-handoff/src/product3d/coquirico-product3d.js"></script>
+<script src="coquirico-handoff/assets/vendor/gsap.min.js"></script>
+<script src="coquirico-handoff/assets/vendor/ScrollTrigger.min.js"></script>
+<script src="coquirico-handoff/assets/vendor/lenis.min.js"></script>
+<script>gsap.registerPlugin(ScrollTrigger);</script>
+
+<!-- ORIGINAL HERO CAN — untouched -->
+<script>
+function initCan(canvas){
+  var renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.outputEncoding=THREE.sRGBEncoding;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=0.98;
+  var scene=new THREE.Scene();
+  var camera=new THREE.PerspectiveCamera(32,1,0.1,100);
+  camera.position.set(0,0.05,6.2); camera.lookAt(0,0.06,0);
+  (function(){ var c=document.createElement('canvas'); c.width=512; c.height=256; var x=c.getContext('2d');
+    var g=x.createLinearGradient(0,0,0,256); g.addColorStop(0,'#0c2116'); g.addColorStop(.42,'#22482c'); g.addColorStop(.6,'#7a723c'); g.addColorStop(.8,'#2a3a22'); g.addColorStop(1,'#0a1109');
+    x.fillStyle=g; x.fillRect(0,0,512,256);
+    var rg=x.createRadialGradient(370,66,4,370,66,130); rg.addColorStop(0,'rgba(255,226,150,.95)'); rg.addColorStop(1,'rgba(255,226,150,0)');
+    x.fillStyle=rg; x.fillRect(0,0,512,256);
+    var tex=new THREE.CanvasTexture(c); tex.mapping=THREE.EquirectangularReflectionMapping;
+    var pm=new THREE.PMREMGenerator(renderer); scene.environment=pm.fromEquirectangular(tex).texture; pm.dispose(); tex.dispose(); })();
+  scene.add(new THREE.AmbientLight(0x40624a,0.42));
+  var key=new THREE.DirectionalLight(0xffe4bd,1.75); key.position.set(3.2,4,3); scene.add(key);
+  var fill=new THREE.DirectionalLight(0x9fc48f,0.7); fill.position.set(-4,1,2); scene.add(fill);
+  var rim=new THREE.DirectionalLight(0xd9f0ff,1.15); rim.position.set(-2.4,3.2,-4); scene.add(rim);
+  var canGroup=new THREE.Group(), bodyH=2.42,R=0.44,rTop=0.335,rBot=0.37,m;
+  var labelTex=new THREE.TextureLoader().load('coquirico-handoff/assets/product3d/textures/coquetearte-seamless-wrap-v3.webp',function(t){t.needsUpdate=true;});
+  labelTex.encoding=THREE.sRGBEncoding; labelTex.wrapS=THREE.RepeatWrapping; labelTex.offset.x=0.5;
+  labelTex.anisotropy=renderer.capabilities.getMaxAnisotropy();
+  var bodyMesh=new THREE.Mesh(new THREE.CylinderGeometry(R,R,bodyH,120,1,true),
+    new THREE.MeshPhysicalMaterial({map:labelTex,roughness:0.56,metalness:0.04,clearcoat:0.22,clearcoatRoughness:0.5,envMapIntensity:0.55}));
+  canGroup.add(bodyMesh);
+  var gold=new THREE.MeshStandardMaterial({color:0xcaa24c,metalness:1,roughness:0.27,envMapIntensity:1.15});
+  var alu=new THREE.MeshStandardMaterial({color:0xcbc9c3,metalness:1,roughness:0.33,envMapIntensity:1.15});
+  var aluDark=new THREE.MeshStandardMaterial({color:0x8f8d88,metalness:1,roughness:0.5,envMapIntensity:1.0});
+  m=new THREE.Mesh(new THREE.CylinderGeometry(rTop,R,0.16,120,1,true),gold); m.position.y=bodyH/2+0.08; canGroup.add(m);
+  m=new THREE.Mesh(new THREE.CylinderGeometry(rTop,rTop,0.055,120,1,true),gold); m.position.y=bodyH/2+0.187; canGroup.add(m);
+  m=new THREE.Mesh(new THREE.TorusGeometry(rTop,0.02,14,120),gold); m.rotation.x=Math.PI/2; m.position.y=bodyH/2+0.214; canGroup.add(m);
+  m=new THREE.Mesh(new THREE.CircleGeometry(rTop-0.006,120),alu); m.rotation.x=-Math.PI/2; m.position.y=bodyH/2+0.198; canGroup.add(m);
+  m=new THREE.Mesh(new THREE.RingGeometry(0.05,0.11,32),alu); m.rotation.x=-Math.PI/2; m.position.set(0.05,bodyH/2+0.203,0); canGroup.add(m);
+  m=new THREE.Mesh(new THREE.CylinderGeometry(R,rBot,0.14,120,1,true),alu); m.position.y=-bodyH/2-0.07; canGroup.add(m);
+  m=new THREE.Mesh(new THREE.CircleGeometry(rBot,120),aluDark); m.rotation.x=Math.PI/2; m.position.y=-bodyH/2-0.14; canGroup.add(m);
+  canGroup.rotation.x=-0.02; scene.add(canGroup);
+  function render(){ renderer.render(scene,camera); }
+  function setSize(w,h){ renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
+  setSize(canvas.clientWidth||1,canvas.clientHeight||1); render();
+  // swap the can's wrap so the hero can "transforms" into another product design
+  function setLabel(url){ if(!url) return; var t=new THREE.TextureLoader().load(url,function(tx){ tx.needsUpdate=true; render(); });
+    t.encoding=THREE.sRGBEncoding; t.wrapS=THREE.RepeatWrapping; t.offset.x=0.5; t.anisotropy=renderer.capabilities.getMaxAnisotropy();
+    var old=bodyMesh.material.map; bodyMesh.material.map=t; bodyMesh.material.needsUpdate=true;
+    if(old && old!==labelTex){ old.dispose(); } }
+  return {renderer:renderer,scene:scene,camera:camera,canGroup:canGroup,render:render,setSize:setSize,setLabel:setLabel};
+}
+</script>
+
+<script>
+(function(){
+  'use strict';
+  // always open at the top — no browser scroll-restore mid-site
+  if('scrollRestoration' in history){ history.scrollRestoration='manual'; }
+  try{ window.scrollTo(0,0); }catch(e){}
+  // Motion is the DEFAULT — this site IS the motion. The static fallback is opt-in only (?motion=0),
+  // so the plain link always shows the full experience, even on machines/OSes that force reduce-motion.
+  function reduced(){ return new URLSearchParams(location.search).get('motion')==='0'; }
+
+  var svg=document.getElementById('wave-svg');
+  var path=document.getElementById('wave-path');
+  var wordEl=document.getElementById('word');
+  var debugEl=document.getElementById('debug');
+  var driver=document.getElementById('driver');
+  var filmA=document.getElementById('filmA');
+  var filmB=document.getElementById('filmB');
+  var muteBtn=document.getElementById('mute');
+  var rippleLayer=document.getElementById('ripples');
+  var chapters=gsap.utils.toArray('.chapter .inner');
+
+  // ---- 5 worlds: dusk hero → CALL film → FLUID pour → amber world → PAVILION film ----
+  var WORLDS=[
+    { type:'gl',   col0:'#081008', col1:'#12271a', mist:'#1d4028', mistAmt:.38, glow:'#caa24c', glowY:.16, glowStr:.13, canX:0,    canS:1.02, ff:.5  },
+    { type:'film', el:'A',                                                                                             canX:0.62, canS:0.72, ff:.06 },
+    { type:'fluid',                                                                                                    canX:-0.52,canS:0.92, ff:.08 },
+    { type:'gl',   col0:'#190b04', col1:'#331608', mist:'#0d0502', mistAmt:.42, glow:'#b5611f', glowY:.10, glowStr:.34, canX:1.5,  canS:0.8,  ff:.72 },
+    { type:'film', el:'B',                                                                                             canX:1.5,  canS:0.6,  ff:.15 }
+  ];
+  /* RESOLUTION FIT (matches the CSS media threshold): on ultrawide the After Dark hero can is authored as a
+     far-right sliver (canX 1.5). On narrower screens the same 1.5 presses it half off the edge — pull it in so
+     it sits beside the drink description as its sidekick. Data-only; transitions read whatever value is set. */
+  function fitAfterDarkCan(){ WORLDS[3].canX = innerWidth<=2300 ? 1.18 : 1.5; }
+  fitAfterDarkCan(); addEventListener('resize', fitAfterDarkCan);
+  /* After Dark is page 2: chapter order is hero → After Dark → island → pour → merch, but the WORLDS array
+     and every per-drink theme stay in their ORIGINAL authoring order. ORD maps a scroll position to its
+     WORLDS index; BMAP maps a scroll-transition (BOUNDS index) to the drink's authored bounds/words index
+     (authored order = [island, pour, afterdark, drop]). Change ONLY these two arrays to reorder the tabs. */
+  var ORD=[0,3,1,2,4];
+  var BMAP=[2,0,1,3];
+  var BOUNDS=[
+    { start:0.12, end:0.24, color:'#2a160c', word:'AFTER DARK' },
+    { start:0.30, end:0.42, color:'#0e2416', word:'THE ISLAND' },
+    { start:0.48, end:0.60, color:'#e9dcc4', word:'THE POUR' },
+    { start:0.66, end:0.78, color:'#123028', word:'THE DROP' }
+  ];
+  /* Derive the 4 world-wipe positions from the LIVE chapter offsets, so reordering chapters keeps the
+     worlds aligned — no hand-tuned fractions to drift. Each wipe centre = 0.861 × the chapter's scroll
+     progress (fires slightly BEFORE the boundary — the "anticipation" that makes the backdrop fall into
+     line as the content arrives, instead of dragging behind), half-width 0.06. On the standard 5-section
+     layout this reproduces the original hand-tuned BOUNDS (0.12–0.24, 0.30–0.42, 0.48–0.60, 0.66–0.78) exactly. */
+  function recomputeBounds(){
+    var dv=document.getElementById('driver'); if(!dv) return;
+    var range=dv.offsetHeight-innerHeight; if(range<=0) return;
+    var LATE=0;   // exact original timing — wipes re-locked to the chapter reveals (0 = the perfect baseline)
+    var ids=['world','story','drink','merch'];
+    for(var i=0;i<BOUNDS.length && i<ids.length;i++){
+      var el=document.getElementById(ids[i]); if(!el) continue;
+      var c=0.861*(el.offsetTop/range)+LATE;   // LATE nudges every wipe a touch later (was firing a hair too soon)
+      BOUNDS[i].start=Math.max(0,c-0.06); BOUNDS[i].end=Math.min(1,c+0.06);
+    }
+  }
+
+  var can=initCan(document.getElementById('can-canvas'));
+  can.setSize(innerWidth,innerHeight);
+  window.__coq=can;
+
+  // bg canvas: atmosphere + fluid quads
+  var bgRenderer=new THREE.WebGLRenderer({ canvas:document.getElementById('bg-canvas'), alpha:true, antialias:false });
+  bgRenderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+  bgRenderer.setSize(innerWidth,innerHeight,false);
+  var bgScene=new THREE.Scene(), bgCam=new THREE.Camera();
+  var NOISE=[
+'float hash(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}',
+'float vnoise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);',
+' float a=hash(i),b=hash(i+vec2(1.,0.)),c=hash(i+vec2(0.,1.)),d=hash(i+vec2(1.,1.));',
+' return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}',
+'float fbm(vec2 p){float s=0.,a=.5;for(int i=0;i<5;i++){s+=a*vnoise(p);p*=2.02;a*=.5;}return s;}'
+  ].join('\n');
+  var atmU={ uTime:{value:0}, uAspect:{value:innerWidth/innerHeight},
+    uCol0:{value:new THREE.Color('#081008')}, uCol1:{value:new THREE.Color('#12271a')},
+    uMist:{value:new THREE.Color('#1d4028')}, uMistAmt:{value:0.38},
+    uGlow:{value:new THREE.Color('#caa24c')}, uGlowY:{value:0.16}, uGlowStr:{value:0.13}, uFade:{value:1} };
+  var atmMesh=new THREE.Mesh(new THREE.PlaneGeometry(2,2), new THREE.ShaderMaterial({ depthTest:false, transparent:true, uniforms:atmU,
+    vertexShader:'varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position.xy,0.,1.); }',
+    fragmentShader:['precision highp float; varying vec2 vUv;',
+'uniform float uTime,uAspect,uMistAmt,uGlowY,uGlowStr,uFade;','uniform vec3 uCol0,uCol1,uMist,uGlow;',NOISE,
+'void main(){',' vec2 uv=vUv; uv.x*=uAspect;',
+' vec3 col=mix(uCol1,uCol0,smoothstep(0.,1.,vUv.y));',
+' float m=fbm(uv*2.0+vec2(uTime*.10,-uTime*.06));',
+' m=fbm(uv*2.0+1.5*vec2(m,m)+vec2(uTime*.04,0.));',
+' col=mix(col,uMist,smoothstep(.25,.85,m)*uMistAmt);',
+' float g=exp(-length(vec2((vUv.x-.5)*uAspect,(vUv.y-uGlowY)))*2.1);',
+' col+=uGlow*g*uGlowStr;',
+' float vig=smoothstep(1.45,.35,length(vUv-.5)*1.65);',
+' col*=mix(.82,1.,vig);',' gl_FragColor=vec4(col,uFade);','}'].join('\n') }));
+  bgScene.add(atmMesh);
+  var fu={ uTime:{value:0}, uMouse:{value:new THREE.Vector2(0.5,0.5)}, uVel:{value:new THREE.Vector2(0,0)}, uAspect:{value:1}, uActive:{value:0} };
+  var fluidMesh=new THREE.Mesh(new THREE.PlaneGeometry(2,2), new THREE.ShaderMaterial({ depthTest:false, uniforms:fu,
+    vertexShader:'varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position.xy,0.,1.); }',
+    fragmentShader:['precision highp float; varying vec2 vUv;',
+'uniform float uTime, uAspect, uActive;','uniform vec2 uMouse, uVel;',NOISE,
+'void main(){',
+'  vec2 uv = vUv; uv.x *= uAspect;',
+'  vec2 mo = uMouse; mo.x *= uAspect;',
+'  float t = uTime*0.06;',
+'  vec2 dm = uv - mo; float dist = length(dm); float infl = exp(-dist*3.1);',
+'  vec2 q = vec2(fbm(uv*2.0 + t), fbm(uv*2.0 + vec2(3.1,1.7) - t));',
+'  float ang = infl*2.6*uActive + 0.35*sin(uTime*0.5);',
+'  mat2 R = mat2(cos(ang),-sin(ang),sin(ang),cos(ang));',
+'  q = R*q + uVel*infl*1.4;',
+'  vec2 r = vec2(fbm(uv*2.0 + 1.8*q + t*0.7), fbm(uv*2.0 + 1.8*q + vec2(6.2,3.3)));',
+'  float f = fbm(uv*2.0 + 2.2*r);',
+'  vec3 creamHi = vec3(0.980,0.950,0.870);',
+'  vec3 creamLo = vec3(0.815,0.715,0.540);',
+'  vec3 cinn    = vec3(0.545,0.265,0.100);',
+'  vec3 cinnHi  = vec3(0.730,0.405,0.175);',
+'  vec3 col = mix(creamLo, creamHi, smoothstep(0.16,0.90,f));',
+'  float spice = fbm(uv*3.1 + 2.6*q + 0.3*t);',
+'  float veins = smoothstep(0.50,0.70, spice);',
+'  col = mix(col, cinn, veins*0.50);',
+'  float stir = smoothstep(0.42,0.86, r.y) * infl * uActive;',
+'  col = mix(col, cinnHi, stir*0.60);',
+'  col *= 0.88 + 0.24*f;',
+'  col += vec3(0.08,0.06,0.035)*infl*uActive;',
+'  float vig = smoothstep(1.35,0.25, length(vUv-0.5)*1.7);',
+'  col *= mix(0.80,1.0,vig);',
+'  gl_FragColor = vec4(col, 1.0);','}'].join('\n') }));
+  fluidMesh.visible=false;
+  bgScene.add(fluidMesh);
+
+  // fireflies
+  var FN=120, ffGeo=new THREE.BufferGeometry();
+  var ffBase=new Float32Array(FN*3), ffPhase=new Float32Array(FN), ffSpd=new Float32Array(FN);
+  for(var fi=0;fi<FN;fi++){ ffBase[fi*3]=(Math.random()*2-1)*3.8; ffBase[fi*3+1]=(Math.random()*2-1)*2.6; ffBase[fi*3+2]=(Math.random()*2-1)*1.6-0.5; ffPhase[fi]=Math.random()*6.28; ffSpd[fi]=0.25+Math.random()*0.6; }
+  ffGeo.setAttribute('position', new THREE.BufferAttribute(ffBase.slice(),3));
+  var ffMat=new THREE.PointsMaterial({ color:0xffe6a3, size:0.03, transparent:true, opacity:0.5, depthWrite:false, blending:THREE.AdditiveBlending });
+  can.scene.add(new THREE.Points(ffGeo,ffMat));
+
+  // ---- COQUI AUDIO (proven) ----
+  var AC=window.AudioContext||window.webkitAudioContext;
+  var ctx=null, master=null, noiseGain=null, muted=false, audioStarted=false, callCount=0;
+  function scheduleCoqui(c, dest, opt){
+    var t=(opt.when!==undefined?opt.when:c.currentTime+0.02);
+    var dist=opt.dist!==undefined?opt.dist:0.3;
+    var vol=(opt.vol!==undefined?opt.vol:0.30)*(1-dist*0.72);
+    var pan=c.createStereoPanner?c.createStereoPanner():null;
+    if(pan) pan.pan.value=Math.max(-1,Math.min(1,opt.pan||0));
+    var lp=c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=6200-dist*4400;
+    if(pan){ lp.connect(pan); pan.connect(dest); } else { lp.connect(dest); }
+    function note(f0,f1,t0,dur,v){
+      var o=c.createOscillator(); o.type='sine'; var g=c.createGain();
+      o.frequency.setValueAtTime(f0,t0);
+      if(f1!==f0) o.frequency.exponentialRampToValueAtTime(f1,t0+dur*0.8);
+      g.gain.setValueAtTime(0.0001,t0);
+      g.gain.exponentialRampToValueAtTime(v,t0+0.018);
+      g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+      o.connect(g); g.connect(lp); o.start(t0); o.stop(t0+dur+0.05);
+    }
+    note(1080,1120,t,0.10,vol);
+    note(1480,2140,t+0.185,0.30,vol*1.15);
+  }
+  function ensureAudio(){
+    if(ctx){ if(ctx.resume) ctx.resume(); return ctx; }
+    ctx=new AC();
+    master=ctx.createGain(); master.gain.value=0.9; master.connect(ctx.destination);
+    var len=2*ctx.sampleRate, buf=ctx.createBuffer(1,len,ctx.sampleRate), d=buf.getChannelData(0);
+    var lastN=0; for(var i=0;i<len;i++){ var w=Math.random()*2-1; lastN=(lastN+0.02*w)/1.02; d[i]=lastN*3.5; }
+    var src=ctx.createBufferSource(); src.buffer=buf; src.loop=true;
+    var nlp=ctx.createBiquadFilter(); nlp.type='lowpass'; nlp.frequency.value=650;
+    noiseGain=ctx.createGain(); noiseGain.gain.value=0;
+    src.connect(nlp); nlp.connect(noiseGain); noiseGain.connect(master); src.start();
+    return ctx;
+  }
+  function startAmbience(){
+    if(audioStarted) return; audioStarted=true;
+    noiseGain.gain.linearRampToValueAtTime(0.04, ctx.currentTime+2.5);
+    muteBtn.textContent='Sound: on'; muteBtn.setAttribute('aria-pressed','true');
+    (function next(){ setTimeout(function(){
+      if(!muted && ctx){ scheduleCoqui(ctx, master, { pan:(Math.random()*2-1)*0.9, dist:0.55+Math.random()*0.4, vol:0.18 }); callCount++; }
+      next(); }, 1700+Math.random()*3400); })();
+  }
+  muteBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!ctx){ ensureAudio(); startAmbience(); return; }
+    muted=!muted;
+    master.gain.linearRampToValueAtTime(muted?0:0.9, ctx.currentTime+0.25);
+    muteBtn.textContent='Sound: '+(muted?'off':'on');
+    muteBtn.setAttribute('aria-pressed', muted?'false':'true');
+  });
+  window.__audio={ state:function(){return ctx?ctx.state:null;}, count:function(){return callCount;} };
+
+  // ripples
+  var ripples=[], lastTime=0;
+  function spawnRipple(x,y){ var el=document.createElement('div'); el.className='ripple';
+    el.style.left=x+'px'; el.style.top=y+'px'; rippleLayer.appendChild(el);
+    ripples.push({el:el,t0:lastTime}); }
+  function stepRipples(now){
+    for(var i=ripples.length-1;i>=0;i--){ var r=ripples[i], age=now-r.t0, D=1.15;
+      if(age>D||age<0){ r.el.remove(); ripples.splice(i,1); continue; }
+      var p=age/D, e=1-Math.pow(1-p,3);
+      r.el.style.transform='scale('+(0.4+e*4.4)+')';
+      r.el.style.opacity=(1-p).toFixed(3); } }
+
+  // ---- MERCH carousel (the original pilot spirit: simple, elegant crossfade) ----
+  var MBASE='coquirico-handoff/assets/concept/merch/products/carousel-stage/';
+  var GARMENTS=[
+    { name:'Hoodie',     img:MBASE+'01-hoodie-stage-v1.webp' },
+    { name:'Sweatpants', img:MBASE+'02-sweatpants-stage-v1.webp' },
+    { name:'Shorts',     img:MBASE+'03-shorts-stage-v1.webp' },
+    { name:'Bucket hat', img:MBASE+'04-bucket-hat-stage-v1.webp' },
+    { name:'Cap',        img:MBASE+'05-cap-stage-v1.webp' }
+  ];
+  GARMENTS.forEach(function(g){ var p=new Image(); p.src=g.img; });
+  var msel=0, mimg=document.getElementById('mimg'), mname=document.getElementById('mname');
+  var mdots=document.getElementById('mdots');
+  GARMENTS.forEach(function(g,i){
+    var b=document.createElement('button'); b.textContent='0'+(i+1);
+    b.setAttribute('aria-pressed', i===0?'true':'false'); b.setAttribute('aria-label', g.name);
+    b.addEventListener('click', function(){ mselect(i); });
+    mdots.appendChild(b);
+  });
+  function mselect(i){
+    msel=(i+GARMENTS.length)%GARMENTS.length;
+    mimg.style.opacity=0;
+    setTimeout(function(){
+      mimg.src=GARMENTS[msel].img;
+      mimg.alt='COQUIRICO '+GARMENTS[msel].name+' — concept garment';
+      mimg.style.opacity=1;
+    }, 200);
+    mname.textContent=GARMENTS[msel].name;
+    [...mdots.children].forEach(function(d,k){ d.setAttribute('aria-pressed', k===msel?'true':'false'); });
+    var nb=document.getElementById('mnotify');
+    nb.setAttribute('aria-pressed','false'); nb.textContent='Notify me';
+  }
+  document.getElementById('mnext').addEventListener('click', function(){ mselect(msel+1); });
+  document.getElementById('mprev').addEventListener('click', function(){ mselect(msel-1); });
+  document.getElementById('mnotify').addEventListener('click', function(){
+    var b=document.getElementById('mnotify');
+    var on=b.getAttribute('aria-pressed')!=='true';
+    b.setAttribute('aria-pressed', on?'true':'false');
+    b.textContent=on?'Listed ✓':'Notify me';
+  });
+  window.__merch={ sel:function(){return msel;}, select:mselect };
+
+  /* ── PER-DRINK THEMING (data) ──────────────────────────────────────────
+     Pick a drink → the whole downstream scroll re-skins to it: gl-world
+     backdrop palette, transition-wipe colours, the traveling can's wrap, the
+     accent glow. 'coquetearte' holds the CURRENT values EXACTLY, so the
+     flagship is byte-for-byte unchanged. Consumed by the static branch just
+     below AND by applyDrinkTheme() in the full-motion path. Phase 1 = palette
+     + can + accent; per-drink copy/art layer on next. */
+  var _TEX='coquirico-handoff/assets/product3d/textures/';
+  var DRINK_THEMES={
+    /* coquetearte holds the CURRENT values EXACTLY → flagship unchanged */
+    'coquetearte':{ accent:'#caa24c', bodyBg:'#0c1a10', wrap:_TEX+'coquetearte-seamless-wrap-v3.webp',
+      worlds:{ '0':{col0:'#081008',col1:'#12271a',mist:'#1d4028',glow:'#caa24c'},
+               '3':{col0:'#190b04',col1:'#331608',mist:'#0d0502',glow:'#b5611f'} },
+      bounds:['#0e2416','#e9dcc4','#2a160c','#123028'], words:['THE ISLAND','THE POUR','AFTER DARK','THE DROP'] },
+    'brisa-de-parcha':{ accent:'#f6d859', bodyBg:'#12100a', wrap:_TEX+'brisa-de-parcha-seamless-wrap-v2.webp',
+      worlds:{ '0':{col0:'#12100a',col1:'#2c2410',mist:'#6f4d1c',glow:'#f6d859'},
+               '3':{col0:'#1a1405',col1:'#33280a',mist:'#0d0a03',glow:'#ffcf3d'} },
+      bounds:['#2c2410','#f4eccf','#1f1808','#2a2410'],
+      words:["THE BREEZE","THE POUR","GOLDEN HOUR","THE DROP"],
+      copy:{ story:{ eyebrow:"02 / The Breeze", sensory:"A window opens over the coast — and the air arrives before the fruit, warm and gold and drifting.", h2:"Carried on the trade winds", body:"Parcha ripens on the vine — the breeze lifts it, and the island leans in to listen." },
+             pour:{ eyebrow:"03 / The Pour", sensory:"Passionfruit breaks bright over cool coconut — tart gold meeting cream, then softening to a daydream.", h2:"What we imagine inside", body:"A flavor study — imagined, not bottled. Parcha drawn across the Coquírico coconut base." },
+             world:{ eyebrow:"04 / Golden Hour", sensory:"The light goes amber and slows — the breeze holds its breath, and the daydream lingers past dusk.", h2:"A brightness that stays" } } },
+    'guayaba-rosada':{ accent:'#ff927f', bodyBg:'#140510', wrap:_TEX+'guayaba-rosada-seamless-wrap-v2.webp',
+      worlds:{ '0':{col0:'#1a0810',col1:'#3a1522',mist:'#5b2330',glow:'#ff927f'},
+               '3':{col0:'#220913',col1:'#45182b',mist:'#12060a',glow:'#ff6f95'} },
+      bounds:['#3a1522','#f4e2e7','#2a0c16','#301222'],
+      words:["THE BLUSH","THE POUR","ROSE HOUR","THE DROP"],
+      copy:{ story:{ eyebrow:"02 / The Blush", sensory:"The afternoon leans pink — guava warms on the branch, and the light goes soft and low across the water.", h2:"An island afternoon", body:"Pink guava, sun-ripened — the blush before the evening cools." },
+             pour:{ eyebrow:"03 / The Pour", sensory:"Rose-pink guava drifts through coconut cream — floral, gentle, a petal opening over the smooth coconut base.", h2:"Imagined, not bottled", body:"A flavor study on the Coquírico coconut — pink guava dreamed aloud, never yet poured." },
+             world:{ eyebrow:"04 / Rose Hour", sensory:"The pink deepens and settles — soft, floral, unhurried, an afternoon that refuses to end.", h2:"A blush held to the light" } } },
+    'cafe-y-canela':{ accent:'#d79760', bodyBg:'#140b08', wrap:_TEX+'cafe-y-canela-seamless-wrap-v2.webp',
+      worlds:{ '0':{col0:'#140b08',col1:'#321b18',mist:'#4a2a1e',glow:'#d79760'},
+               '3':{col0:'#1a0d07',col1:'#331a10',mist:'#0d0604',glow:'#e0a878'} },
+      bounds:['#321b18','#eaddcb','#241310','#2a1a14'],
+      words:["THE CORTADITO","THE POUR","BROWN HOUR","THE DROP"],
+      copy:{ story:{ eyebrow:"02 / The Cortadito", sensory:"Morning leans in — a little café curls into the coconut, and the island wakes slow and brown.", h2:"A cortadito, dreaming", body:"The colmado kettle, the cinnamon shelf — a warmth remembered, then imagined into coconut." },
+             pour:{ eyebrow:"03 / The Pour", sensory:"Warm coffee threads through the coconut, and a whisper of cinnamon lingers at the edge of it.", h2:"A study, not a recipe", body:"A flavor study on the Coquírico coconut base — imagined, not bottled. Café y canela, dreamed aloud." },
+             world:{ eyebrow:"04 / Brown Hour", sensory:"The cup goes quiet — cinnamon settling into coconut, an afternoon that holds its own warmth.", h2:"Cozy, and a little slow" } } },
+    /* future-rum is a bottle → the traveling can reverts to the coquetearte wrap; only the palette themes */
+    'future-rum':{ accent:'#c7a864', bodyBg:'#04100f', wrap:_TEX+'coquetearte-seamless-wrap-v3.webp',
+      worlds:{ '0':{col0:'#04100f',col1:'#0a1f1d',mist:'#071a19',glow:'#c7a864'},
+               '3':{col0:'#05100f',col1:'#0c211f',mist:'#030807',glow:'#d8bb76'} },
+      bounds:['#0a1f1d','#dfe3d8','#08100f','#0c2320'],
+      words:["AFTER DARK","SMOKED GLASS","GROWN QUIET","A MAYBE"],
+      copy:{ story:{ eyebrow:"02 / The Late Hour", sensory:"The day loosens its collar — and something is set aside for the hours that belong only to grown things.", h2:"Kept for after dark", body:"A bottle, not a can — smoked emerald glass, waiting for a night that hasn't arrived." },
+             pour:{ eyebrow:"03 / What May Come", sensory:"Nothing is poured yet — no recipe named, no formula sworn to. Only the shape of an idea in smoked glass.", h2:"A possibility, not a promise", body:"For grown hands, someday — 21 and up, unbottled, undecided. A concept the island keeps to itself, for now." },
+             world:{ eyebrow:"04 / The Grown Hours", sensory:"When it comes — if it comes — it will be adult and quiet, a low gold light behind smoked green.", h2:"Adult, and unhurried" } } },
+    'flamboyan-at-dusk':{ accent:'#ee744e', bodyBg:'#160810', wrap:_TEX+'flamboyan-at-dusk-seamless-wrap-v2.webp',
+      worlds:{ '0':{col0:'#160810',col1:'#401d28',mist:'#5a2432',glow:'#ee744e'},
+               '3':{col0:'#1a0810',col1:'#3a141f',mist:'#0d0407',glow:'#ff8a5c'} },
+      bounds:['#401d28','#f2ddd0','#2a0f16','#301420'],
+      words:["THE BLAZE","THE POUR","CORAL HOUR","THE EMBER"],
+      copy:{ story:{ eyebrow:"02 / The Blaze", sensory:"The can steps aside, and the flamboyán takes the screen — a whole tree caught mid-burn against the falling light.", h2:"Silkscreen fire", body:"Coral, flame, dusk-plum — the island's brightest tree, pulled through the press at the hour it glows." },
+             pour:{ eyebrow:"03 / The Pour", sensory:"The art is new — the pour is the same one you know, cool coconut breaking over ice as cinnamon lifts to the vanilla.", h2:"What waits inside", body:"Coconut water · coconut milk · cane sugar · agave syrup · natural flavors · cinnamon · vanilla extract." },
+             world:{ eyebrow:"04 / Coral Hour", sensory:"The blossoms hold their fire as the sky goes plum — one drink, dressed for the last warm light of the day.", h2:"Dressed in dusk" } } },
+    'rain-on-palm':{ accent:'#68c3ae', bodyBg:'#04100f', wrap:_TEX+'rain-on-palm-dark-seamless-wrap-v3.webp',
+      worlds:{ '0':{col0:'#04100f',col1:'#0a2523',mist:'#061d1b',glow:'#68c3ae'},
+               '3':{col0:'#05100f',col1:'#0c2422',mist:'#030807',glow:'#7fd4c2'} },
+      bounds:['#0a2523','#dbe8e4','#08100f','#0c2320'],
+      words:["THE RAIN","THE POUR","GREEN HOUR","THE DROP"],
+      copy:{ story:{ eyebrow:"02 / Rain on Palm", sensory:"Warm rain sheets off a broad palm — the whole island leans in, then exhales all at once.", h2:"When the sky opens", body:"The green turns deeper — each leaf a channel, each drop a note struck on tin." },
+             pour:{ eyebrow:"03 / The Pour", sensory:"Cool coconut beads on the glass like rain on skin — then a thread of cinnamon lifts to meet the vanilla.", h2:"What waits inside", body:"Coconut water · coconut milk · cane sugar · agave syrup · natural flavors · cinnamon · vanilla extract." },
+             world:{ eyebrow:"04 / After the Rain", sensory:"The downpour softens to a drip — petrichor and green in the air, and the can holds that hush.", h2:"The island, rinsed clean" } } },
+    'coqui-chorus':{ accent:'#e9b666', bodyBg:'#0a140e', wrap:_TEX+'coqui-chorus-seamless-wrap-v2.webp',
+      worlds:{ '0':{col0:'#0a140e',col1:'#243c2e',mist:'#1d4028',glow:'#e9b666'},
+               '3':{col0:'#0f160f',col1:'#1e3324',mist:'#070d08',glow:'#f2c77a'} },
+      bounds:['#243c2e','#ece0c8','#12241a','#1a3024'],
+      words:["THE CALLING","THE POUR","NIGHT-GREEN","THE CHORUS"],
+      copy:{ story:{ eyebrow:"02 / The Calling", sensory:"One coquí opens the dark — then another answers, and the whole hillside begins to sing.", h2:"A nocturne, held", body:"Warm gold laid over night-green — the island's evening chorus, painted onto the can." },
+             pour:{ eyebrow:"03 / The Pour", sensory:"Cool coconut breaks over ice, and a thread of cinnamon lifts to meet the vanilla.", h2:"What waits inside", body:"Coconut water · coconut milk · cane sugar · agave syrup · natural flavors · cinnamon · vanilla extract." },
+             world:{ eyebrow:"04 / After Dark", sensory:"The chorus swells and folds into rhythm — a small song of the island, warm in one hand.", h2:"One island. Many voices." } } },
+    'caribbean-night-01':{ accent:'#d5ad58', bodyBg:'#070a18', wrap:_TEX+'caribbean-night-01-seamless-wrap-v2.webp',
+      worlds:{ '0':{col0:'#070a18',col1:'#101633',mist:'#1a2145',glow:'#d5ad58'},
+               '3':{col0:'#080a18',col1:'#12173a',mist:'#04060f',glow:'#e6c06a'} },
+      bounds:['#101633','#e2ddcb','#0a0d1f','#12163a'],
+      words:["NIGHTFALL","THE POUR","GOLD MOON","NO. 01"],
+      copy:{ story:{ eyebrow:"02 / Caribbean Night", sensory:"Indigo floods the frame — and a single gold line finds the moon, hung low over a coast gone quiet.", h2:"A low gold moon", body:"First of the Caribbean Night series — the same island, drawn after the last light in blue and gold." },
+             pour:{ eyebrow:"03 / The Pour", sensory:"Cool coconut breaks over ice, and a thread of cinnamon lifts to meet the vanilla — the pour beneath the art, unchanged.", h2:"What waits inside", body:"Coconut water · coconut milk · cane sugar · agave syrup · natural flavors · cinnamon · vanilla extract." },
+             world:{ eyebrow:"04 / After Dark", sensory:"The gold line holds the indigo together — one can wearing the first night, and the nights still to come.", h2:"One island. Many nights." } } }
+  };
+  var curDrink='coquetearte';
+  function _drinkParam(){ var d=new URLSearchParams(location.search).get('drink'); return DRINK_THEMES[d]?d:'coquetearte'; }
+
+  /* Per-drink COPY swap. copy = {story,pour,world}: {eyebrow,sensory,h2,body?}. Maps to the scroll
+     sections #story/#drink/#world (hero + merch are never themed). Drinks with no `copy` keep the
+     flagship DOM text (safe partial state). */
+  function _setCopy(copy){ if(!copy) return;
+    var map={ '#story':copy.story, '#drink':copy.pour, '#world':copy.world };
+    Object.keys(map).forEach(function(sel){ var o=map[sel]; if(!o) return; var root=document.querySelector(sel); if(!root) return;
+      var e=root.querySelector('.eyebrow'); if(e && o.eyebrow!=null) e.textContent=o.eyebrow;
+      var s=root.querySelector('.sensory'); if(s && o.sensory!=null) s.textContent=o.sensory;
+      var h=root.querySelector('h2');       if(h && o.h2!=null)      h.textContent=o.h2;
+      var b=root.querySelector('.body');    if(b && o.body!=null)    b.textContent=o.body;
+    });
+  }
+  /* Capture the flagship's real copy + transition words straight from the pristine DOM, so switching
+     back to 'coquetearte' restores it EXACTLY (no hand-transcribed strings to drift). */
+  (function _captureBaseline(){
+    var m={ '#story':'story', '#drink':'pour', '#world':'world' }, c={};
+    Object.keys(m).forEach(function(sel){ var r=document.querySelector(sel); if(!r) return; var o={};
+      var e=r.querySelector('.eyebrow'), s=r.querySelector('.sensory'), h=r.querySelector('h2'), b=r.querySelector('.body');
+      if(e)o.eyebrow=e.textContent; if(s)o.sensory=s.textContent; if(h)o.h2=h.textContent;
+      if(b && sel!=='#world')o.body=b.textContent; c[m[sel]]=o; });
+    DRINK_THEMES.coquetearte.copy=c;
+  })();
+
+  // ---- reduced motion: static site ----
+  if(reduced()){
+    curDrink=_drinkParam(); var _st=DRINK_THEMES[curDrink];
+    document.body.style.background=_st.bodyBg;
+    (function(bg){ bg('story',_st.bounds[0]); bg('drink',_st.bounds[1]); bg('world',_st.bounds[2]); bg('merch',_st.bounds[3]); bg('pick',_st.bodyBg);
+    })(function(id,c){ var e=document.getElementById(id); if(e) e.style.background=c; });
+    document.documentElement.style.setProperty('--fam-accent', _st.accent);
+    if(can && can.setLabel){ can.setLabel(_st.wrap); }
+    _setCopy(_st.copy);
+    svg.style.display='none'; wordEl.style.display='none';
+    filmA.style.display='none'; filmB.style.display='none';
+    chapters.forEach(function(el){ el.style.opacity=1; });
+    can.render();
+    if(debugEl) debugEl.textContent='site static · reduced-motion · '+curDrink;
+    addEventListener('pointerdown', function(e){ if(e.target.closest('nav')||e.target.closest('#merchstage')) return;
+      ensureAudio(); startAmbience();
+      scheduleCoqui(ctx, master, { pan:e.clientX/innerWidth*2-1, dist:0.4 }); callCount++; });
+    return;
+  }
+
+  // ---- full experience ----
+  var lenis=new Lenis({ duration:1.15, easing:function(t){return Math.min(1,1.001-Math.pow(2,-10*t));}, smoothWheel:true, autoRaf:false });
+  window.__lenis=lenis;   // exposed so the opening overture can lock scroll during the intro, then hand it back
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(function(t){ lenis.raf(t*1000); });
+  gsap.ticker.lagSmoothing(0);
+
+  // nav smooth-scroll
+  document.querySelectorAll('[data-nav], .navbrand').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var id=a.getAttribute('href');
+      if(id && id.startsWith('#')){ e.preventDefault(); var el=document.querySelector(id); if(el) lenis.scrollTo(el, {offset:0}); }
+    });
+  });
+
+  var prog={p:0};
+  ScrollTrigger.create({ trigger:driver, start:'top top', end:'bottom bottom', scrub:0.6,
+    onUpdate:function(self){ prog.p=self.progress; } });
+  chapters.forEach(function(el){
+    gsap.fromTo(el,{autoAlpha:0,y:46},{autoAlpha:1,y:0,ease:'power2.out',
+      scrollTrigger:{trigger:el.parentElement,start:'top 80%',end:'top 45%',scrub:true}});
+  });
+
+  function norm(p,a,b){ return Math.min(1,Math.max(0,(p-a)/(b-a))); }
+  function easeWipe(w){ var e=w<0.5 ? 4*w*w*w : 1-Math.pow(-2*w+2,3)/2; return e + Math.sin(w*Math.PI)*0.03*Math.sin(w*9.4); }
+  function buildWavePath(w,time,H,W){
+    var edge=(1-easeWipe(w))*H, amp=Math.sin(Math.PI*w)*H*0.055;
+    var pts=['M0 '+H,'L0 '+edge.toFixed(1)], N=28;
+    for(var i=0;i<=N;i++){ var x=i/N*W;
+      var y=edge + Math.sin(i/N*Math.PI*2.6 + time*1.7)*amp + Math.sin(i/N*Math.PI*5.2 - time*1.1)*amp*0.45;
+      pts.push('L'+x.toFixed(1)+' '+y.toFixed(1)); }
+    pts.push('L'+W+' '+H,'Z'); return pts.join(' ');
+  }
+
+  var mx=0.5,my=0.5,tmx=0.5,tmy=0.5,pmx=0.5,pmy=0.5;
+  addEventListener('pointermove', function(e){ tmx=e.clientX/innerWidth; tmy=1.0-e.clientY/innerHeight; }, {passive:true});
+
+  // AFTER DARK (world 3): DRAG the main can to grab/twist/turn it; a TAP (no drag) calls a coqui.
+  var worldIdxNow=0, canDragYaw=0, canDragPitch=0, dragOn=false, dragMoved=false, dSX=0, dSY=0, dPX=0, dPY=0;
+  window.__canFront=function(){ canDragYaw = -(idleAngle + prog.p*Math.PI*2); canDragPitch=0; };  // snap the main can to its front
+  addEventListener('pointerdown', function(e){
+    var t=e.target;
+    if(t && t.closest && (t.closest('nav')||t.closest('#merchstage')||t.closest('.rit')||t.closest('#family'))) return;
+    if(ORD[worldIdxNow]!==3) return;
+    dragOn=true; dragMoved=false; dSX=dPX=e.clientX; dSY=dPY=e.clientY;
+  });
+  addEventListener('pointermove', function(e){
+    if(!dragOn) return;
+    var dx=e.clientX-dPX, dy=e.clientY-dPY; dPX=e.clientX; dPY=e.clientY;
+    if(Math.abs(e.clientX-dSX)+Math.abs(e.clientY-dSY)>4) dragMoved=true;
+    canDragYaw += dx*0.013;
+    canDragPitch = Math.max(-1.15, Math.min(1.15, canDragPitch + dy*0.008));   /* free grab — was a tight ±0.5 */
+  }, {passive:true});
+  addEventListener('pointerup', function(e){
+    if(!dragOn) return; dragOn=false;
+    if(!dragMoved){ ensureAudio(); startAmbience();
+      var pan=e.clientX/innerWidth*2-1;
+      var dist=Math.max(0.15,Math.min(0.95, Math.hypot(e.clientX-innerWidth/2,e.clientY-innerHeight/2)/(Math.max(innerWidth,innerHeight)*0.62)));
+      scheduleCoqui(ctx, master, {pan:pan, dist:dist}); callCount++;
+      spawnRipple(e.clientX, e.clientY); }
+  });
+
+  var activeWorldIdx=-1, curCanX=0, curCanS=1.0, curFF=0.5, fluidActive=0;
+
+  // ---- island video drive: auto-play (coquí keeps calling when idle) + scroll speeds it up ----
+  var RATE_GAIN=18, prevP=0, prevTloop=null, idleAngle=0, curIslandLock=0, curRate=1;
+
+  function filmFor(id){ return id==='A'?filmA:filmB; }
+  function setWorld(i){
+    if(i===activeWorldIdx) return;
+    activeWorldIdx=i; worldIdxNow=i;
+    var awi=ORD[i];                                       // scroll position i → actual WORLDS index
+    document.body.classList.toggle('island', awi===1);   // island film world
+    document.body.classList.toggle('merch', awi===4);
+    var w=WORLDS[awi];
+    [filmA,filmB].forEach(function(f){ f.style.opacity=0; });
+    if(w.type==='film'){
+      var f=filmFor(w.el);
+      f.style.opacity=1;
+      if(w.el==='A'){ curRate=1; f.playbackRate=1; }
+      var pr=f.play(); if(pr&&pr.catch) pr.catch(function(){});
+      (w.el==='A'?filmB:filmA).pause();
+    } else { filmA.pause(); filmB.pause(); }
+    atmMesh.visible = (w.type==='gl');
+    fluidMesh.visible = (w.type==='fluid');
+    if(w.type==='gl'){
+      atmU.uCol0.value.set(w.col0); atmU.uCol1.value.set(w.col1);
+      atmU.uMist.value.set(w.mist); atmU.uMistAmt.value=w.mistAmt;
+      atmU.uGlow.value.set(w.glow); atmU.uGlowY.value=w.glowY; atmU.uGlowStr.value=w.glowStr;
+      atmU.uFade.value=1;
+    }
+  }
+
+  /* Full-motion theming: mutate the live WORLDS/BOUNDS from DRINK_THEMES
+     (defined above the reduced() branch) + swap the can wrap + accent, then
+     repaint the world we're standing in. Trigger: ?drink=<id> on load, or
+     window.__drink(id) at runtime. 'coquetearte' restores the exact original. */
+  function applyDrinkTheme(id){
+    var t=DRINK_THEMES[id]; if(!t){ return false; }
+    curDrink=id;
+    Object.keys(t.worlds).forEach(function(k){ var W=WORLDS[+k], s=t.worlds[k];
+      if(W){ W.col0=s.col0; W.col1=s.col1; W.mist=s.mist; W.glow=s.glow; } });
+    if(t.bounds){ for(var i=0;i<BOUNDS.length;i++){ BOUNDS[i].color=t.bounds[BMAP[i]]; } }
+    if(t.words){ for(var wi=0;wi<BOUNDS.length;wi++){ BOUNDS[wi].word=t.words[BMAP[wi]]; } }
+    _setCopy(t.copy);
+    document.documentElement.style.setProperty('--fam-accent', t.accent);
+    if(can && can.setLabel){ can.setLabel(t.wrap); }
+    if(atmU){ var _i=worldIdxNow; activeWorldIdx=-1; setWorld(_i); }   /* repaint the world we're standing in */
+    return true;
+  }
+  window.__drink=applyDrinkTheme;
+  window.__drinkState=function(){ return { drink:curDrink, world0Glow:WORLDS[0].glow, world3Glow:WORLDS[3].glow,
+    accent:getComputedStyle(document.documentElement).getPropertyValue('--fam-accent').trim() }; };
+
+  var bgCanvasEl=document.getElementById('bg-canvas');
+  var canCanvasEl=document.getElementById('can-canvas');
+  var famRevealEl=document.getElementById('fam-reveal');   // picker's centred description — shown only while PARKED in After Dark
+  var CAN_FADE_SOON=1.0;   // ← knob: can rides the drop wipe out and is gone exactly as merch arrives (lower = sooner/abrupt)
+  function frame(p,time){
+    lastTime=time;
+    var H=innerHeight, W=innerWidth;
+    if(bgCanvasEl.width===0 && W>0){ can.setSize(W,H); bgRenderer.setSize(W,H,false); }
+    svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    var active=null, w=0, wIdx=0;
+    for(var i=0;i<BOUNDS.length;i++){
+      var b=BOUNDS[i];
+      if(p>=b.end){ wIdx=i+1; continue; }
+      if(p>b.start){ active=b; w=norm(p,b.start,b.end); }
+      break;
+    }
+    setWorld(wIdx);
+    var awi=ORD[wIdx];                                    // active WORLDS index at this scroll position
+    /* The wave must REVEAL the destination, not flash the outgoing world behind it. When wiping INTO a film
+       world (Island / Merch), crossfade: fade the outgoing gl atmosphere OUT (uFade) and the destination film
+       IN, in step with the wave — so e.g. After Dark's brown no longer sits as a slab behind the Island wipe. */
+    if(active){
+      var _dw=WORLDS[ORD[wIdx+1]];
+      if(_dw && _dw.type==='film'){
+        /* Cinematic descent, not a flat cross-dissolve: the outgoing brown dusk sinks OUT ahead of the
+           destination film, so the two scenes never sit at 50/50 and ghost. The dusk dims toward dark,
+           then the island rises up out of it — one continuous fall into night, no muddy double-exposure. */
+        var _sf=function(a,b,x){ x=Math.min(1,Math.max(0,(x-a)/(b-a))); return x*x*(3-2*x); };
+        atmU.uFade.value=1-_sf(0.0,0.58,w);                       // brown gone by ~0.58 (front-loaded)
+        var _df=filmFor(_dw.el); _df.style.opacity=_sf(0.36,1.0,w).toFixed(3); // island rises later, out of the dark
+        if(_df.paused){ var _pr=_df.play(); if(_pr&&_pr.catch) _pr.catch(function(){}); }
+      }
+    }
+    // The After Dark -> island(mp4) hinge is a CLEAN dark-into-animation crossfade (handled above: the brown
+    // atmosphere fades out via uFade while the island film fades in underneath) — NO pour wave here, because a
+    // solid pour colour becomes an ugly slab that then POPS to the bright island. Every OTHER hinge keeps the
+    // signature pour + kinetic word.
+    var _bare=(awi===3 && WORLDS[ORD[wIdx+1]] && WORLDS[ORD[wIdx+1]].type==='film');
+    if(active && w>0 && w<1 && !_bare){
+      path.setAttribute('d', buildWavePath(w,time,H,W));
+      path.setAttribute('fill', active.color);
+      svg.style.display='block';
+      wordEl.textContent = active.word;
+      wordEl.style.opacity = (Math.sin(Math.PI*w)*0.9).toFixed(3);
+      wordEl.style.letterSpacing=(0.02+w*0.06)+'em';   // original kinetic "breathing" — the word spreads as it peaks
+    } else { svg.style.display='none'; wordEl.style.opacity=0; }
+    // The After Dark picker's centred description shows ONLY while parked there — hide it during any pour so it
+    // never collides with the giant kinetic word.
+    if(famRevealEl){ famRevealEl.classList.toggle('show', awi===3 && !active); }
+
+    pmx=mx; pmy=my; mx+=(tmx-mx)*0.08; my+=(tmy-my)*0.08;
+    fu.uTime.value=time; fu.uAspect.value=W/H;
+    fu.uMouse.value.set(mx,my);
+    fu.uVel.value.set((mx-pmx)*8.0,(my-pmy)*8.0);
+    fluidActive += ((WORLDS[awi].type==='fluid'?1:0) - fluidActive)*0.05;
+    fu.uActive.value=fluidActive;
+
+    var tw=WORLDS[awi];
+    /* The traveling hero can rides the WORLDS positions (canX/canS) with a smooth lerp — so entering the
+       After Dark picker (world 3, canX 1.5) it slides aside + shrinks exactly as in the original, then
+       flies back in themed as you scroll into the chosen drink's story. */
+    curCanX += (tw.canX-curCanX)*0.06;
+    curCanS += (tw.canS-curCanS)*0.06;
+    curFF   += (tw.ff-curFF)*0.05;
+    curIslandLock += ((awi===1?1:0) - curIslandLock)*0.09;
+    var dt = (prevTloop==null) ? 0 : Math.min(0.05, time - prevTloop); prevTloop = time;
+    if(awi===1){
+      // scroll speeds the coquí up; idle keeps it calling at 1x; scroll-up eases it back down
+      var sp=(p-prevP)/Math.max(dt,0.001);
+      var tRate = sp>=0 ? (1 + sp*RATE_GAIN) : (1 + sp*RATE_GAIN*0.7);
+      tRate = Math.max(0.25, Math.min(6, tRate));
+      curRate += (tRate-curRate)*0.12;
+      filmA.playbackRate = curRate;
+    }
+    prevP = p;
+    var lip = active ? Math.sin(Math.PI*w) : 0;
+    var g=can.canGroup;
+    idleAngle += dt*0.2*(1 - curIslandLock);   // integrate the rate (no time-scaled jump); damped to 0 in island = pauses in place
+    var dYaw=(awi===3)?canDragYaw:0, dPit=(awi===3)?canDragPitch:0;
+    g.rotation.y = idleAngle + p*Math.PI*2 + dYaw;
+    g.rotation.x = -0.02 + dPit;
+    g.rotation.z = Math.sin(time*0.5)*0.02 + lip*0.05;
+    g.position.x = curCanX*2.2;
+    g.position.y = Math.sin(time*0.9)*0.035 - lip*0.16;
+    g.scale.setScalar(Math.max(0.001,curCanS*(1-lip*0.05)));
+    /* Fade the traveling can out DURING the final wipe into merch (last BOUNDS), so it's gone before the
+       merch world fully arrives — scroll-driven, not a late class toggle. */
+    var canFade = (wIdx>=BOUNDS.length) ? 1
+                : (active && wIdx===BOUNDS.length-1) ? Math.min(1, w/CAN_FADE_SOON) : 0;
+    if(canCanvasEl) canCanvasEl.style.opacity=(1-canFade).toFixed(3);
+
+    var a=ffGeo.attributes.position.array;
+    for(var j=0;j<FN;j++){ var ix=j*3;
+      a[ix]=ffBase[ix]+Math.sin(time*ffSpd[j]+ffPhase[j])*0.18;
+      a[ix+1]=ffBase[ix+1]+Math.cos(time*ffSpd[j]*0.8+ffPhase[j])*0.15;
+      a[ix+2]=ffBase[ix+2]+Math.sin(time*ffSpd[j]*0.6+ffPhase[j])*0.12; }
+    ffGeo.attributes.position.needsUpdate=true;
+    ffMat.opacity=curFF+Math.sin(time*1.2)*0.05;
+    atmU.uTime.value=time; atmU.uAspect.value=W/H;
+    stepRipples(time);
+    if((tw.type!=='film'&&tw.type!=='seq') || (active&&w>0)) bgRenderer.render(bgScene,bgCam);
+    can.render();
+    if(debugEl){
+      debugEl.textContent=(active?('pouring "'+active.word+'" '+w.toFixed(2)):('world '+awi+' · '+WORLDS[awi].type))
+        +' · A '+(filmA.paused?'⏸':'▶')+' B '+(filmB.paused?'⏸':'▶')
+        +' · audio '+(ctx?ctx.state:'—')+' · merch '+GARMENTS[msel].name;
+    }
+  }
+  window.__site=function(p,t){ prog.p=p; frame(p, t||2.0); };
+
+  /* apply a drink theme from ?drink=<id> before the first paint (no colour flash) */
+  (function(){ try{ var _d=new URLSearchParams(location.search).get('drink'); if(_d){ applyDrinkTheme(_d); } }catch(e){} })();
+
+  gsap.ticker.add(function(time){ frame(prog.p, time); });
+
+  addEventListener('resize', function(){ can.setSize(innerWidth,innerHeight); bgRenderer.setSize(innerWidth,innerHeight,false); lenis.resize(); recomputeBounds(); ScrollTrigger.refresh(); });
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){ lenis.stop(); gsap.ticker.sleep(); filmA.pause(); filmB.pause(); if(ctx&&ctx.state==='running') ctx.suspend(); }
+    else { gsap.ticker.wake(); lenis.start(); ScrollTrigger.refresh(); if(ctx&&!muted) ctx.resume(); } });
+  recomputeBounds();
+  lenis.scrollTo(0, { immediate:true });
+  ScrollTrigger.refresh();
+  recomputeBounds();
+  ScrollTrigger.addEventListener && ScrollTrigger.addEventListener('refresh', recomputeBounds);
+  window.addEventListener('pageshow', function(){ lenis.scrollTo(0, { immediate:true }); });
+})();
+</script>
+<script>
+/* AFTER DARK — interactive concept-product family (Codex CoquiricoProduct3D), lazy-mounted */
+(function(){
+  if(!window.CoquiricoProduct3D){ return; }
+  var P=CoquiricoProduct3D.products;
+  var FAM=['coquetearte','brisa-de-parcha','guayaba-rosada','cafe-y-canela','future-rum','flamboyan-at-dusk','rain-on-palm','coqui-chorus','caribbean-night-01'].filter(function(id){ return P[id]; });
+  var host=document.getElementById('world'),
+      canvas=document.getElementById('fam-canvas'),
+      rail=document.getElementById('fam-rail'),
+      nameEl=document.getElementById('fam-name'),
+      eyeEl=document.getElementById('fam-eyebrow'),
+      statusEl=document.getElementById('fam-status'),
+      descEl=document.getElementById('fam-desc'),
+      insideEl=document.getElementById('fam-inside'),
+      revealEl=document.getElementById('fam-reveal');
+  if(!canvas||!host||!FAM.length){ return; }
+  var viewer=null, curId=FAM[0];
+
+  var TBASE='coquirico-handoff/assets/concept/brand-world/products/';
+  var THUMB={
+    'coquetearte':'coquirico-handoff/assets/concept/about/products/coquetearte-can-cutout-v2.webp',
+    'brisa-de-parcha':TBASE+'flavors/brisa-de-parcha-can-study-v1.webp',
+    'guayaba-rosada':TBASE+'flavors/guayaba-rosada-can-study-v1.webp',
+    'cafe-y-canela':TBASE+'flavors/cafe-y-canela-can-study-v1.webp',
+    'future-rum':TBASE+'rum/future-rum-expression-bottle-study-v1.webp',
+    'flamboyan-at-dusk':TBASE+'artist-editions/flamboyan-at-dusk-can-study-v1.webp',
+    'rain-on-palm':TBASE+'artist-editions/rain-on-palm-can-study-v1.webp',
+    'coqui-chorus':TBASE+'artist-editions/coqui-chorus-can-study-v1.webp',
+    'caribbean-night-01':TBASE+'artist-editions/caribbean-night-01-can-study-v1.webp'
+  };
+  /* Evocative CONCEPT descriptions — every line self-identifies as a study/edition/concept.
+     Deliberately NO fabricated ingredient/formula facts (brand + Codex rule: don't invent formulas for unavailable concepts). */
+  var DESC={
+    'coquetearte':'The one we actually make — Puerto Rican coconut, cool and creamy, zero alcohol. The real can every study here is dreamed around.',
+    'brisa-de-parcha':'A parcha-bright daydream — passionfruit breeze drifting over coconut. A flavor study, imagined, not bottled.',
+    'guayaba-rosada':'Pink guava blushing through the cream, soft and floral as an island afternoon. A flavor study.',
+    'cafe-y-canela':'Cortadito curled into coconut — warm coffee, a whisper of cinnamon. A flavor study.',
+    'future-rum':'Kept for after dark — smoked emerald glass and a possibility, not a promise. A future 21+ concept.',
+    'flamboyan-at-dusk':'Artist edition — the flamboyán ablaze at dusk, pulled in silkscreen fire. The same Coquírico, wearing art.',
+    'rain-on-palm':'Artist edition — warm rain sheeting off a palm, the whole island exhaling. Packaging as a poem.',
+    'coqui-chorus':'Artist edition — the coquí chorus mid-call, a nocturne you can hold in one hand.',
+    'caribbean-night-01':'Artist edition — first of the Caribbean Night series, deep indigo under a low gold moon.'
+  };
+  /* Honest "inside" line. Artist editions ARE the real Coquetearte drink (different art) → real ingredients.
+     Flavor studies + rum have no approved formula → concept note, no fabricated deck. */
+  var BASE='Coconut water · coconut milk · cane sugar · agave · natural flavors · cinnamon · vanilla';
+  var ARTIST={ 'flamboyan-at-dusk':1, 'rain-on-palm':1, 'coqui-chorus':1, 'caribbean-night-01':1 };
+  function insideText(id){
+    if(id==='coquetearte') return '<b>Inside</b>'+BASE;
+    if(ARTIST[id]) return '<b>Inside · the Coquetearte recipe</b>'+BASE;
+    if(id==='future-rum') return '<b>The pour</b>A future 21+ concept — no recipe to share yet.';
+    return '<b>The idea</b>A flavor study on the Coquírico coconut base — not an approved recipe.';
+  }
+  /* Wraps for transforming the traveling hero can into each CAN design (the rum is a bottle → hero reverts to coquetearte). */
+  var CANW='coquirico-handoff/assets/product3d/textures/', COQ_WRAP=CANW+'coquetearte-seamless-wrap-v3.webp';
+  var WRAP={ 'brisa-de-parcha':CANW+'brisa-de-parcha-seamless-wrap-v2.webp', 'guayaba-rosada':CANW+'guayaba-rosada-seamless-wrap-v2.webp',
+    'cafe-y-canela':CANW+'cafe-y-canela-seamless-wrap-v2.webp', 'flamboyan-at-dusk':CANW+'flamboyan-at-dusk-seamless-wrap-v2.webp',
+    'rain-on-palm':CANW+'rain-on-palm-dark-seamless-wrap-v3.webp', 'coqui-chorus':CANW+'coqui-chorus-seamless-wrap-v2.webp',
+    'caribbean-night-01':CANW+'caribbean-night-01-seamless-wrap-v2.webp' };
+  var famEl=document.getElementById('family');
+  FAM.forEach(function(id,i){ var p=P[id]; var b=document.createElement('button'); b.type='button';
+    b.setAttribute('role','tab'); b.setAttribute('aria-selected', id===curId?'true':'false'); b.dataset.product=id; b.title=p.label||id;
+    var im=document.createElement('img'); im.src=THUMB[id]||''; im.alt=p.label||id; im.loading='lazy'; im.style.animationDelay=(i*0.4).toFixed(2)+'s'; b.appendChild(im);
+    b.addEventListener('click',function(){ select(id); }); rail.appendChild(b); });
+
+  function revealWords(el, text){ el.innerHTML=''; (text||'').split(/\s+/).filter(Boolean).forEach(function(w,i){
+    var s=document.createElement('span'); s.className='w'; s.textContent=w; s.style.animationDelay=(i*0.085).toFixed(3)+'s';
+    el.appendChild(s); el.appendChild(document.createTextNode(' ')); }); }
+  function syncLabels(p){ if(!p){ return; } eyeEl.textContent=p.eyebrowEn||p.eyebrowEs||''; nameEl.textContent=p.label||''; statusEl.textContent=p.noteEn||p.noteEs||'';
+    if(descEl){ revealWords(descEl, DESC[p.id]||''); }
+    if(insideEl){ insideEl.innerHTML=insideText(p.id); }
+    if(famEl && p.accent){ famEl.style.setProperty('--fam-accent', p.accent); } }
+  function setActive(id){ Array.prototype.forEach.call(rail.querySelectorAll('[data-product]'),function(b){ b.setAttribute('aria-selected', b.dataset.product===id?'true':'false'); }); }
+  function select(id){ curId=id; setActive(id); if(viewer){ viewer.setProduct(id); if(viewer.resetRotation){ viewer.resetRotation(); } } else { syncLabels(P[id]); }
+    /* full-motion: re-skin the whole scroll (palette + can wrap + accent) to the chosen drink.
+       static/fallback (or an id without a theme): just swap the traveling can's wrap. */
+    if(!(window.__drink && window.__drink(id))){
+      if(window.__coq && window.__coq.setLabel){ window.__coq.setLabel(WRAP[id]||COQ_WRAP); }
+    }
+    if(window.__canFront){ window.__canFront(); } }
+
+  canvas.addEventListener('coquirico:productchange', function(e){ syncLabels(e.detail); });
+
+  function mount(){ if(viewer){ return; } try{ viewer=CoquiricoProduct3D.mount(canvas,{ product:curId }); setActive(curId); window.__fam=viewer; }catch(err){} }
+  function unmount(){ if(!viewer){ return; } try{ viewer.destroy(); }catch(err){} viewer=null; window.__fam=null; }
+
+  /* Mount/destroy the GL viewer on DOM proximity (context budget). */
+  var io=new IntersectionObserver(function(entries){ entries.forEach(function(en){
+    if(en.isIntersecting){ mount(); } else { unmount(); } }); }, { rootMargin:'90% 0px 90% 0px' });
+  io.observe(host);
+  syncLabels(P[curId]);
+  window.__famState=function(){ return { mounted:!!viewer, curId:curId, ids:FAM, name:nameEl.textContent, status:statusEl.textContent,
+    canvasSize:[canvas.width,canvas.height] }; };
+})();
+</script>
+<script>
+/* DRINK — ritual cards as live 3D (coquetearte + el-original), lazy-mounted */
+(function(){
+  if(!window.CoquiricoProduct3D){ return; }
+  var host=document.getElementById('drink');
+  var canvases=Array.prototype.slice.call(document.querySelectorAll('.rit-canvas'));
+  if(!host||!canvases.length){ return; }
+  var viewers=[];
+  function mount(){ if(viewers.length){ return; }
+    canvases.forEach(function(c){ try{ viewers.push(CoquiricoProduct3D.mount(c,{ product:c.dataset.product })); }catch(e){} }); }
+  function unmount(){ viewers.forEach(function(v){ try{ v.destroy(); }catch(e){} }); viewers=[]; }
+  var io=new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ mount(); } else { unmount(); } }); }, { rootMargin:'60% 0px 60% 0px' });
+  io.observe(host);
+  window.__ritState=function(){ return { mounted:viewers.length, products:canvases.map(function(c){ return c.dataset.product; }) }; };
+})();
+</script>
+
+<style>
+  /* ===== EL LLAMADO — opening overture (plays over the real hero, then hands scroll to Lenis) ===== */
+  #ov{ position:fixed; inset:0; z-index:90; pointer-events:none; overflow:hidden; }
+  #ov-veil{ position:absolute; inset:0; background:#070c07; opacity:1; }
+  #ov-ff{ position:absolute; inset:0; width:100%; height:100%; }
+  #ov-wave{ position:absolute; inset:0; width:100%; height:100%; }
+  #ov-type{ position:absolute; inset:0; mix-blend-mode:difference; }
+  #ov .ovs{ position:absolute; left:50%; top:50%; font-family:var(--serif); font-style:italic; font-weight:700;
+    color:#fff; font-size:clamp(5rem,21vw,19rem); letter-spacing:-.02em; line-height:.9; opacity:0;
+    white-space:nowrap; will-change:transform,opacity; font-variation-settings:'opsz' 144; }
+  #ov-wordmark{ position:absolute; left:50%; top:50%; font-family:var(--serif); font-style:italic; font-weight:700;
+    color:#fff; mix-blend-mode:difference; font-size:clamp(3rem,13vw,11.5rem); letter-spacing:-.015em; line-height:1;
+    opacity:0; white-space:nowrap; will-change:transform,opacity; font-variation-settings:'opsz' 144; }
+  #ov-kicker{ position:absolute; left:1.6rem; bottom:1.35rem; font-family:var(--sans); font-weight:700; font-size:.62rem;
+    letter-spacing:.36em; text-transform:uppercase; color:var(--amber-b); opacity:0; }
+  #ov-skip{ position:absolute; right:1.5rem; top:1.35rem; pointer-events:auto; font-family:var(--sans); font-weight:700;
+    font-size:.58rem; letter-spacing:.24em; text-transform:uppercase; color:var(--cream); opacity:.5;
+    background:none; border:1px solid rgba(244,234,210,.28); border-radius:20px; padding:.4rem .8rem; cursor:pointer; }
+  #ov-skip:hover{ opacity:.9; }
+  html.ov-lock, html.ov-lock body{ overflow:hidden !important; height:100%; touch-action:none; }
+</style>
+<script>
+/* EL LLAMADO — the coquí's call pours the name up in Fraunces difference-type, then drains to reveal the real hero. */
+(function(){
+  function reduced(){ return new URLSearchParams(location.search).get('motion')==='0'; }
+  if(reduced() || !window.gsap){ return; }                 // static mode → no overture
+  var QA=/[?&]qa=1/.test(location.search);
+
+  /* ---- inject overlay ---- */
+  var ov=document.createElement('div'); ov.id='ov'; ov.setAttribute('aria-hidden','true');
+  ov.innerHTML=''+
+    '<canvas id="ov-ff"></canvas>'+
+    '<div id="ov-veil"></div>'+
+    '<svg id="ov-wave" preserveAspectRatio="none"><path id="ov-wave-path" d=""></path></svg>'+
+    '<div id="ov-type"><span class="ovs" id="ovs0">CO</span><span class="ovs" id="ovs1">QUÍ</span>'+
+      '<span class="ovs" id="ovs2">RI</span><span class="ovs" id="ovs3">CO</span></div>'+
+    '<div id="ov-wordmark">COQUÍRICO</div>'+
+    '<div id="ov-kicker">de noche · canta —</div>'+
+    '<button id="ov-skip" type="button">Skip</button>';
+  document.body.appendChild(ov);
+
+  var veil=ov.querySelector('#ov-veil'), waveSvg=ov.querySelector('#ov-wave'), wavePath=ov.querySelector('#ov-wave-path'),
+      typeLayer=ov.querySelector('#ov-type'), wordmark=ov.querySelector('#ov-wordmark'),
+      kicker=ov.querySelector('#ov-kicker'), skipBtn=ov.querySelector('#ov-skip'),
+      syl=[ov.querySelector('#ovs0'),ov.querySelector('#ovs1'),ov.querySelector('#ovs2'),ov.querySelector('#ovs3')],
+      navbrand=document.querySelector('.navbrand');
+
+  /* ---- lock scroll during the intro ---- */
+  var lenis=window.__lenis, docEl=document.documentElement;
+  function lock(){ docEl.classList.add('ov-lock'); if(lenis&&lenis.stop) lenis.stop(); try{ scrollTo(0,0);}catch(e){}
+    addEventListener('wheel',prevent,{passive:false}); addEventListener('touchmove',prevent,{passive:false}); addEventListener('keydown',keyPrevent,false); }
+  function unlock(){ docEl.classList.remove('ov-lock'); removeEventListener('wheel',prevent,{passive:false});
+    removeEventListener('touchmove',prevent,{passive:false}); removeEventListener('keydown',keyPrevent,false);
+    if(lenis){ if(lenis.start) lenis.start(); if(lenis.scrollTo) lenis.scrollTo(0,{immediate:true}); } }
+  function prevent(e){ e.preventDefault(); }
+  function keyPrevent(e){ if([32,33,34,35,36,38,40].indexOf(e.keyCode)>=0) e.preventDefault(); }
+
+  /* ---- state + wave engine (buildWavePath, verbatim shape) ---- */
+  var S={ wLevel:0.045, creamMix:0, bloom:0, waveOn:true };
+  function easeWipe(w){ var e=w<0.5?4*w*w*w:1-Math.pow(-2*w+2,3)/2; return e+Math.sin(w*Math.PI)*0.03*Math.sin(w*9.4); }
+  function buildWave(w,time,H,W){ var edge=(1-easeWipe(Math.min(1,w)))*H, amp=Math.sin(Math.PI*Math.min(1,w))*H*0.05+6;
+    var pts=['M0 '+H,'L0 '+edge.toFixed(1)],N=30;
+    for(var i=0;i<=N;i++){ var x=i/N*W, y=edge+Math.sin(i/N*Math.PI*2.6+time*1.7)*amp+Math.sin(i/N*Math.PI*5.2-time*1.1)*amp*0.45; pts.push('L'+x.toFixed(1)+' '+y.toFixed(1)); }
+    pts.push('L'+W+' '+H,'Z'); return pts.join(' '); }
+  function lerpHex(a,b,t){ function h(x){return [parseInt(x.substr(1,2),16),parseInt(x.substr(3,2),16),parseInt(x.substr(5,2),16)];}
+    var A=h(a),B=h(b); return 'rgb('+Math.round(A[0]+(B[0]-A[0])*t)+','+Math.round(A[1]+(B[1]-A[1])*t)+','+Math.round(A[2]+(B[2]-A[2])*t)+')'; }
+
+  /* ---- overlay fireflies ---- */
+  var ff=ov.querySelector('#ov-ff'), fx=ff.getContext('2d'), FF=[], DPR=Math.min(devicePixelRatio,2), seed={x:.5,y:.5,on:0};
+  function sizeFF(){ ff.width=innerWidth*DPR; ff.height=innerHeight*DPR; }
+  sizeFF(); addEventListener('resize', sizeFF);
+  for(var i=0;i<46;i++){ FF.push({x:Math.random(),y:Math.random(),r:.6+Math.random()*1.7,vx:(Math.random()-.5)*6e-5,vy:-8e-5-Math.random()*12e-5,ph:Math.random()*6.28,sp:.6+Math.random()*1.2}); }
+  function drawFF(tSec){ fx.clearRect(0,0,ff.width,ff.height);
+    for(var i=0;i<FF.length;i++){ var f=FF[i]; f.x+=f.vx; f.y+=f.vy;
+      if(S.bloom>0){ f.x+=(f.x-seed.x)*S.bloom*.02; f.y+=(f.y-seed.y)*S.bloom*.02; }
+      if(f.y<-.05){f.y=1.05;f.x=Math.random();} if(f.x<-.05)f.x=1.05; if(f.x>1.05)f.x=-.05;
+      var px=f.x*ff.width,py=f.y*ff.height,a=Math.min(1,(0.3+0.7*(0.5+0.5*Math.sin(tSec*f.sp+f.ph)))*(0.3+0.7*S.bloom+0.2)),R=f.r*DPR*(1+S.bloom*.5)*6;
+      var g=fx.createRadialGradient(px,py,0,px,py,R); g.addColorStop(0,'rgba(255,224,150,'+(a*.9).toFixed(3)+')'); g.addColorStop(1,'rgba(255,224,150,0)');
+      fx.fillStyle=g; fx.beginPath(); fx.arc(px,py,R,0,6.2832); fx.fill(); }
+    if(seed.on>0){ var sx=seed.x*ff.width,sy=seed.y*ff.height,rr=(60+180*(1-seed.on))*DPR; var g2=fx.createRadialGradient(sx,sy,0,sx,sy,rr);
+      g2.addColorStop(0,'rgba(255,230,160,'+(.5*seed.on).toFixed(3)+')'); g2.addColorStop(1,'rgba(255,230,160,0)'); fx.fillStyle=g2; fx.beginPath(); fx.arc(sx,sy,rr,0,6.2832); fx.fill(); seed.on*=.94; if(seed.on<.01)seed.on=0; }
+  }
+
+  /* ---- single render loop on gsap.ticker ---- */
+  var t0=performance.now();
+  function render(){ var tSec=(performance.now()-t0)/1000, W=innerWidth, H=innerHeight;
+    waveSvg.setAttribute('viewBox','0 0 '+W+' '+H);
+    if(S.waveOn){ waveSvg.style.display='block'; wavePath.setAttribute('d', buildWave(S.wLevel,tSec,H,W)); wavePath.setAttribute('fill', lerpHex('#b5611f','#f4ead2',S.creamMix)); }
+    else waveSvg.style.display='none';
+    drawFF(tSec);
+  }
+  gsap.ticker.add(render);
+
+  /* ---- audio (best-effort; arms on gesture) ---- */
+  var AC=window.AudioContext||window.webkitAudioContext, ctx=null, master=null;
+  function audioOn(){ if(!AC) return; if(!ctx){ ctx=new AC(); master=ctx.createGain(); master.gain.value=.85; master.connect(ctx.destination); } if(ctx.state==='suspended') ctx.resume(); }
+  function coqui(dist,pan){ if(!ctx) return; var t=ctx.currentTime+.02, vol=.24*(1-dist*.72), lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=6200-dist*4400;
+    var pn=ctx.createStereoPanner?ctx.createStereoPanner():null; if(pn){pn.pan.value=pan||0; lp.connect(pn); pn.connect(master);} else lp.connect(master);
+    [[1080,1120,t,.10,vol],[1480,2140,t+.185,.30,vol*1.15]].forEach(function(n){ var o=ctx.createOscillator(); o.type='sine'; var g=ctx.createGain();
+      o.frequency.setValueAtTime(n[0],n[2]); o.frequency.exponentialRampToValueAtTime(n[1],n[2]+n[3]*.8); g.gain.setValueAtTime(.0001,n[2]); g.gain.exponentialRampToValueAtTime(n[4],n[2]+.018); g.gain.exponentialRampToValueAtTime(.0001,n[2]+n[3]); o.connect(g); g.connect(lp); o.start(n[2]); o.stop(n[2]+n[3]+.05); }); }
+  var NOTES=[[1080,1120,.12],[1500,2100,.22],[1560,1450,.14],[1180,1240,.20]];
+  function brandNote(i){ if(!ctx) return; var n=NOTES[i], t=ctx.currentTime+.02, lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=5200; lp.connect(master);
+    var o=ctx.createOscillator(); o.type='sine'; var g=ctx.createGain(); o.frequency.setValueAtTime(n[0],t); o.frequency.exponentialRampToValueAtTime(n[1],t+n[2]*.8);
+    g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.27,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+n[2]); o.connect(g); g.connect(lp); o.start(t); o.stop(t+n[2]+.06); }
+
+  /* ---- the master timeline ---- */
+  var done=false, tl=null;
+  function build(){
+    gsap.set(syl,{xPercent:-50,yPercent:-50}); gsap.set(wordmark,{xPercent:-50,yPercent:-50});
+    tl=gsap.timeline({ paused:QA, defaults:{ ease:'power3.out' }, onComplete:finish });
+    tl.to(kicker,{opacity:.85,duration:.5},0.05);
+    tl.add(function(){ audioOn(); coqui(.45,0); seed.x=.62; seed.y=.42; seed.on=1; gsap.to(S,{bloom:.35,duration:.5,ease:'power2.out'}); },0.5);
+    var beats=[0.9,1.55,2.1,2.6], levels=[0.28,0.52,0.74,1.0], mixes=[0.15,0.5,0.78,1.0];
+    beats.forEach(function(bt,i){
+      tl.add(function(){ brandNote(i); },bt);
+      tl.to(S,{wLevel:levels[i], creamMix:mixes[i], duration:(i<3?0.5:0.62), ease:'power2.inOut'},bt);
+      if(i>0) tl.to(syl[i-1],{opacity:0,yPercent:-98,duration:.28,ease:'power2.in'},bt);
+      tl.fromTo(syl[i],{opacity:0,xPercent:-50,yPercent:-14,scale:.9},{opacity:1,xPercent:-50,yPercent:-50,scale:1,duration:.44,ease:'power3.out'},bt+0.07);
+    });
+    tl.to(S,{bloom:.7,duration:.7},2.1);
+    tl.to(syl[3],{opacity:0,duration:.35},3.05);
+    tl.fromTo(wordmark,{opacity:0,scale:.94},{opacity:1,scale:1,duration:.4,ease:'power2.out'},3.0);
+    // drain: recede the cream, lift the veil → reveal the REAL hero underneath
+    tl.to(S,{wLevel:0.045, creamMix:1.0, duration:.8, ease:'power2.inOut'},3.35);
+    tl.to(veil,{opacity:0,duration:.85,ease:'power2.inOut'},3.4);
+    tl.to(ff,{opacity:0,duration:.7,ease:'power2.out'},3.75);
+    tl.add(function(){ flipToHero(); },4.0);
+    tl.add(function(){ audioOn(); coqui(.25,-.2); },4.15);
+    window.__ov=tl; window.__ovSeek=function(t){ done=false; S.waveOn=true; veil.style.display=''; waveSvg.style.display=''; ff.style.opacity=1; gsap.set(veil,{opacity:1}); if(wordmark){wordmark.style.display=''; gsap.set(wordmark,{clearProps:'x,y'});} tl.pause(); tl.time(t); render(); return {t:t,wLevel:+S.wLevel.toFixed(3),creamMix:+S.creamMix.toFixed(3),bloom:+S.bloom.toFixed(3)}; };
+    setTimeout(function(){ if(!done) finish(); }, 12000);   // safety net: never leave the page locked if the intro is interrupted (well beyond the ~4.5s intro)
+  }
+  function flipToHero(){
+    if(!navbrand){ return; }
+    var wr=wordmark.getBoundingClientRect(), nr=navbrand.getBoundingClientRect();
+    var wcx=wr.left+wr.width/2, wcy=wr.top+wr.height/2, ncx=nr.left+nr.width/2, ncy=nr.top+nr.height/2, sc=nr.width/Math.max(1,wr.width);
+    gsap.to(wordmark,{ x:(ncx-wcx), y:(ncy-wcy), scale:sc, opacity:0, duration:.7, ease:'power3.inOut' });
+  }
+  function finish(){ if(done) return; done=true;
+    S.waveOn=false; gsap.ticker.remove(render);
+    unlock();
+    if(ov&&ov.parentNode){ ov.parentNode.removeChild(ov); }
+    // gently wake the hero's ambient coquí feel is handled by the site; nothing else needed
+  }
+  function skip(){ audioOn(); if(tl){ tl.pause(); } finish(); }
+  skipBtn.addEventListener('click', function(e){ e.stopPropagation(); skip(); });
+  ['pointerdown','keydown','wheel','touchstart'].forEach(function(ev){ addEventListener(ev, function(){ audioOn(); }, {passive:true}); });
+
+  function boot(){ lock(); build(); }
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(boot); setTimeout(function(){ if(!tl) boot(); }, 1000); }
+  else boot();
+})();
+</script>
+</body>
+</html>
