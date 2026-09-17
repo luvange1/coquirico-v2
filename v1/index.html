@@ -237,6 +237,10 @@
       background:linear-gradient(180deg,rgba(244,234,210,0) 0%,rgba(244,234,210,.78) 9%,rgba(244,234,210,.95) 24%,rgba(244,234,210,.97) 100%); }
     .rit{ flex-wrap:wrap; }
     .study{ flex:1 1 44%; }
+    /* THE mobile scroll trap: these canvases use touch-action:none so the can can be dragged on
+       desktop. On a phone your finger lands on the can (86vw wide) and the page simply refuses to
+       scroll. pan-y gives the page vertical swipes back and keeps horizontal drags for turning. */
+    .rit-canvas,#fam-canvas{ touch-action:pan-y; }
   }
 
   /* merch stage */
