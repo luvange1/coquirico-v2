@@ -1516,6 +1516,15 @@ function initCan(canvas){
     font-size:.58rem; letter-spacing:.24em; text-transform:uppercase; color:var(--cream); opacity:.5;
     background:none; border:1px solid rgba(244,234,210,.28); border-radius:20px; padding:.4rem .8rem; cursor:pointer; }
   #ov-skip:hover{ opacity:.9; }
+  /* on a phone this button is the only way out of the intro, so it gets a 44px target, a visible
+     edge and safe-area insets — it was small tracked-out text tucked under the notch */
+  @media (max-width:700px), (hover:none){
+    #ov-skip{ right:max(1rem, env(safe-area-inset-right)); top:max(1rem, env(safe-area-inset-top));
+      min-height:44px; min-width:88px; display:inline-flex; align-items:center; justify-content:center;
+      padding:.7rem 1.1rem; font-size:.74rem; letter-spacing:.16em; opacity:1;
+      border:1px solid rgba(244,234,210,.45); border-radius:999px;
+      background:rgba(8,14,8,.5); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
+  }
   html.ov-lock, html.ov-lock body{ overflow:hidden !important; height:100%; touch-action:none; }
 </style>
 <script>
@@ -1607,6 +1616,9 @@ function initCan(canvas){
   function build(){
     gsap.set(syl,{xPercent:-50,yPercent:-50}); gsap.set(wordmark,{xPercent:-50,yPercent:-50});
     tl=gsap.timeline({ paused:QA, defaults:{ ease:'power3.out' }, onComplete:finish });
+    /* A 4.5s title sequence is a cinema opening on a 27" screen and an obstacle on a phone, where
+       the first gesture is a thumb already moving. Same choreography, 1.6x faster (~2.8s). */
+    if(window.COQ_SMALL) tl.timeScale(1.6);
     tl.to(kicker,{opacity:.85,duration:.5},0.05);
     tl.add(function(){ audioOn(); coqui(.45,0); seed.x=.62; seed.y=.42; seed.on=1; gsap.to(S,{bloom:.35,duration:.5,ease:'power2.out'}); },0.5);
     var beats=[0.9,1.55,2.1,2.6], levels=[0.28,0.52,0.74,1.0], mixes=[0.15,0.5,0.78,1.0];
@@ -1626,7 +1638,14 @@ function initCan(canvas){
     tl.add(function(){ flipToHero(); },4.0);
     tl.add(function(){ audioOn(); coqui(.25,-.2); },4.15);
     window.__ov=tl; window.__ovSeek=function(t){ done=false; S.waveOn=true; veil.style.display=''; waveSvg.style.display=''; ff.style.opacity=1; gsap.set(veil,{opacity:1}); if(wordmark){wordmark.style.display=''; gsap.set(wordmark,{clearProps:'x,y'});} tl.pause(); tl.time(t); render(); return {t:t,wLevel:+S.wLevel.toFixed(3),creamMix:+S.creamMix.toFixed(3),bloom:+S.bloom.toFixed(3)}; };
-    setTimeout(function(){ if(!done) finish(); }, 12000);   // safety net: never leave the page locked if the intro is interrupted (well beyond the ~4.5s intro)
+    /* Safety net: never leave the page locked if the intro is interrupted.
+       12s is fine on a desktop, where an unresponsive page for a moment is survivable. On a phone
+       it is the whole experience: measured at 393x852, the scroll lock held for 11.8 SECONDS
+       because the GSAP timeline is rAF-driven and had not reached onComplete, so this net was what
+       eventually released it. Pedro: "i cant even move in mobile preview."
+       A phone gets 3.8s, which is past the (time-scaled) intro with room to spare, and is short
+       enough that a stall never reads as a broken page. */
+    setTimeout(function(){ if(!done) finish(); }, window.COQ_SMALL ? 3800 : 12000);
   }
   function flipToHero(){
     if(!navbrand){ return; }
