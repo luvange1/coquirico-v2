@@ -24,6 +24,7 @@
   --sans:'Instrument Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
   --container:1440px; --gutter:48px;
   --sec:150px; --r-media:40px; --r-card:28px; --r-pill:999px;
+  --theme:var(--amber); /* V1 heritage: follows the drink you pick in Las latas */
 }
 *{box-sizing:border-box}
 html{scroll-behavior:auto;-webkit-text-size-adjust:100%}
@@ -35,7 +36,8 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;margin:0;letter-spacing:-.01em
 p{margin:0}
 .wrap{width:min(var(--container),100% - var(--gutter)*2);margin-inline:auto}
 .wrap-wide{width:min(1780px,100% - var(--gutter)*2);margin-inline:auto}
-.eyebrow{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--leaf-deep)}
+.eyebrow{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:color-mix(in srgb,var(--theme) 42%,var(--leaf-deep));transition:color .6s ease}
+::selection{background:color-mix(in srgb,var(--theme) 32%,#fff)}
 .h2{font-size:64px;line-height:1.04;font-weight:500;letter-spacing:-.012em}
 .h3{font-size:30px;line-height:1.15;font-weight:500}
 .lead{font-size:19px;line-height:1.6;color:var(--ink-2);max-width:56ch}
@@ -141,7 +143,10 @@ p{margin:0}
 .pill.study{border-style:dashed;border-color:var(--ink-3);color:var(--ink-2)}
 .pill.concept{background:var(--ink);border-color:var(--ink);color:#E8DFC8}
 .drink.is-open .name{text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1px}
-.drink-detail{margin-top:80px;display:grid;grid-template-columns:520px 1fr;gap:72px;align-items:center;padding:44px 64px 44px 48px;border-radius:var(--r-card);background:var(--paper-2);border:1px solid var(--rule)}
+.drink-detail{position:relative;overflow:hidden;margin-top:80px;display:grid;grid-template-columns:520px 1fr;gap:72px;align-items:center;padding:44px 64px 44px 48px;border-radius:var(--r-card);background:var(--paper-2);border:1px solid var(--rule)}
+/* V1 heritage — the pour: switching drinks sends a liquid wave of that drink's color across the card */
+.drink-wave{position:absolute;inset:0;z-index:4;pointer-events:none;display:none;width:100%;height:100%}
+.drink-wave.on{display:block}
 .drink-detail .fig{position:relative;height:520px;display:flex;justify-content:center;align-items:flex-end}
 .drink-detail .fig .disc{position:absolute;left:50%;bottom:0;width:340px;height:520px;border-radius:170px 170px 14px 14px;background:var(--paper-3);background:radial-gradient(120% 78% at 50% 24%,color-mix(in srgb,var(--accent) 18%,#fff) 0%,color-mix(in srgb,var(--accent) 46%,#fff) 72%,color-mix(in srgb,var(--accent) 54%,#fff) 100%);transform:translateX(-50%)}
 .drink-detail .fig img{position:relative;width:400px;height:auto;margin-bottom:-6px}
@@ -663,14 +668,57 @@ p{margin:0}
     grid.appendChild(li);
   });
 
+  /* V1 heritage — the pour wave (easeWipe/buildWavePath ported byte-for-byte from the loved proof).
+     Switching drinks pours that drink's color up over the card, swaps the content at the crest,
+     then drains back down. Reduced-motion falls back to the plain crossfade. */
+  var waveSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  waveSvg.setAttribute('class', 'drink-wave');
+  waveSvg.setAttribute('viewBox', '0 0 1000 600');
+  waveSvg.setAttribute('preserveAspectRatio', 'none');
+  waveSvg.setAttribute('aria-hidden', 'true');
+  var wavePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  waveSvg.appendChild(wavePath);
+  detail.appendChild(waveSvg);
+  var waving = false;
+  function easeWipe(w){ var e = w < 0.5 ? 4*w*w*w : 1 - Math.pow(-2*w + 2, 3)/2; return e + Math.sin(w*Math.PI)*0.03*Math.sin(w*9.4); }
+  function buildWavePath(w, time, H, W){
+    var edge = (1 - easeWipe(w))*H, amp = Math.sin(Math.PI*w)*H*0.055;
+    var pts = ['M0 ' + H, 'L0 ' + edge.toFixed(1)], N = 28;
+    for (var i = 0; i <= N; i++){ var x = i/N*W;
+      var y = edge + Math.sin(i/N*Math.PI*2.6 + time*1.7)*amp + Math.sin(i/N*Math.PI*5.2 - time*1.1)*amp*0.45;
+      pts.push('L' + x.toFixed(1) + ' ' + y.toFixed(1)); }
+    pts.push('L' + W + ' ' + H, 'Z'); return pts.join(' ');
+  }
+  function waveSwap(accent, atCrest){
+    waving = true;
+    wavePath.style.fill = accent;
+    waveSvg.classList.add('on');
+    var t0 = performance.now(), UP = 420, DOWN = 460, swapped = false;
+    /* driven from gsap.ticker (not raw rAF) so QA can advance it with manual gsap.ticker.tick() */
+    function frame(){
+      var now = performance.now(), el = now - t0, time = now/1000;
+      if (el <= UP){
+        wavePath.setAttribute('d', buildWavePath(Math.min(1, el/UP), time, 600, 1000));
+      } else {
+        if (!swapped){ swapped = true; atCrest(); }
+        var w = 1 - Math.min(1, (el - UP)/DOWN);
+        wavePath.setAttribute('d', buildWavePath(w, time, 600, 1000));
+        if (el >= UP + DOWN){ gsap.ticker.remove(frame); waveSvg.classList.remove('on'); waving = false; }
+      }
+    }
+    gsap.ticker.add(frame);
+  }
+  var quietMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   function open(id){
-    if (id === current) return;
+    if (id === current || waving) return;
     var d = DRINKS.filter(function(x){ return x.id === id; })[0];
     if (!d) return;
     current = id;
     Array.prototype.forEach.call(grid.children, function(li){
       li.classList.toggle('is-open', li.getAttribute('data-id') === id);
     });
+    document.documentElement.style.setProperty('--theme', d.accent);
     var apply = function(){
       detail.style.setProperty('--accent', d.accent);
       var im = detail.querySelector('.fig img');
@@ -685,10 +733,9 @@ p{margin:0}
       detail.querySelector('[data-d="tags"]').textContent = d.tags;
       detail.classList.remove('fade');
     };
-    if (detail.classList.contains('ready')){
-      detail.classList.add('fade');
-      setTimeout(apply, 220);
-    } else { apply(); detail.classList.add('ready'); }
+    if (!detail.classList.contains('ready')){ apply(); detail.classList.add('ready'); }
+    else if (quietMotion){ detail.classList.add('fade'); setTimeout(apply, 220); }
+    else { waveSwap(d.accent, apply); }
   }
   open('coquetearte');
 
