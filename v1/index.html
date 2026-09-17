@@ -339,6 +339,25 @@
       padding:.8rem .7rem; min-height:44px; display:inline-flex; align-items:center; }
     .footer .fnote,#findus .fnote{ font-size:.74rem; letter-spacing:.1em; line-height:1.8;
       max-width:36ch; margin:0 auto; }
+  
+    /* --- one chapter per screen: the plates measured 740px inside an 844px viewport, so two
+           chapters of copy were on screen at once with dead film between them. Tighter headline,
+           leading and padding bring a plate to ~570px so each chapter lands on its own screen. --- */
+    .chapter h2{ font-size:clamp(1.6rem,7vw,2.05rem); line-height:1.07; margin-bottom:.5rem; }
+    .chapter .sensory{ font-size:.9rem; line-height:1.38; margin-bottom:.65rem; }
+    .chapter .body{ font-size:.94rem; line-height:1.48; }
+    .chapter .facts{ margin-top:.55rem; }
+    .chapter .inner,
+    .chapter[data-side="right"] .inner{ padding:24px 16px 18px; }
+  
+    /* --- the tallest two chapters still overran the screen (772px and 743px in an 844px
+           viewport), which is what put two chapters of copy on screen at once --- */
+    #drink .rituals{ gap:8px; margin-top:.9rem; }
+    #drink .rit{ padding:10px; }
+    #drink .rit-canvas{ height:104px; }
+    #drink .status{ font-size:.66rem; padding:.38rem .7rem; }
+    #world > .inner{ padding-bottom:150px; }
+    #world .fam-rail{ margin-top:.6rem; }
   }
 
   /* merch stage */
