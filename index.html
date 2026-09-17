@@ -224,14 +224,68 @@ p{margin:0}
 .form input:focus{border-color:var(--ink)}
 .form .status{font-size:14px;color:var(--leaf-deep);min-height:1.4em}
 
+/* ---------------- EL COQUÍ TE ACOMPAÑA ----------------
+   The brand's frog rides the page with you: he hops from section to section down a hairline
+   rail, names where you are, and sings when you touch him. De noche, fireflies find him.
+   The rail doubles as real section navigation. Desktop only — mobile stays clean. */
+/* he lives in the 48px page gutter — never over the content, at any width */
+.cq-rail{position:fixed;right:21px;top:23vh;height:54vh;width:1px;z-index:39;display:none;
+  background:linear-gradient(180deg,transparent 0%,var(--rule-2) 10%,var(--rule-2) 90%,transparent 100%)}
+.cq-tick{position:absolute;right:-9px;width:19px;height:19px;margin-top:-9px;display:grid;place-items:center;background:none;border:0;cursor:pointer}
+.cq-tick::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--ink-3);opacity:.45;transition:opacity .3s ease,transform .3s cubic-bezier(.34,1.56,.5,1),background .3s ease}
+.cq-tick:hover::after{opacity:.9;transform:scale(1.6)}
+.cq-tick.on::after{background:var(--theme);opacity:1;transform:scale(1.5)}
+.cq-tick:focus-visible{outline:2px solid var(--theme);outline-offset:2px;border-radius:50%}
+#cq-guide{position:fixed;right:6px;top:0;z-index:40;display:none;will-change:transform}
+.cq-frog{position:relative;display:block;width:30px;padding:0;background:none;border:0;cursor:pointer;will-change:transform}
+.cq-frog img{width:100%;display:block;filter:drop-shadow(0 4px 8px rgba(36,24,18,.22))}
+:root[data-noche] .cq-frog img{filter:brightness(0) invert(1) drop-shadow(0 0 7px rgba(233,192,106,.45))}
+.cq-frog:focus-visible{outline:2px solid var(--theme);outline-offset:4px;border-radius:8px}
+.cq-label,.cq-bubble{position:absolute;right:40px;top:8px;white-space:nowrap;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);opacity:0;transform:translateX(6px);transition:opacity .4s ease,transform .4s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+.cq-label.on{opacity:.85;transform:translateX(0)}
+.cq-bubble{top:4px;max-width:250px;white-space:normal;text-transform:none;letter-spacing:.01em;font-size:12.5px;font-weight:400;line-height:1.45;font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:14px;padding:10px 14px;box-shadow:0 16px 34px -16px rgba(36,24,18,.4);text-align:right}
+.cq-bubble.on{opacity:1;transform:translateX(0)}
+:root[data-noche] .cq-bubble{background:var(--paper-2)}
+.cq-ff{position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,#FFE9A8 0%,rgba(255,233,168,0) 70%);opacity:0;pointer-events:none}
+:root[data-noche] .cq-ff{animation:cqff 4.6s ease-in-out infinite}
+:root[data-noche] .cq-ff:nth-child(3){animation-duration:6.1s;animation-delay:1.5s}
+:root[data-noche] .cq-ff:nth-child(4){animation-duration:5.3s;animation-delay:2.9s}
+@keyframes cqff{0%,100%{opacity:0;transform:translate(-14px,4px)}30%{opacity:.95}50%{opacity:.5;transform:translate(12px,-14px)}80%{opacity:.8;transform:translate(-8px,-22px)}}
+/* at "Dónde" he leaps off the rail into the island — the map's traveler is him */
+.cq-frog{transition:opacity .45s ease,transform .45s cubic-bezier(.5,-0.4,.7,.6)}
+#cq-guide.away .cq-frog{opacity:0;transform:scale(.3) translate(-26px,14px);pointer-events:none}
+#cq-guide.away .cq-label,#cq-guide.away .cq-bubble{opacity:0}
+@media (min-width:1100px){ .cq-rail,#cq-guide{display:block} }
+/* the passive label only appears where there is real margin for it; the bubble is user-invoked */
+.cq-label{display:none}
+@media (min-width:1660px){ .cq-label{display:block} }
+@media (prefers-reduced-motion:reduce){ .cq-ff{animation:none} }
+
 /* ---------------- EL COLMADO (the map is a place) ----------------
    Evening on the island: the route home draws itself out of El Yunque, the pins glow like
    storefront signs, each town opens a little colmado vignette. De noche the map goes full
    night — moon up, fireflies out. */
 .map-card{background:linear-gradient(180deg,#F3E0C6 0%,#E3EFE4 46%,#DCEFE9 100%)}
-.ruta{stroke:#B98A36;stroke-width:2.2;stroke-linecap:round;opacity:.5;stroke-dasharray:1;stroke-dashoffset:1}
-.yunque path{stroke:var(--leaf-deep);stroke-width:2;stroke-linejoin:round;opacity:.75}
-.yq-t{font-family:var(--serif);font-style:italic;font-size:15px;fill:var(--ink-2)}
+.ruta{stroke:#B98A36;stroke-width:2.2;stroke-linecap:round;opacity:.55;stroke-dasharray:1;stroke-dashoffset:1}
+.sierra path{stroke:var(--leaf-deep);stroke-width:2;stroke-linejoin:round;opacity:.7}
+.map-card .pin.origen text{font-family:var(--serif);font-style:italic;font-size:15px}
+/* el viajero — the coquí walking the island, drawing the route behind him */
+.viajero{opacity:0;transition:opacity .6s ease}
+.map-card.journey .viajero{opacity:1}
+.vj-glow{fill:rgba(201,138,54,.28)}
+:root[data-noche] .vj-glow{fill:rgba(233,192,106,.32)}
+:root[data-noche] .vj-frog{filter:brightness(0) invert(1)}
+/* the island lights up town by town as he passes */
+.map-card.journey .pin{opacity:.34;transition:opacity .55s ease}
+.map-card.journey .pin.lit,.map-card.journey .pin.on,.map-card.journey .pin:hover{opacity:1}
+.map-card .pin text{transition:fill .45s ease}
+.map-card .pin.flash text{fill:#B9812F}
+:root[data-noche] .map-card .pin.flash text{fill:#E9C06A}
+.map-sea{position:absolute;width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.95);opacity:0;pointer-events:none;animation:seaTwinkle 5s ease-in-out infinite}
+.map-sea:nth-of-type(even){animation-duration:6.8s;animation-delay:1.8s}
+:root[data-noche] .map-sea{display:none}
+@keyframes seaTwinkle{0%,100%{opacity:0}50%{opacity:.8}}
+.tc-r{display:block;font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:.17em;text-transform:uppercase;color:var(--ink-3);margin-bottom:2px}
 .map-moon{display:none}
 .map-moon circle{fill:#F2E9C8}
 .map-moon .mm-bite{fill:#13201C}
@@ -250,8 +304,7 @@ p{margin:0}
 :root[data-noche] .map-card{background:linear-gradient(180deg,#0A111C 0%,#0F1B1A 55%,#13201C 100%)}
 :root[data-noche] .map-moon{display:block}
 :root[data-noche] .ruta{stroke:#E9C06A;opacity:.75}
-:root[data-noche] .yunque path{stroke:var(--palm)}
-:root[data-noche] .yq-t{fill:var(--ink-2)}
+:root[data-noche] .sierra path{stroke:var(--palm)}
 :root[data-noche] .map-card .pin circle{filter:drop-shadow(0 0 6px rgba(233,192,106,.8));animation:signglow 2.8s ease-in-out infinite alternate}
 :root[data-noche] .town-card{background:rgba(16,24,19,.96);border-color:var(--rule)}
 :root[data-noche] .town-card .cm .cm-b,:root[data-noche] .town-card .cm .cm-d{stroke:var(--palm)}
@@ -268,9 +321,9 @@ p{margin:0}
   .town-card{width:150px;padding:10px 11px}
   .town-card b{font-size:15.5px}
   .town-card p{font-size:11.5px}
-  .town-card[data-town="sj"]{left:auto;right:4%}
-  .town-card[data-town="cg"]{left:auto;right:8%}
-  .town-card[data-town="mz"]{left:5%}
+  /* the little map has no room for floating cards — on phones the town reads as a caption
+     strip pinned to the bottom of the map (inline left/top need !important to lose) */
+  .town-card{left:10px!important;right:10px!important;top:auto!important;bottom:8px;width:auto}
 }
 
 /* ---------------- FAQ ---------------- */
@@ -528,6 +581,17 @@ p{margin:0}
   </div>
 </header>
 
+<!-- ============ EL COQUÍ TE ACOMPAÑA — he rides the page with you ============ -->
+<nav class="cq-rail" id="cq-rail" aria-label="Secciones"></nav>
+<div id="cq-guide">
+  <span class="cq-label" aria-hidden="true"></span>
+  <span class="cq-bubble" aria-hidden="true"></span>
+  <button type="button" class="cq-frog" id="cq-frog" aria-label="El coquí — tócalo y canta">
+    <img src="assets/label/coqui-mark-ink.webp" srcset="assets/label/coqui-mark-ink.webp 1x, assets/label/coqui-mark-ink@2x.webp 2x" alt="" aria-hidden="true" width="36" height="36">
+    <span class="cq-ff" aria-hidden="true"></span><span class="cq-ff" aria-hidden="true"></span><span class="cq-ff" aria-hidden="true"></span>
+  </button>
+</div>
+
 <main id="top">
 
 <!-- ============ HERO ============ -->
@@ -711,20 +775,25 @@ p{margin:0}
         </g>
         <!-- El Colmado: the route home — from El Yunque out to every town we're walking toward -->
         <path class="ruta" pathLength="1" d="M742 128 C 700 96, 655 84, 612 78 C 618 112, 616 146, 612 180 C 566 214, 512 254, 470 288 C 380 262, 200 220, 84 196" fill="none"/>
-        <g class="yunque" aria-hidden="true">
-          <path d="M726 132 742 106 758 132 Z M740 132 752 112 764 132 Z" fill="none"/>
-          <text x="742" y="152" text-anchor="middle" class="yq-t">El Yunque</text>
-        </g>
+        <g class="sierra" aria-hidden="true"><path d="M754 126 770 100 786 126 Z M768 126 780 108 792 126 Z" fill="none"/></g>
         <g class="map-moon" aria-hidden="true"><circle cx="930" cy="52" r="16"/><circle class="mm-bite" cx="938" cy="46" r="14"/></g>
+        <g class="pin origen" data-town="yq"><circle cx="742" cy="128" r="7"/><text x="742" y="156" text-anchor="middle">El Yunque <tspan class="s">— el origen</tspan></text></g>
         <g class="pin" data-town="sj"><circle cx="612" cy="78" r="7"/><text x="600" y="46">San Juan <tspan class="s">— coming soon</tspan></text></g>
         <g class="pin" data-town="cg"><circle cx="612" cy="180" r="7"/><text x="600" y="185" text-anchor="end">Caguas <tspan class="s">— coming soon</tspan></text></g>
         <g class="pin" data-town="pn"><circle cx="470" cy="288" r="7"/><text x="470" y="348" text-anchor="middle">Ponce <tspan class="s">— coming soon</tspan></text></g>
         <g class="pin" data-town="mz"><circle cx="84" cy="196" r="7"/><text x="100" y="201">Mayagüez <tspan class="s">— coming soon</tspan></text></g>
+        <!-- el viajero: the coquí himself, walking the island and drawing the route behind him -->
+        <g class="viajero" aria-hidden="true">
+          <circle class="vj-glow" r="14"/>
+          <image class="vj-frog" href="assets/label/coqui-mark-ink.webp" x="-11" y="-11" width="22" height="22"/>
+        </g>
       </svg>
-      <div class="town-card" data-town="sj" style="left:64%;top:26%"><svg class="cm" viewBox="0 0 44 32" aria-hidden="true"><path class="cm-a" d="M4 12 Q7 6 10 12 Q13 6 16 12 Q19 6 22 12 Q25 6 28 12 Q31 6 34 12 Q37 6 40 12"/><path class="cm-b" d="M6 12v14h32V12"/><path class="cm-d" d="M18 26v-8h8v8"/><circle class="cm-l" cx="33" cy="19" r="2"/></svg><b>San Juan</b><p>Where the first fridges hum.</p></div>
-      <div class="town-card" data-town="cg" style="left:64%;top:54%"><svg class="cm" viewBox="0 0 44 32" aria-hidden="true"><path class="cm-a" d="M4 12 Q7 6 10 12 Q13 6 16 12 Q19 6 22 12 Q25 6 28 12 Q31 6 34 12 Q37 6 40 12"/><path class="cm-b" d="M6 12v14h32V12"/><path class="cm-d" d="M18 26v-8h8v8"/><circle class="cm-l" cx="33" cy="19" r="2"/></svg><b>Caguas</b><p>The valley in the middle of everything.</p></div>
-      <div class="town-card" data-town="pn" style="left:47%;top:54%"><svg class="cm" viewBox="0 0 44 32" aria-hidden="true"><path class="cm-a" d="M4 12 Q7 6 10 12 Q13 6 16 12 Q19 6 22 12 Q25 6 28 12 Q31 6 34 12 Q37 6 40 12"/><path class="cm-b" d="M6 12v14h32V12"/><path class="cm-d" d="M18 26v-8h8v8"/><circle class="cm-l" cx="33" cy="19" r="2"/></svg><b>Ponce</b><p>The south, señorial and slow.</p></div>
-      <div class="town-card" data-town="mz" style="left:11%;top:28%"><svg class="cm" viewBox="0 0 44 32" aria-hidden="true"><path class="cm-a" d="M4 12 Q7 6 10 12 Q13 6 16 12 Q19 6 22 12 Q25 6 28 12 Q31 6 34 12 Q37 6 40 12"/><path class="cm-b" d="M6 12v14h32V12"/><path class="cm-d" d="M18 26v-8h8v8"/><circle class="cm-l" cx="33" cy="19" r="2"/></svg><b>Mayagüez</b><p>Sunset side of the island.</p></div>
+      <div class="town-card" data-town="yq" style="left:60%;top:40%"><svg class="cm" viewBox="0 0 44 32" aria-hidden="true"><path class="cm-b" d="M4 26 16 8 26 22 32 14 40 26 Z"/><path class="cm-a" d="M10 6q3-4 6 0"/><circle class="cm-l" cx="31" cy="7" r="2"/></svg><span class="tc-r">El origen</span><b>El Yunque</b><p>Where the song starts.</p></div>
+      <div class="town-card" data-town="sj" style="left:64%;top:26%"><svg class="cm" viewBox="0 0 44 32" aria-hidden="true"><path class="cm-a" d="M4 12 Q7 6 10 12 Q13 6 16 12 Q19 6 22 12 Q25 6 28 12 Q31 6 34 12 Q37 6 40 12"/><path class="cm-b" d="M6 12v14h32V12"/><path class="cm-d" d="M18 26v-8h8v8"/><circle class="cm-l" cx="33" cy="19" r="2"/></svg><span class="tc-r">La costa norte</span><b>San Juan</b><p>Where the first fridges hum.</p></div>
+      <div class="town-card" data-town="cg" style="left:64%;top:54%"><svg class="cm" viewBox="0 0 44 32" aria-hidden="true"><path class="cm-a" d="M4 12 Q7 6 10 12 Q13 6 16 12 Q19 6 22 12 Q25 6 28 12 Q31 6 34 12 Q37 6 40 12"/><path class="cm-b" d="M6 12v14h32V12"/><path class="cm-d" d="M18 26v-8h8v8"/><circle class="cm-l" cx="33" cy="19" r="2"/></svg><span class="tc-r">El valle</span><b>Caguas</b><p>The valley in the middle of everything.</p></div>
+      <div class="town-card" data-town="pn" style="left:47%;top:54%"><svg class="cm" viewBox="0 0 44 32" aria-hidden="true"><path class="cm-a" d="M4 12 Q7 6 10 12 Q13 6 16 12 Q19 6 22 12 Q25 6 28 12 Q31 6 34 12 Q37 6 40 12"/><path class="cm-b" d="M6 12v14h32V12"/><path class="cm-d" d="M18 26v-8h8v8"/><circle class="cm-l" cx="33" cy="19" r="2"/></svg><span class="tc-r">El sur</span><b>Ponce</b><p>Señorial, and slower than the rest.</p></div>
+      <div class="town-card" data-town="mz" style="left:11%;top:28%"><svg class="cm" viewBox="0 0 44 32" aria-hidden="true"><path class="cm-a" d="M4 12 Q7 6 10 12 Q13 6 16 12 Q19 6 22 12 Q25 6 28 12 Q31 6 34 12 Q37 6 40 12"/><path class="cm-b" d="M6 12v14h32V12"/><path class="cm-d" d="M18 26v-8h8v8"/><circle class="cm-l" cx="33" cy="19" r="2"/></svg><span class="tc-r">El oeste</span><b>Mayagüez</b><p>The sunset side of the island.</p></div>
+      <span class="map-sea" style="left:8%;top:14%"></span><span class="map-sea" style="left:16%;top:78%"></span><span class="map-sea" style="left:88%;top:22%"></span><span class="map-sea" style="left:93%;top:64%"></span><span class="map-sea" style="left:44%;top:88%"></span>
       <span class="map-ff" style="left:22%;top:30%"></span><span class="map-ff" style="left:38%;top:18%"></span><span class="map-ff" style="left:55%;top:40%"></span><span class="map-ff" style="left:70%;top:22%"></span><span class="map-ff" style="left:82%;top:48%"></span><span class="map-ff" style="left:30%;top:60%"></span><span class="map-ff" style="left:60%;top:66%"></span>
       <p class="tiny">De El Yunque a toda la isla — areas we’re working toward. Not stockists.</p>
     </div>
@@ -1092,7 +1161,7 @@ p{margin:0}
     ['.serve .txt > p:not(.eyebrow):not(.tiny)', ['Directo de la lata sobre un vaso alto con hielo. Nada más.', 'Pura y bien fría, servida mientras baja el sol — la hora feliz de la isla, sin la hora.', 'Un vaso corto, hielo, y la lata abierta a la hora azul — cuando empieza el coquí.']],
     ['.serve .txt .tiny', ['Sugerencia para servir — sin medidas.', 'Sugerencia para servir — sin medidas.', 'Sugerencia para servir — sin medidas.']],
     ['.map-card > .tiny', 'De El Yunque a toda la isla — zonas hacia las que trabajamos. No son puntos de venta.'],
-    ['.town-card p', ['Donde zumban las primeras neveras.', 'El valle en el medio de todo.', 'El sur, señorial y lento.', 'El lado del atardecer.']],
+    ['.town-card p', ['Donde empieza el canto.', 'Donde zumban las primeras neveras.', 'El valle en el medio de todo.', 'Señorial, y más lento que el resto.', 'El lado del atardecer.']],
     ['.map-card .pin tspan.s', ['— próximamente', '— próximamente', '— próximamente', '— próximamente']],
     ['#find .h2', 'Dónde encontrarnos'],
     ['#find .lead', 'Todavía no hay nada en las góndolas. Estas son las zonas de la isla hacia donde vamos — primero los colmados, como debe ser.'],
@@ -1133,6 +1202,7 @@ p{margin:0}
     });
     var cd = DRINKS.filter(function(x){ return x.id === current; })[0];
     if (cd) paintDetail(cd);
+    if (window.__coqGuideRelabel) window.__coqGuideRelabel();
     try { localStorage.setItem('coq-lang', LANG); } catch(e){}
   }
   document.querySelectorAll('.lang-btn').forEach(function(b){
@@ -1159,11 +1229,36 @@ p{margin:0}
       p.addEventListener('click', function(e){ e.stopPropagation(); show(p.classList.contains('on') ? null : t); });
     });
     card.addEventListener('pointerleave', function(){ show(null); });
-    var ruta = card.querySelector('.ruta');
-    if (ruta && window.gsap && window.ScrollTrigger && !quietMotion){
-      gsap.to(ruta, { strokeDashoffset: 0, duration: 2.4, ease: 'power2.inOut',
-        scrollTrigger: { trigger: card, start: 'top 75%' } });
-    } else if (ruta){ ruta.style.strokeDashoffset = '0'; }
+    /* the journey: as you scroll the section, the coquí walks from El Yunque out to the west,
+       drawing the route behind him and lighting each town as he reaches it. */
+    var ruta = card.querySelector('.ruta'), vj = card.querySelector('.viajero');
+    if (!ruta) return;
+    if (!vj || !window.gsap || !window.ScrollTrigger || quietMotion){ ruta.style.strokeDashoffset = '0'; return; }
+    var L = ruta.getTotalLength(), SAMP = 240;
+    var stops = Array.prototype.map.call(pins, function(p){
+      var c = p.querySelector('circle'), cx = +c.getAttribute('cx'), cy = +c.getAttribute('cy'), best = 0, bd = 1e9;
+      for (var i = 0; i <= SAMP; i++){
+        var pt = ruta.getPointAtLength(L * i / SAMP), dx = pt.x - cx, dy = pt.y - cy, d = dx*dx + dy*dy;
+        if (d < bd){ bd = d; best = i / SAMP; }
+      }
+      return { el: p, t: best };
+    });
+    function place(prog){
+      var pt = ruta.getPointAtLength(L * prog);
+      vj.setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ',' + pt.y.toFixed(1) + ')');
+      ruta.style.strokeDashoffset = String(1 - prog);
+      stops.forEach(function(s){
+        var lit = prog >= s.t - 0.004;
+        if (lit !== s.el.classList.contains('lit')){
+          s.el.classList.toggle('lit', lit);
+          if (lit){ s.el.classList.add('flash'); setTimeout(function(){ s.el.classList.remove('flash'); }, 950); }
+        }
+      });
+    }
+    card.classList.add('journey');
+    place(0);
+    ScrollTrigger.create({ trigger: card, start: 'top 82%', end: 'bottom 58%',
+      onUpdate: function(self){ place(self.progress); } });
   })();
 
   /* V1 heritage — the coquí call: two sine sweeps through a lowpass, synthesized live, no files.
@@ -1196,6 +1291,100 @@ p{margin:0}
       if (fr){ fr.classList.remove('hop'); void fr.offsetWidth; fr.classList.add('hop'); }
     });
   }
+
+  /* EL COQUÍ TE ACOMPAÑA — he hops down the rail as you scroll, names each place, sings when
+     touched, and at "Dónde" he leaps off the rail INTO the island (the map traveler takes over). */
+  (function(){
+    var guide = document.getElementById('cq-guide'), rail = document.getElementById('cq-rail');
+    if (!guide || !rail || !window.gsap) return;
+    var frogBtn = document.getElementById('cq-frog'), frogImg = frogBtn.querySelector('img');
+    var labelEl = guide.querySelector('.cq-label'), bubbleEl = guide.querySelector('.cq-bubble');
+    var MARKS = [
+      { id:'hero',        en:'The sea',      es:'El mar' },
+      { id:'drinks',      en:'The cans',     es:'Las latas' },
+      { id:'ingredients', en:'What’s inside', es:'Lo que lleva' },
+      { id:'story',       en:'El Yunque',    es:'El Yunque' },
+      { id:'serve',       en:'How to serve', es:'Cómo se sirve' },
+      { id:'find',        en:'Where',        es:'Dónde' },
+      { id:'faq',         en:'Questions',    es:'Preguntas' }
+    ];
+    MARKS.forEach(function(m, i){
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'cq-tick';
+      b.style.top = (i / (MARKS.length - 1) * 100) + '%';
+      b.setAttribute('aria-label', m.es);
+      b.addEventListener('click', function(){
+        var el = document.getElementById(m.id); if (!el) return;
+        var yy = el.getBoundingClientRect().top + window.scrollY - 64;
+        if (window.__lenis && __lenis.scrollTo) __lenis.scrollTo(yy, { duration: 1.1 });
+        else window.scrollTo({ top: yy, behavior: 'smooth' });
+      });
+      rail.appendChild(b);
+    });
+    var ticks = rail.querySelectorAll('.cq-tick');
+    function tickY(i){
+      var r = ticks[i].getBoundingClientRect(), h = frogBtn.getBoundingClientRect().height || 30;
+      return r.top + r.height / 2 - h / 2;
+    }
+
+    var cur = -1, y = 0, fromY = 0, toY = 0, hopT = 1, arc = 0, first = true, labelTimer;
+    function write(){ guide.style.transform = 'translate3d(' + arc.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0)'; }
+    function setMark(i){
+      if (i === cur) return;
+      cur = i;
+      Array.prototype.forEach.call(ticks, function(t, n){ t.classList.toggle('on', n === i); });
+      labelEl.textContent = (LANG === 'es') ? MARKS[i].es : MARKS[i].en;
+      labelEl.classList.add('on');
+      clearTimeout(labelTimer); labelTimer = setTimeout(function(){ labelEl.classList.remove('on'); }, 2300);
+      /* at Dónde he leaps into the map and rides the route himself */
+      guide.classList.toggle('away', MARKS[i].id === 'find');
+      fromY = y; toY = tickY(i);
+      if (first || quietMotion){ y = toY; hopT = 1; write(); first = false; } else { hopT = 0; }
+    }
+    gsap.ticker.add(function(time){
+      if (hopT < 1){
+        hopT = Math.min(1, hopT + 0.042);
+        var e = hopT < .5 ? 4*hopT*hopT*hopT : 1 - Math.pow(-2*hopT + 2, 3)/2;
+        var s = Math.sin(hopT * Math.PI);
+        y = fromY + (toY - fromY) * e;
+        arc = -s * 9;   /* the hop arcs inward, but never far enough to reach the text column */
+        frogImg.style.transform = 'scaleY(' + (1 + s*.17).toFixed(3) + ') scaleX(' + (1 - s*.13).toFixed(3) + ') rotate(' + (-s*11).toFixed(1) + 'deg)';
+        if (hopT >= 1) arc = 0;
+        write();
+      } else {
+        var b = Math.sin(time * 1.7) * .022;
+        frogImg.style.transform = 'scaleY(' + (1 + b).toFixed(3) + ') scaleX(' + (1 - b).toFixed(3) + ')';
+      }
+    });
+    function probe(){
+      var p = window.scrollY + innerHeight * .42, idx = 0;
+      MARKS.forEach(function(m, i){ var el = document.getElementById(m.id); if (el && el.offsetTop <= p) idx = i; });
+      setMark(idx);
+    }
+    addEventListener('scroll', probe, { passive:true });
+    addEventListener('resize', function(){ if (cur >= 0){ toY = tickY(cur); y = toY; write(); } }, { passive:true });
+    probe();
+
+    var FACTS = [
+      { en:'He only sings after dark. That’s why the island sounds different at night.', es:'Solo canta de noche. Por eso la isla suena distinta.' },
+      { en:'Two notes: co… quí. Nothing else, all night long.', es:'Dos notas: co… quí. Nada más, toda la noche.' },
+      { en:'He lives up in El Yunque, on the wet leaves.', es:'Vive allá en El Yunque, sobre las hojas mojadas.' },
+      { en:'He is small enough to sit in the palm of your hand.', es:'Es tan pequeño que cabe en la palma de la mano.' },
+      { en:'He is where our name comes from.', es:'De él viene nuestro nombre.' }
+    ];
+    var fi = 0, bubbleTimer;
+    frogBtn.addEventListener('click', function(){
+      coquiCall();
+      var f = FACTS[fi++ % FACTS.length];
+      bubbleEl.textContent = (LANG === 'es') ? f.es : f.en;
+      bubbleEl.classList.add('on'); labelEl.classList.remove('on');
+      clearTimeout(bubbleTimer); bubbleTimer = setTimeout(function(){ bubbleEl.classList.remove('on'); }, 4400);
+      fromY = y; toY = y; hopT = 0;   /* a delighted hop in place */
+    });
+    window.__coqGuideRelabel = function(){
+      if (cur >= 0) labelEl.textContent = (LANG === 'es') ? MARKS[cur].es : MARKS[cur].en;
+    };
+  })();
 
   /* DE NOCHE — the island's second act. The flip rides the same liquid wave; the hero trades
      the beach for molten-gold water; the coquí calls once as night falls (a real click = a gesture). */
