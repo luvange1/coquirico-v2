@@ -459,18 +459,24 @@
     #bg-canvas,#can-canvas,.filmlayer,#grain,#ripples,#wave-svg,#word{ display:none !important; }
 
     /* chapters become flowing sections, not stacked screens */
-    .chapter{ min-height:0; display:block; padding:0 0 2.6rem; background:none; }
+    .chapter{ min-height:0; display:block; padding:0 0 3.6rem; background:none; }
     #hero{ padding-top:calc(58px + env(safe-area-inset-top)); }
-    .chapter + .chapter{ padding-top:.4rem; }
+    .chapter + .chapter{ padding-top:1.7rem; }
     .chapter .inner,
     .chapter[data-side="right"] .inner{ position:static; max-width:none; margin:0; text-align:left;
       background:none !important; padding:0 18px; border-radius:0; text-shadow:none; }
     .chapter .inner::after{ display:none; }
 
     /* the picture */
-    .pic-frame{ display:block; margin:0 0 1.5rem; }
-    .pic-frame img{ width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:3px;
-      background:#0e1a10; box-shadow:0 26px 60px rgba(0,0,0,.5); }
+    .pic-frame{ display:block; margin:0 0 1.5rem; position:relative; overflow:hidden;
+      border-radius:3px; aspect-ratio:4/5; background:#0e1a10;
+      box-shadow:0 26px 60px rgba(0,0,0,.5); }
+    /* the media is TALLER than its window so it can drift inside it as you scroll — the picture
+       breathes instead of sitting there, which is what makes a still frame feel alive */
+    .pic-frame img,.pic-frame video{ position:absolute; left:0; top:-6%; width:100%; height:112%;
+      object-fit:cover; will-change:transform; }
+    .pic-frame video{ opacity:0; transition:opacity .5s ease; }
+    .pic-frame video.on{ opacity:1; }
     #hero .pic-frame img{ object-position:50% 42%; }
     #story .pic-frame img{ object-position:72% 50%; }
 
@@ -489,7 +495,7 @@
     /* the hairline that closes each chapter */
     .chapter .inner{ position:relative; }
     .chapter:not(#merch) .inner::before{ content:""; position:absolute; left:18px; right:18px;
-      bottom:-1.3rem; height:1px; background:rgba(244,234,210,.18); }
+      bottom:-1.85rem; height:1px; background:rgba(244,234,210,.16); }
 
     /* After Dark and The Pour keep their in-flow interactive 3D — it is the product, not scenery */
     #world{ justify-content:flex-start; }
@@ -580,6 +586,105 @@
   else move();
 })();
 </script>
+<script>/* MOBILE ONLY — make the framed pictures move.
+   Study B replaced the fixed full-screen film with a picture per chapter. A picture that never
+   moves reads as a brochure, so each frame gets back the loop it was authored from, INSIDE the
+   window rather than behind the type:
+     - the .webp poster is already in the <img>, so the frame is never empty;
+     - the clip is fetched only when its chapter is actually approaching (IntersectionObserver),
+       never on arrival — the whole reason the phone build is fast now is that it does not pull
+       multiple megabytes of video before the first screen. The hero's clip additionally waits for
+       the page to settle, and everything is skipped entirely on Save-Data or 2g;
+     - it pauses the moment it leaves the screen, so only one video ever decodes;
+     - and the media sits 112% tall inside a clipped window, drifting a few percent with scroll,
+       which is what makes a framed still feel alive rather than pasted on.
+   Desktop is untouched — it still runs the real full-screen films. */
+(function(){
+  var small = (innerWidth < 900) || (window.matchMedia && matchMedia('(hover:none)').matches);
+  if(!small) return;
+  var conn = navigator.connection || {};
+  var thin = conn.saveData === true || /(^|-)2g$/.test(conn.effectiveType || '');
+
+  function start(){
+    var frames = [].slice.call(document.querySelectorAll('.pic-frame'));
+    if(!frames.length) return;
+
+    /* drift: map each frame's travel through the viewport onto a few percent of movement */
+    function drift(){
+      for(var i=0;i<frames.length;i++){
+        var f=frames[i], r=f.getBoundingClientRect();
+        if(r.bottom < -80 || r.top > innerHeight + 80) continue;
+        var t = (r.top + r.height/2 - innerHeight/2) / innerHeight;   /* -1 .. 1 */
+        var y = Math.max(-1, Math.min(1, t)) * 5.2;                   /* percent */
+        var m = f.querySelector('video.on') || f.querySelector('img');
+        if(m) m.style.transform = 'translate3d(0,' + y.toFixed(2) + '%,0)';
+      }
+    }
+    var ticking=false;
+    addEventListener('scroll', function(){
+      if(ticking) return; ticking=true;
+      requestAnimationFrame(function(){ drift(); ticking=false; });
+    }, {passive:true});
+    drift();
+
+    if(thin || !('IntersectionObserver' in window)) return;   /* posters only, still composed */
+
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var f=e.target, src=f.getAttribute('data-clip');
+        if(!src) return;
+        var v=f.querySelector('video');
+        if(e.isIntersecting){
+          if(!v){
+            v=document.createElement('video');
+            v.muted=true; v.loop=true; v.playsInline=true; v.setAttribute('playsinline',''); v.autoplay=true; v.setAttribute('autoplay','');
+            v.setAttribute('muted',''); v.preload='auto'; v.src=src;
+            v.addEventListener('canplay', function(){ v.classList.add('on'); drift(); }, {once:true});
+            f.appendChild(v);
+          }
+          var p=v.play(); if(p && p.catch) p.catch(function(){});
+        } else if(v){ v.pause(); }
+      });
+    }, { rootMargin:'250px 0px 250px 0px', threshold:0.01 });
+
+    frames.forEach(function(f){
+      if(!f.getAttribute('data-clip')) return;
+      /* the first frame is on screen at load; let the page settle before pulling 4.8MB */
+      if(f.closest('#hero')) setTimeout(function(){ io.observe(f); }, 1400);
+      else io.observe(f);
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+</script>
+<script>/* MOBILE ONLY — the flow. Each chapter's picture and its words arrive as one considered
+   move: the frame rises and fades, the type follows a beat later. Scrubbed against scroll so it
+   reverses on the way back up, and gated on COQ_SMALL so desktop keeps its authored reveal. */
+(function(){
+  var small = (innerWidth < 900) || (window.matchMedia && matchMedia('(hover:none)').matches);
+  if(!small) return;
+  function start(){
+    if(!window.gsap || !window.ScrollTrigger) return;
+    document.querySelectorAll('.chapter').forEach(function(ch){
+      var fig = ch.querySelector('.pic-frame');
+      var words = [].slice.call(ch.querySelectorAll(':scope > .inner > :not(.pic-frame)'));
+      if(fig){
+        gsap.fromTo(fig, {y:30, autoAlpha:0}, {y:0, autoAlpha:1, ease:'power2.out', duration:.9,
+          scrollTrigger:{ trigger:fig, start:'top 92%', toggleActions:'play none none reverse' }});
+      }
+      if(words.length){
+        gsap.fromTo(words, {y:18, autoAlpha:0}, {y:0, autoAlpha:1, ease:'power2.out',
+          duration:.75, stagger:.07, delay:.12,
+          scrollTrigger:{ trigger:words[0], start:'top 94%', toggleActions:'play none none reverse' }});
+      }
+    });
+    ScrollTrigger.refresh();
+  }
+  if(document.readyState === 'complete') setTimeout(start, 300);
+  else addEventListener('load', function(){ setTimeout(start, 300); });
+})();
+</script>
 <video id="filmB" class="filmlayer" muted loop playsinline preload="metadata"
   poster="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-SERIGRAPH-DUO-V1-POSTER.webp">
   <source src="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-SERIGRAPH-DUO-V1-SITE-1080.mp4" type="video/mp4">
@@ -615,7 +720,7 @@
 
   <div class="chapter" data-ch="0" data-tone="dark" id="hero">
     <div class="inner">
-      <figure class="pic-frame"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/01-HERO-NIGHT-RAINFOREST/01-HERO-NIGHT-RAINFOREST-POSTER.webp" alt="Night rainforest — the coquí calling into the dark" loading="lazy" decoding="async"></figure>
+      <figure class="pic-frame" data-clip="coquirico-handoff/assets/LIVE_BACKGROUNDS/01-HERO-NIGHT-RAINFOREST/01-HERO-NIGHT-RAINFOREST-WEB-1080.mp4"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/01-HERO-NIGHT-RAINFOREST/01-HERO-NIGHT-RAINFOREST-POSTER.webp" alt="Night rainforest — the coquí calling into the dark" loading="lazy" decoding="async"></figure>
       <p class="eyebrow">Puerto Rican style coconut drink</p>
       <p class="sensory">The rainforest exhales &mdash; warm wet air, the hush of leaves, and the first coqui calling into the dark.</p>
       <h1>Sip a taste of the Caribbean.</h1>
@@ -646,7 +751,7 @@
 
   <div class="chapter" data-ch="2" data-tone="dark" id="story">
     <div class="inner">
-      <figure class="pic-frame"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-LITHO-V1-POSTER.webp" alt="A coquí on a monstera leaf, throat lit, under the moon" loading="lazy" decoding="async"></figure>
+      <figure class="pic-frame" data-clip="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-LITHO-V1-SITE-1080.mp4"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-LITHO-V1-POSTER.webp" alt="A coquí on a monstera leaf, throat lit, under the moon" loading="lazy" decoding="async"></figure>
       <p class="eyebrow">02 / The Island</p>
       <p class="sensory">The story breathes &mdash; the can steps aside, and the island itself takes the screen.</p>
       <h2>Born of El Yunque</h2>
@@ -656,7 +761,7 @@
 
   <div class="chapter" data-ch="2" data-tone="light" data-side="right" id="drink">
     <div class="inner">
-      <figure class="pic-frame"><img src="coquirico-handoff/assets/concept/about/motion/about-pour-poster-v1.webp" alt="Coconut and cinnamon breaking over ice" loading="lazy" decoding="async"></figure>
+      <figure class="pic-frame" data-clip="coquirico-handoff/assets/concept/about/motion/about-pour-loop-1080-v1.mp4"><img src="coquirico-handoff/assets/concept/about/motion/about-pour-poster-v1.webp" alt="Coconut and cinnamon breaking over ice" loading="lazy" decoding="async"></figure>
       <p class="eyebrow">03 / The Pour</p>
       <p class="sensory">Cool coconut breaks over ice, and a thread of cinnamon lifts to meet the vanilla.</p>
       <h2>What waits inside</h2>
@@ -679,7 +784,7 @@
 
   <div class="chapter" data-ch="4" data-tone="dark" id="merch">
     <div class="inner" style="max-width:100%;text-align:center;margin:0 auto">
-      <figure class="pic-frame"><img src="coquirico-handoff/assets/concept/merch/carousel-environment/merch-pavilion-poster-v1.webp" alt="The Isla Drop pavilion" loading="lazy" decoding="async"></figure>
+      <figure class="pic-frame" data-clip="coquirico-handoff/assets/LIVE_BACKGROUNDS/06-MERCH-CARIBBEAN-PAVILION/06-MERCH-CARIBBEAN-PAVILION-WEB-1080.mp4"><img src="coquirico-handoff/assets/concept/merch/carousel-environment/merch-pavilion-poster-v1.webp" alt="The Isla Drop pavilion" loading="lazy" decoding="async"></figure>
       <p class="eyebrow">05 / Isla Drop 01</p>
       <h2 style="margin-bottom:.2rem">Wear the Rainforest</h2>
       <p class="body" style="opacity:.75;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase">Concept drop &middot; presentation only</p>
@@ -1191,6 +1296,14 @@ function initCan(canvas){
        are actually reading it (or reaching for the After Dark picker, which lives inside this
        element). Desktop keeps the authored one-way fade — there the chapters are far apart. */
     if(window.COQ_SMALL){
+      /* STUDY B: the phone no longer stacks 100svh screens, so this rise/hold/sink timeline —
+         whose geometry assumed exactly that — was holding .inner at autoAlpha 0 forever. The
+         framed-picture reveal script near #filmB owns the phone entrance now. Leave the copy
+         visible and get out of the way. */
+      gsap.set(el,{autoAlpha:1,y:0});
+      return;
+    }
+    if(false){
       /* NOT the last chapter: the scroll ENDS on it, so there is nothing to hand over to. Fading it
          would dissolve the screen you are standing on — and autoAlpha:0 sets visibility:hidden,
          which would make NOTIFY ME untappable. It keeps the one-way fade. */
