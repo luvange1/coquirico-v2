@@ -274,13 +274,15 @@
            amount of shrinking the copy buys a single pixel of extra dwell. Type and spacing passes
            could never have fixed this; only decoupling how long you look at an idea from how far
            your thumb travelled can.
-           Each chapter is now a 180svh STAGE with the copy stuck to the bottom of the frame for the
-           whole of it. Dwell 216px -> ~682px, about one full flick: you can arrive, flick once, and
-           still be on the same settled screen. And because the copy holds still instead of sweeping
+           Each chapter is now a 140svh STAGE with the copy stuck to the bottom of the frame for the
+           whole of it. Dwell 216px -> ~340px pinned (~700px fully-opaque-and-on-screen).
+           180svh was tried first and was WRONG: an 800px thumb flick moved the composition only
+           ~120px, so the page read as frozen — dwell so long it looked like nothing was happening.
+           A pinned pane only works if something animates THROUGH it; a static pin is a freeze. And because the copy holds still instead of sweeping
            650px up an 852px frame, the middle of the screen finally clears for the film and the
            can — which is the same thing as "room to breathe". --- */
     .chapter{ justify-content:flex-end; padding-bottom:0; padding-left:0; padding-right:0;
-      min-height:180svh; }
+      min-height:140svh; }
     .chapter .inner{ position:sticky; bottom:0; }
     .chapter .inner,
     .chapter[data-side="right"] .inner{ max-width:none; margin:0; text-align:left; border-radius:0;
@@ -1149,7 +1151,7 @@ function initCan(canvas){
           scrollTrigger:{trigger:el.parentElement,start:'top 80%',end:'top 45%',scrub:true}});
         return;
       }
-      /* Re-anchored to the 180svh stage. The weights 0.28/0.40/0.32 were fractions of a span that
+      /* Re-anchored to the 140svh stage. The weights 0.28/0.40/0.32 were fractions of a span that
          assumed a 100svh chapter; left alone they would end the hold while the pane is still
          pinned and motionless — the copy would fade out in front of a reader who has not moved.
          Over 'top 90%' -> 'bottom 10%' these weights put the hold from scroll (chapterTop - 375px)
