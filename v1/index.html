@@ -265,25 +265,8 @@
            top, and that is a 100px ramp, which reads as haze rather than an edge.
            The ramp is in PIXELS, not percentages: a percentage ramp on a tall plate was still
            transparent where the first line of text actually sat. --- */
-    /* --- THE PIN — the one change that fixes "cramped" and "rushed" together.
-           Every chapter was exactly 100svh and nothing was ever pinned, so the window in which a
-           chapter's copy is both fully on screen AND fully opaque measured 216px of scroll. A thumb
-           flick is ~800px: one flick crossed an entire chapter. Desktop gets 660-896px against
-           ~100px wheel notches — roughly 29x the dwell per idea.
-           The window is min(100svh - contentHeight, 216.4) and the 216.4 term always wins, so no
-           amount of shrinking the copy buys a single pixel of extra dwell. Type and spacing passes
-           could never have fixed this; only decoupling how long you look at an idea from how far
-           your thumb travelled can.
-           Each chapter is now a 140svh STAGE with the copy stuck to the bottom of the frame for the
-           whole of it. Dwell 216px -> ~340px pinned (~700px fully-opaque-and-on-screen).
-           180svh was tried first and was WRONG: an 800px thumb flick moved the composition only
-           ~120px, so the page read as frozen — dwell so long it looked like nothing was happening.
-           A pinned pane only works if something animates THROUGH it; a static pin is a freeze. And because the copy holds still instead of sweeping
-           650px up an 852px frame, the middle of the screen finally clears for the film and the
-           can — which is the same thing as "room to breathe". --- */
     .chapter{ justify-content:flex-end; padding-bottom:0; padding-left:0; padding-right:0;
-      min-height:140svh; }
-    .chapter .inner{ position:sticky; bottom:0; }
+      min-height:100svh; }
     .chapter .inner,
     .chapter[data-side="right"] .inner{ max-width:none; margin:0; text-align:left; border-radius:0;
       background:linear-gradient(180deg,rgba(8,14,8,0) 0px,rgba(8,14,8,.16) 28px,rgba(8,14,8,.40) 60px,rgba(8,14,8,.62) 92px,rgba(8,14,8,.74) 140px,rgba(8,14,8,.78) 100%);
@@ -292,8 +275,7 @@
     .chapter[data-tone="light"] .inner{
       background:linear-gradient(180deg,rgba(244,234,210,0) 0px,rgba(244,234,210,.20) 28px,rgba(244,234,210,.48) 60px,rgba(244,234,210,.72) 92px,rgba(244,234,210,.84) 140px,rgba(244,234,210,.88) 100%);
       text-shadow:0 1px 10px rgba(250,243,226,.95), 0 0 24px rgba(250,243,226,.8); }
-    /* (the ::after tail below needs a positioned parent; THE PIN above supplies it with
-       position:sticky — do not re-add position:relative here, it will beat the pin) */
+    .chapter .inner{ position:relative; }
     .chapter .inner::after{ content:""; position:absolute; left:0; right:0; top:100%; height:13svh;
       pointer-events:none;
       background:linear-gradient(180deg,rgba(8,14,8,.78) 0%,rgba(8,14,8,.56) 30%,rgba(8,14,8,.22) 62%,rgba(8,14,8,0) 100%); }
@@ -352,8 +334,7 @@
            just above. --- */
     #world{ justify-content:flex-start; padding-bottom:0; }
     #world{ padding-left:0; padding-right:0; }
-    #world > .inner{ position:sticky; top:0; bottom:auto; flex:0 0 auto; height:100svh;
-      display:flex; flex-direction:column; margin-top:0; padding:100px 16px 26px;
+    #world > .inner{ margin-top:-86px; padding:100px 16px 26px;
       background:linear-gradient(180deg,rgba(8,14,8,.28) 0px,rgba(8,14,8,.28) 42px,rgba(8,14,8,.48) 84px,rgba(8,14,8,.70) 128px,rgba(8,14,8,.80) 176px,rgba(8,14,8,.84) 100%);
       text-shadow:0 1px 10px rgba(4,8,4,.92), 0 0 26px rgba(4,8,4,.65); }
     #world .sensory{ font-size:.92rem; line-height:1.42; margin-bottom:.8rem; }
@@ -782,17 +763,8 @@ function initCan(canvas){
     var ids=['world','story','drink','merch'];
     for(var i=0;i<BOUNDS.length && i<ids.length;i++){
       var el=document.getElementById(ids[i]); if(!el) continue;
-      /* 0.861 and 0.06 are fractions of TOTAL scroll. That was fine while every chapter was
-         100svh, but pinning makes the driver ~1.7x longer and BOTH constants scale with it: the
-         anticipation lead grows from 118px to ~780px — the wipe would fire most of a screen early,
-         pouring opaque colour over copy still being read — and each pour stretches to 1.7x its
-         authored length. On phones, re-derive both in PIXELS so they are length-proof and
-         reproduce today's felt timing exactly: 0.861 against the old range gave a 118px lead
-         (0.2092 - 0.861*0.2092 = 0.0291 of 4073), and 0.06 of 4073 = 244px. */
-      var mob=!!window.COQ_SMALL, c, hw;
-      if(mob){ c=((el.offsetTop-118)/range)+LATE; hw=244/range; }
-      else   { c=0.861*(el.offsetTop/range)+LATE; hw=0.06; }   // LATE nudges every wipe a touch later
-      BOUNDS[i].start=Math.max(0,c-hw); BOUNDS[i].end=Math.min(1,c+hw);
+      var c=0.861*(el.offsetTop/range)+LATE;   // LATE nudges every wipe a touch later (was firing a hair too soon)
+      BOUNDS[i].start=Math.max(0,c-0.06); BOUNDS[i].end=Math.min(1,c+0.06);
     }
   }
 
@@ -1151,20 +1123,13 @@ function initCan(canvas){
           scrollTrigger:{trigger:el.parentElement,start:'top 80%',end:'top 45%',scrub:true}});
         return;
       }
-      /* Re-anchored to the 140svh stage. The weights 0.28/0.40/0.32 were fractions of a span that
-         assumed a 100svh chapter; left alone they would end the hold while the pane is still
-         pinned and motionless — the copy would fade out in front of a reader who has not moved.
-         Over 'top 90%' -> 'bottom 10%' these weights put the hold from scroll (chapterTop - 375px)
-         to (chapterTop + 1040px), and the pin runs chapterTop -> chapterTop + 682px. So the copy
-         is at full opacity for the whole of the pin and nothing else: full opacity exactly and
-         only while it is holding still. */
-      gsap.timeline({scrollTrigger:{trigger:el.parentElement,start:'top 90%',end:'bottom 10%',scrub:true}})
-        .fromTo(el,{autoAlpha:0,y:46},{autoAlpha:1,y:0,ease:'power2.out',duration:0.16})
-        .to(el,{autoAlpha:1,duration:0.68})
+      gsap.timeline({scrollTrigger:{trigger:el.parentElement,start:'top 80%',end:'bottom 25%',scrub:true}})
+        .fromTo(el,{autoAlpha:0,y:46},{autoAlpha:1,y:0,ease:'power2.out',duration:0.28})
+        .to(el,{autoAlpha:1,duration:0.40})
         /* power2.OUT on the way out too, not power2.in: an ease-in is slow off the mark, which left
            the outgoing copy at ~0.87 alpha exactly where the next chapter's headline arrived. This
            drops fast and tails off, so the handover is decisive. */
-        .to(el,{autoAlpha:0,y:-26,ease:'power2.out',duration:0.16});
+        .to(el,{autoAlpha:0,y:-26,ease:'power2.out',duration:0.32});
       return;
     }
     gsap.fromTo(el,{autoAlpha:0,y:46},{autoAlpha:1,y:0,ease:'power2.out',
