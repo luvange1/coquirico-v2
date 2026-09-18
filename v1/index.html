@@ -475,6 +475,7 @@
        breathes instead of sitting there, which is what makes a still frame feel alive */
     .pic-frame img,.pic-frame video{ position:absolute; left:0; top:-6%; width:100%; height:112%;
       object-fit:cover; will-change:transform; }
+    .pic-frame img,.pic-frame video{ pointer-events:none; }
     .pic-frame video{ opacity:0; transition:opacity .5s ease; }
     .pic-frame video.on{ opacity:1; }
     #hero .pic-frame img{ object-position:50% 42%; }
@@ -627,31 +628,45 @@
     }, {passive:true});
     drift();
 
-    if(thin || !('IntersectionObserver' in window)) return;   /* posters only, still composed */
+    if(thin) return;   /* Save-Data / 2g: posters only, still fully composed */
 
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        var f=e.target, src=f.getAttribute('data-clip');
-        if(!src) return;
+    /* Load and play from inside drift(), which is the one code path here that is PROVEN to run —
+       it is what moves the pictures, and the hero's img already carried its transform. An
+       IntersectionObserver was tried first and silently never fired, leaving five still frames and
+       a video that only appeared when tapped, which on iOS meant a play button on a picture. */
+    var settled = false;
+    setTimeout(function(){ settled = true; pump(); }, 1200);   /* let the first screen paint first */
+
+    function pump(){
+      if(!settled) return;
+      for(var i=0;i<frames.length;i++){
+        var f=frames[i], src=f.getAttribute('data-clip');
+        if(!src) continue;
+        var r=f.getBoundingClientRect();
+        var near = r.bottom > -300 && r.top < innerHeight + 300;
         var v=f.querySelector('video');
-        if(e.isIntersecting){
-          if(!v){
-            v=document.createElement('video');
-            v.muted=true; v.loop=true; v.playsInline=true; v.setAttribute('playsinline',''); v.autoplay=true; v.setAttribute('autoplay','');
-            v.setAttribute('muted',''); v.preload='auto'; v.src=src;
-            v.addEventListener('canplay', function(){ v.classList.add('on'); drift(); }, {once:true});
-            f.appendChild(v);
-          }
+        if(near && !v){
+          v=document.createElement('video');
+          v.muted=true; v.defaultMuted=true; v.loop=true; v.playsInline=true;
+          v.setAttribute('muted',''); v.setAttribute('playsinline',''); v.setAttribute('autoplay','');
+          v.autoplay=true; v.controls=false; v.removeAttribute('controls');
+          v.disablePictureInPicture=true; v.setAttribute('disablepictureinpicture','');
+          v.setAttribute('tabindex','-1'); v.setAttribute('aria-hidden','true');
+          v.preload='auto'; v.src=src;
+          v.addEventListener('canplay', function(){ this.classList.add('on'); drift(); }, {once:true});
+          f.appendChild(v);
           var p=v.play(); if(p && p.catch) p.catch(function(){});
-        } else if(v){ v.pause(); }
-      });
-    }, { rootMargin:'250px 0px 250px 0px', threshold:0.01 });
-
-    frames.forEach(function(f){
-      if(!f.getAttribute('data-clip')) return;
-      /* the first frame is on screen at load; let the page settle before pulling 4.8MB */
-      if(f.closest('#hero')) setTimeout(function(){ io.observe(f); }, 1400);
-      else io.observe(f);
+        } else if(v){
+          if(near && v.paused){ var q=v.play(); if(q && q.catch) q.catch(function(){}); }
+          else if(!near && !v.paused){ v.pause(); }
+        }
+      }
+    }
+    addEventListener('scroll', function(){ pump(); }, {passive:true});
+    /* iOS refuses autoplay until the page has been touched at least once on some settings — the
+       first touch anywhere quietly starts whatever is on screen. */
+    ['touchstart','pointerdown'].forEach(function(ev){
+      addEventListener(ev, function(){ settled = true; pump(); }, {passive:true, once:true});
     });
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
@@ -729,7 +744,7 @@
 
   <div class="chapter" data-ch="0" data-tone="dark" id="hero">
     <div class="inner">
-      <figure class="pic-frame" data-clip="coquirico-handoff/assets/LIVE_BACKGROUNDS/01-HERO-NIGHT-RAINFOREST/01-HERO-NIGHT-RAINFOREST-WEB-1080.mp4"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/01-HERO-NIGHT-RAINFOREST/01-HERO-NIGHT-RAINFOREST-POSTER.webp" alt="Night rainforest — the coquí calling into the dark" decoding="async"></figure>
+      <figure class="pic-frame" data-clip="coquirico-handoff/assets/phone/hero-phone.mp4"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/01-HERO-NIGHT-RAINFOREST/01-HERO-NIGHT-RAINFOREST-POSTER.webp" alt="Night rainforest — the coquí calling into the dark" decoding="async"></figure>
       <p class="eyebrow">Puerto Rican style coconut drink</p>
       <p class="sensory">The rainforest exhales &mdash; warm wet air, the hush of leaves, and the first coqui calling into the dark.</p>
       <h1>Sip a taste of the Caribbean.</h1>
@@ -760,7 +775,7 @@
 
   <div class="chapter" data-ch="2" data-tone="dark" id="story">
     <div class="inner">
-      <figure class="pic-frame" data-clip="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-LITHO-V1-SITE-1080.mp4"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-LITHO-V1-POSTER.webp" alt="A coquí on a monstera leaf, throat lit, under the moon" decoding="async"></figure>
+      <figure class="pic-frame" data-clip="coquirico-handoff/assets/phone/island-phone.mp4"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-LITHO-V1-POSTER.webp" alt="A coquí on a monstera leaf, throat lit, under the moon" decoding="async"></figure>
       <p class="eyebrow">02 / The Island</p>
       <p class="sensory">The story breathes &mdash; the can steps aside, and the island itself takes the screen.</p>
       <h2>Born of El Yunque</h2>
@@ -793,7 +808,7 @@
 
   <div class="chapter" data-ch="4" data-tone="dark" id="merch">
     <div class="inner" style="max-width:100%;text-align:center;margin:0 auto">
-      <figure class="pic-frame" data-clip="coquirico-handoff/assets/LIVE_BACKGROUNDS/06-MERCH-CARIBBEAN-PAVILION/06-MERCH-CARIBBEAN-PAVILION-WEB-1080.mp4"><img src="coquirico-handoff/assets/concept/merch/carousel-environment/merch-pavilion-poster-v1.webp" alt="The Isla Drop pavilion" decoding="async"></figure>
+      <figure class="pic-frame" data-clip="coquirico-handoff/assets/phone/merch-phone.mp4"><img src="coquirico-handoff/assets/concept/merch/carousel-environment/merch-pavilion-poster-v1.webp" alt="The Isla Drop pavilion" decoding="async"></figure>
       <p class="eyebrow">05 / Isla Drop 01</p>
       <h2 style="margin-bottom:.2rem">Wear the Rainforest</h2>
       <p class="body" style="opacity:.75;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase">Concept drop &middot; presentation only</p>
