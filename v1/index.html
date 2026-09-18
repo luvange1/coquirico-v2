@@ -93,10 +93,6 @@
   .chapter{ min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; justify-content:center;
     padding:clamp(4.6rem,9vw,6.5rem) clamp(1.2rem,5vw,6rem) clamp(2rem,6vw,4rem); box-sizing:border-box; }
   .inner{ max-width:34rem; will-change:transform,opacity; }
-  /* STUDY B: on a phone each chapter leads with a framed PICTURE instead of a full-bleed
-     background. Desktop never shows these — it keeps the live film, the atmosphere shader and the
-     travelling can. */
-  .pic-frame{ display:none; }
   .chapter[data-side="right"] .inner{ margin-left:auto; text-align:right; }
   .eyebrow{ margin:0 0 1rem; font-size:.74rem; letter-spacing:.32em; text-transform:uppercase; font-weight:700; color:var(--amber); }
   .sensory{ margin:0 0 1.2rem; font-family:var(--serif); font-style:italic; font-size:clamp(1.02rem,2.1vw,1.35rem); line-height:1.5; opacity:.85; }
@@ -433,80 +429,6 @@
       text-align:center; }
     #world > .inner{ padding-bottom:26px; }
     #world .fam-rail{ margin-top:.6rem; }
-    /* ══════════════════════════ STUDY B — "the image is a picture, not a backdrop" ══════════════
-       Chosen by Pedro from three phone compositions (coquirico-phone-studies.html).
-
-       Everything before this point in this media block was an ADAPTATION: the desktop's stack of
-       eyebrow / lead-in / headline / body, laid over a full-screen background cropped to a ~26%
-       slice of itself, with gradient scrims to keep the type readable. Four passes of that landed
-       at "a lil better" every time, because the problem was never the spacing — it was that a
-       composition authored for a 1920px-wide frame has no phone form.
-
-       B is a different composition. The image stops being a backdrop and becomes a picture: a
-       hard-edged 4:5 frame with real margin around it, sitting on solid brand ground, with the
-       type in its own uninterrupted field beneath it. Nothing is scrimmed, nothing is cropped to a
-       sliver, and the air comes from the gap between two clean things rather than from insetting a
-       plate (which is the pop-up card he rejected).
-
-       The fixed full-screen media layers are hidden here. That is the honest trade: the phone
-       loses the travelling can and the pour wipes, and in exchange it gets a composition, a 7.8MB
-       film it no longer downloads, and an end to the whole class of bugs that came from painting
-       type over a moving background on a device whose viewport resizes as you scroll. The 3D that
-       is actually INTERACTIVE — the After Dark picker and the two ritual cans — lives in the
-       document flow and stays. Desktop keeps all of it. ══════════════════════════════════════ */
-
-    body{ background:#0B1109; }
-    #bg-canvas,#can-canvas,.filmlayer,#grain,#ripples,#wave-svg,#word{ display:none !important; }
-
-    /* chapters become flowing sections, not stacked screens */
-    .chapter{ min-height:0; display:block; padding:0 0 3.6rem; background:none; }
-    #hero{ padding-top:calc(58px + env(safe-area-inset-top)); }
-    .chapter + .chapter{ padding-top:1.7rem; }
-    .chapter .inner,
-    .chapter[data-side="right"] .inner{ position:static; max-width:none; margin:0; text-align:left;
-      background:none !important; padding:0 18px; border-radius:0; text-shadow:none; }
-    .chapter .inner::after{ display:none; }
-
-    /* the picture */
-    .pic-frame{ display:block; margin:0 0 1.5rem; position:relative; overflow:hidden;
-      border-radius:3px; aspect-ratio:4/5; background:#0e1a10;
-      box-shadow:0 26px 60px rgba(0,0,0,.5); }
-    /* the media is TALLER than its window so it can drift inside it as you scroll — the picture
-       breathes instead of sitting there, which is what makes a still frame feel alive */
-    .pic-frame img,.pic-frame video{ position:absolute; left:0; top:-6%; width:100%; height:112%;
-      object-fit:cover; will-change:transform; }
-    .pic-frame img,.pic-frame video{ pointer-events:none; }
-    .pic-frame video{ opacity:0; transition:opacity .5s ease; }
-    .pic-frame video.on{ opacity:1; }
-    #hero .pic-frame img{ object-position:50% 42%; }
-    #story .pic-frame img{ object-position:72% 50%; }
-
-    /* the type field — one ground, so the light chapter reads cream-on-night like the rest */
-    .chapter[data-tone="light"]{ color:var(--cream); }
-    .chapter[data-tone="light"] .inner{ color:var(--cream); }
-    #drink .eyebrow{ color:var(--amber-b); }
-    .chapter .eyebrow{ margin:0 0 .85rem; }
-    .chapter h2,#hero h1{ font-size:clamp(2.1rem,10vw,2.7rem); line-height:1.03;
-      letter-spacing:-.018em; margin:0 0 .85rem; max-width:12ch; }
-    .chapter .sensory{ font-size:1.02rem; line-height:1.45; margin-bottom:1rem; opacity:.88;
-      max-width:30ch; }
-    .chapter .body{ font-size:.92rem; line-height:1.6; opacity:.7; max-width:36ch; }
-    .chapter .facts{ margin-top:1.1rem; font-size:.64rem; opacity:.55; line-height:1.5; }
-
-    /* the hairline that closes each chapter */
-    .chapter .inner{ position:relative; }
-    .chapter:not(#merch) .inner::before{ content:""; position:absolute; left:18px; right:18px;
-      bottom:-1.85rem; height:1px; background:rgba(244,234,210,.16); }
-
-    /* After Dark and The Pour keep their in-flow interactive 3D — it is the product, not scenery */
-    #world{ justify-content:flex-start; }
-    #world > .inner{ position:static; height:auto; margin-top:0; padding:0 18px;
-      background:none !important; }
-    #world .fam-rail{ margin-left:-18px; margin-right:-18px; padding-left:18px; padding-right:18px; }
-    .fam-reveal{ padding-top:1rem; }
-    #merchstage{ margin-top:1.2rem; }
-    #merchstage #mwrap{ height:auto; aspect-ratio:1/1; }
-    #merchstage #mimg{ height:auto; width:100%; object-fit:contain; }
   }
 
   /* merch stage */
@@ -587,128 +509,6 @@
   else move();
 })();
 </script>
-<script>/* MOBILE ONLY — make the framed pictures move.
-   Study B replaced the fixed full-screen film with a picture per chapter. A picture that never
-   moves reads as a brochure, so each frame gets back the loop it was authored from, INSIDE the
-   window rather than behind the type:
-     - the .webp poster is already in the <img>, so the frame is never empty;
-     - the clip is fetched only when its chapter is actually approaching (IntersectionObserver),
-       never on arrival — the whole reason the phone build is fast now is that it does not pull
-       multiple megabytes of video before the first screen. The hero's clip additionally waits for
-       the page to settle, and everything is skipped entirely on Save-Data or 2g;
-     - it pauses the moment it leaves the screen, so only one video ever decodes;
-     - and the media sits 112% tall inside a clipped window, drifting a few percent with scroll,
-       which is what makes a framed still feel alive rather than pasted on.
-   Desktop is untouched — it still runs the real full-screen films. */
-(function(){
-  var small = (innerWidth < 900) || (window.matchMedia && matchMedia('(hover:none)').matches);
-  if(!small) return;
-  var conn = navigator.connection || {};
-  var thin = conn.saveData === true || /(^|-)2g$/.test(conn.effectiveType || '');
-
-  function start(){
-    var frames = [].slice.call(document.querySelectorAll('.pic-frame'));
-    if(!frames.length) return;
-
-    /* drift: map each frame's travel through the viewport onto a few percent of movement */
-    function drift(){
-      for(var i=0;i<frames.length;i++){
-        var f=frames[i], r=f.getBoundingClientRect();
-        if(r.bottom < -80 || r.top > innerHeight + 80) continue;
-        var t = (r.top + r.height/2 - innerHeight/2) / innerHeight;   /* -1 .. 1 */
-        var y = Math.max(-1, Math.min(1, t)) * 5.2;                   /* percent */
-        var m = f.querySelector('video.on') || f.querySelector('img');
-        if(m) m.style.transform = 'translate3d(0,' + y.toFixed(2) + '%,0)';
-      }
-    }
-    var ticking=false;
-    addEventListener('scroll', function(){
-      if(ticking) return; ticking=true;
-      requestAnimationFrame(function(){ drift(); ticking=false; });
-    }, {passive:true});
-    drift();
-
-    if(thin) return;   /* Save-Data / 2g: posters only, still fully composed */
-
-    /* Load and play from inside drift(), which is the one code path here that is PROVEN to run —
-       it is what moves the pictures, and the hero's img already carried its transform. An
-       IntersectionObserver was tried first and silently never fired, leaving five still frames and
-       a video that only appeared when tapped, which on iOS meant a play button on a picture. */
-    var settled = false;
-    setTimeout(function(){ settled = true; pump(); }, 1200);   /* let the first screen paint first */
-
-    function pump(){
-      if(!settled) return;
-      for(var i=0;i<frames.length;i++){
-        var f=frames[i], src=f.getAttribute('data-clip');
-        if(!src) continue;
-        var r=f.getBoundingClientRect();
-        var near = r.bottom > -300 && r.top < innerHeight + 300;
-        var v=f.querySelector('video');
-        if(near && !v){
-          v=document.createElement('video');
-          v.muted=true; v.defaultMuted=true; v.loop=true; v.playsInline=true;
-          v.setAttribute('muted',''); v.setAttribute('playsinline',''); v.setAttribute('autoplay','');
-          v.autoplay=true; v.controls=false; v.removeAttribute('controls');
-          v.disablePictureInPicture=true; v.setAttribute('disablepictureinpicture','');
-          v.setAttribute('tabindex','-1'); v.setAttribute('aria-hidden','true');
-          v.preload='auto'; v.src=src;
-          v.addEventListener('canplay', function(){ this.classList.add('on'); drift(); }, {once:true});
-          f.appendChild(v);
-          var p=v.play(); if(p && p.catch) p.catch(function(){});
-        } else if(v){
-          if(near && v.paused){ var q=v.play(); if(q && q.catch) q.catch(function(){}); }
-          else if(!near && !v.paused){ v.pause(); }
-        }
-      }
-    }
-    addEventListener('scroll', function(){ pump(); }, {passive:true});
-    /* iOS refuses autoplay until the page has been touched at least once on some settings — the
-       first touch anywhere quietly starts whatever is on screen. */
-    ['touchstart','pointerdown'].forEach(function(ev){
-      addEventListener(ev, function(){ settled = true; pump(); }, {passive:true, once:true});
-    });
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
-  else start();
-})();
-</script>
-<script>/* MOBILE ONLY — the flow. Each chapter's picture and its words arrive as one considered
-   move: the frame rises and fades, the type follows a beat later. Scrubbed against scroll so it
-   reverses on the way back up, and gated on COQ_SMALL so desktop keeps its authored reveal. */
-(function(){
-  var small = (innerWidth < 900) || (window.matchMedia && matchMedia('(hover:none)').matches);
-  if(!small) return;
-  function start(){
-    if(!window.gsap || !window.ScrollTrigger) return;
-    document.querySelectorAll('.chapter').forEach(function(ch){
-      var fig = ch.querySelector('.pic-frame');
-      var words = [].slice.call(ch.querySelectorAll(':scope > .inner > :not(.pic-frame)'));
-      if(fig){
-        gsap.fromTo(fig, {y:30, opacity:0}, {y:0, opacity:1, ease:'power2.out', duration:.9,
-          scrollTrigger:{ trigger:fig, start:'top 92%', toggleActions:'play none none reverse' }});
-      }
-      if(words.length){
-        gsap.fromTo(words, {y:18, opacity:0}, {y:0, opacity:1, ease:'power2.out',
-          duration:.75, stagger:.07, delay:.12,
-          scrollTrigger:{ trigger:words[0], start:'top 94%', toggleActions:'play none none reverse' }});
-      }
-    });
-    ScrollTrigger.refresh();
-    /* FAILSAFE. Whatever happens — GSAP missing, ScrollTrigger mis-measuring after the images
-       settle, a trigger that never fires — the page must not be left blank. Three seconds after
-       the reveal is wired, anything still at zero opacity is simply shown. This is the difference
-       between a missed animation and "mobile is broken for me completely". */
-    setTimeout(function(){
-      document.querySelectorAll('.pic-frame, .chapter > .inner > *').forEach(function(el){
-        if(parseFloat(getComputedStyle(el).opacity) < 0.05){ el.style.opacity = 1; el.style.transform = 'none'; }
-      });
-    }, 3000);
-  }
-  if(document.readyState === 'complete') setTimeout(start, 300);
-  else addEventListener('load', function(){ setTimeout(start, 300); });
-})();
-</script>
 <video id="filmB" class="filmlayer" muted loop playsinline preload="metadata"
   poster="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-SERIGRAPH-DUO-V1-POSTER.webp">
   <source src="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-SERIGRAPH-DUO-V1-SITE-1080.mp4" type="video/mp4">
@@ -744,7 +544,6 @@
 
   <div class="chapter" data-ch="0" data-tone="dark" id="hero">
     <div class="inner">
-      <figure class="pic-frame" data-clip="coquirico-handoff/assets/phone/hero-phone.mp4"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/01-HERO-NIGHT-RAINFOREST/01-HERO-NIGHT-RAINFOREST-POSTER.webp" alt="Night rainforest — the coquí calling into the dark" decoding="async"></figure>
       <p class="eyebrow">Puerto Rican style coconut drink</p>
       <p class="sensory">The rainforest exhales &mdash; warm wet air, the hush of leaves, and the first coqui calling into the dark.</p>
       <h1>Sip a taste of the Caribbean.</h1>
@@ -755,7 +554,6 @@
 
   <div class="chapter" data-ch="1" data-tone="dark" id="world">
     <div class="inner" style="max-width:44rem">
-      <figure class="pic-frame"><img src="coquirico-handoff/assets/concept/brand-world/environments/brand-world-night-poster-v1.webp" alt="The Coquírico brand world at night" decoding="async"></figure>
       <p class="eyebrow">04 / After Dark</p>
       <p class="sensory">The coqui&rsquo;s song settles into rhythm &mdash; and the can is the beginning, not the boundary.</p>
       <h2>One island. Many expressions.</h2>
@@ -775,7 +573,6 @@
 
   <div class="chapter" data-ch="2" data-tone="dark" id="story">
     <div class="inner">
-      <figure class="pic-frame" data-clip="coquirico-handoff/assets/phone/island-phone.mp4"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-LITHO-V1-POSTER.webp" alt="A coquí on a monstera leaf, throat lit, under the moon" decoding="async"></figure>
       <p class="eyebrow">02 / The Island</p>
       <p class="sensory">The story breathes &mdash; the can steps aside, and the island itself takes the screen.</p>
       <h2>Born of El Yunque</h2>
@@ -785,7 +582,6 @@
 
   <div class="chapter" data-ch="2" data-tone="light" data-side="right" id="drink">
     <div class="inner">
-      <figure class="pic-frame" data-clip="coquirico-handoff/assets/concept/about/motion/about-pour-loop-1080-v1.mp4"><img src="coquirico-handoff/assets/concept/about/motion/about-pour-poster-v1.webp" alt="Coconut and cinnamon breaking over ice" decoding="async"></figure>
       <p class="eyebrow">03 / The Pour</p>
       <p class="sensory">Cool coconut breaks over ice, and a thread of cinnamon lifts to meet the vanilla.</p>
       <h2>What waits inside</h2>
@@ -808,7 +604,6 @@
 
   <div class="chapter" data-ch="4" data-tone="dark" id="merch">
     <div class="inner" style="max-width:100%;text-align:center;margin:0 auto">
-      <figure class="pic-frame" data-clip="coquirico-handoff/assets/phone/merch-phone.mp4"><img src="coquirico-handoff/assets/concept/merch/carousel-environment/merch-pavilion-poster-v1.webp" alt="The Isla Drop pavilion" decoding="async"></figure>
       <p class="eyebrow">05 / Isla Drop 01</p>
       <h2 style="margin-bottom:.2rem">Wear the Rainforest</h2>
       <p class="body" style="opacity:.75;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase">Concept drop &middot; presentation only</p>
@@ -1320,14 +1115,6 @@ function initCan(canvas){
        are actually reading it (or reaching for the After Dark picker, which lives inside this
        element). Desktop keeps the authored one-way fade — there the chapters are far apart. */
     if(window.COQ_SMALL){
-      /* STUDY B: the phone no longer stacks 100svh screens, so this rise/hold/sink timeline —
-         whose geometry assumed exactly that — was holding .inner at autoAlpha 0 forever. The
-         framed-picture reveal script near #filmB owns the phone entrance now. Leave the copy
-         visible and get out of the way. */
-      gsap.set(el,{autoAlpha:1,y:0});
-      return;
-    }
-    if(false){
       /* NOT the last chapter: the scroll ENDS on it, so there is nothing to hand over to. Fading it
          would dissolve the screen you are standing on — and autoAlpha:0 sets visibility:hidden,
          which would make NOTIFY ME untappable. It keeps the one-way fade. */
