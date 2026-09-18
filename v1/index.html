@@ -93,6 +93,10 @@
   .chapter{ min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; justify-content:center;
     padding:clamp(4.6rem,9vw,6.5rem) clamp(1.2rem,5vw,6rem) clamp(2rem,6vw,4rem); box-sizing:border-box; }
   .inner{ max-width:34rem; will-change:transform,opacity; }
+  /* STUDY B: on a phone each chapter leads with a framed PICTURE instead of a full-bleed
+     background. Desktop never shows these — it keeps the live film, the atmosphere shader and the
+     travelling can. */
+  .pic-frame{ display:none; }
   .chapter[data-side="right"] .inner{ margin-left:auto; text-align:right; }
   .eyebrow{ margin:0 0 1rem; font-size:.74rem; letter-spacing:.32em; text-transform:uppercase; font-weight:700; color:var(--amber); }
   .sensory{ margin:0 0 1.2rem; font-family:var(--serif); font-style:italic; font-size:clamp(1.02rem,2.1vw,1.35rem); line-height:1.5; opacity:.85; }
@@ -429,6 +433,73 @@
       text-align:center; }
     #world > .inner{ padding-bottom:26px; }
     #world .fam-rail{ margin-top:.6rem; }
+    /* ══════════════════════════ STUDY B — "the image is a picture, not a backdrop" ══════════════
+       Chosen by Pedro from three phone compositions (coquirico-phone-studies.html).
+
+       Everything before this point in this media block was an ADAPTATION: the desktop's stack of
+       eyebrow / lead-in / headline / body, laid over a full-screen background cropped to a ~26%
+       slice of itself, with gradient scrims to keep the type readable. Four passes of that landed
+       at "a lil better" every time, because the problem was never the spacing — it was that a
+       composition authored for a 1920px-wide frame has no phone form.
+
+       B is a different composition. The image stops being a backdrop and becomes a picture: a
+       hard-edged 4:5 frame with real margin around it, sitting on solid brand ground, with the
+       type in its own uninterrupted field beneath it. Nothing is scrimmed, nothing is cropped to a
+       sliver, and the air comes from the gap between two clean things rather than from insetting a
+       plate (which is the pop-up card he rejected).
+
+       The fixed full-screen media layers are hidden here. That is the honest trade: the phone
+       loses the travelling can and the pour wipes, and in exchange it gets a composition, a 7.8MB
+       film it no longer downloads, and an end to the whole class of bugs that came from painting
+       type over a moving background on a device whose viewport resizes as you scroll. The 3D that
+       is actually INTERACTIVE — the After Dark picker and the two ritual cans — lives in the
+       document flow and stays. Desktop keeps all of it. ══════════════════════════════════════ */
+
+    body{ background:#0B1109; }
+    #bg-canvas,#can-canvas,.filmlayer,#grain,#ripples,#wave-svg,#word{ display:none !important; }
+
+    /* chapters become flowing sections, not stacked screens */
+    .chapter{ min-height:0; display:block; padding:0 0 2.6rem; background:none; }
+    #hero{ padding-top:calc(58px + env(safe-area-inset-top)); }
+    .chapter + .chapter{ padding-top:.4rem; }
+    .chapter .inner,
+    .chapter[data-side="right"] .inner{ position:static; max-width:none; margin:0; text-align:left;
+      background:none !important; padding:0 18px; border-radius:0; text-shadow:none; }
+    .chapter .inner::after{ display:none; }
+
+    /* the picture */
+    .pic-frame{ display:block; margin:0 0 1.5rem; }
+    .pic-frame img{ width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:3px;
+      background:#0e1a10; box-shadow:0 26px 60px rgba(0,0,0,.5); }
+    #hero .pic-frame img{ object-position:50% 42%; }
+    #story .pic-frame img{ object-position:72% 50%; }
+
+    /* the type field — one ground, so the light chapter reads cream-on-night like the rest */
+    .chapter[data-tone="light"]{ color:var(--cream); }
+    .chapter[data-tone="light"] .inner{ color:var(--cream); }
+    #drink .eyebrow{ color:var(--amber-b); }
+    .chapter .eyebrow{ margin:0 0 .85rem; }
+    .chapter h2,#hero h1{ font-size:clamp(2.1rem,10vw,2.7rem); line-height:1.03;
+      letter-spacing:-.018em; margin:0 0 .85rem; max-width:12ch; }
+    .chapter .sensory{ font-size:1.02rem; line-height:1.45; margin-bottom:1rem; opacity:.88;
+      max-width:30ch; }
+    .chapter .body{ font-size:.92rem; line-height:1.6; opacity:.7; max-width:36ch; }
+    .chapter .facts{ margin-top:1.1rem; font-size:.64rem; opacity:.55; line-height:1.5; }
+
+    /* the hairline that closes each chapter */
+    .chapter .inner{ position:relative; }
+    .chapter:not(#merch) .inner::before{ content:""; position:absolute; left:18px; right:18px;
+      bottom:-1.3rem; height:1px; background:rgba(244,234,210,.18); }
+
+    /* After Dark and The Pour keep their in-flow interactive 3D — it is the product, not scenery */
+    #world{ justify-content:flex-start; }
+    #world > .inner{ position:static; height:auto; margin-top:0; padding:0 18px;
+      background:none !important; }
+    #world .fam-rail{ margin-left:-18px; margin-right:-18px; padding-left:18px; padding-right:18px; }
+    .fam-reveal{ padding-top:1rem; }
+    #merchstage{ margin-top:1.2rem; }
+    #merchstage #mwrap{ height:auto; aspect-ratio:1/1; }
+    #merchstage #mimg{ height:auto; width:100%; object-fit:contain; }
   }
 
   /* merch stage */
@@ -544,6 +615,7 @@
 
   <div class="chapter" data-ch="0" data-tone="dark" id="hero">
     <div class="inner">
+      <figure class="pic-frame"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/01-HERO-NIGHT-RAINFOREST/01-HERO-NIGHT-RAINFOREST-POSTER.webp" alt="Night rainforest — the coquí calling into the dark" loading="lazy" decoding="async"></figure>
       <p class="eyebrow">Puerto Rican style coconut drink</p>
       <p class="sensory">The rainforest exhales &mdash; warm wet air, the hush of leaves, and the first coqui calling into the dark.</p>
       <h1>Sip a taste of the Caribbean.</h1>
@@ -554,6 +626,7 @@
 
   <div class="chapter" data-ch="1" data-tone="dark" id="world">
     <div class="inner" style="max-width:44rem">
+      <figure class="pic-frame"><img src="coquirico-handoff/assets/concept/brand-world/environments/brand-world-night-poster-v1.webp" alt="The Coquírico brand world at night" loading="lazy" decoding="async"></figure>
       <p class="eyebrow">04 / After Dark</p>
       <p class="sensory">The coqui&rsquo;s song settles into rhythm &mdash; and the can is the beginning, not the boundary.</p>
       <h2>One island. Many expressions.</h2>
@@ -573,6 +646,7 @@
 
   <div class="chapter" data-ch="2" data-tone="dark" id="story">
     <div class="inner">
+      <figure class="pic-frame"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-LITHO-V1-POSTER.webp" alt="A coquí on a monstera leaf, throat lit, under the moon" loading="lazy" decoding="async"></figure>
       <p class="eyebrow">02 / The Island</p>
       <p class="sensory">The story breathes &mdash; the can steps aside, and the island itself takes the screen.</p>
       <h2>Born of El Yunque</h2>
@@ -582,6 +656,7 @@
 
   <div class="chapter" data-ch="2" data-tone="light" data-side="right" id="drink">
     <div class="inner">
+      <figure class="pic-frame"><img src="coquirico-handoff/assets/concept/about/motion/about-pour-poster-v1.webp" alt="Coconut and cinnamon breaking over ice" loading="lazy" decoding="async"></figure>
       <p class="eyebrow">03 / The Pour</p>
       <p class="sensory">Cool coconut breaks over ice, and a thread of cinnamon lifts to meet the vanilla.</p>
       <h2>What waits inside</h2>
@@ -604,6 +679,7 @@
 
   <div class="chapter" data-ch="4" data-tone="dark" id="merch">
     <div class="inner" style="max-width:100%;text-align:center;margin:0 auto">
+      <figure class="pic-frame"><img src="coquirico-handoff/assets/concept/merch/carousel-environment/merch-pavilion-poster-v1.webp" alt="The Isla Drop pavilion" loading="lazy" decoding="async"></figure>
       <p class="eyebrow">05 / Isla Drop 01</p>
       <h2 style="margin-bottom:.2rem">Wear the Rainforest</h2>
       <p class="body" style="opacity:.75;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase">Concept drop &middot; presentation only</p>
