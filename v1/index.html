@@ -276,11 +276,11 @@
       background:linear-gradient(180deg,rgba(244,234,210,0) 0px,rgba(244,234,210,.20) 28px,rgba(244,234,210,.48) 60px,rgba(244,234,210,.72) 92px,rgba(244,234,210,.84) 140px,rgba(244,234,210,.88) 100%);
       text-shadow:0 1px 10px rgba(250,243,226,.95), 0 0 24px rgba(250,243,226,.8); }
     .chapter .inner{ position:relative; }
-    .chapter .inner::after{ content:""; position:absolute; left:0; right:0; top:100%; height:26vh;
+    .chapter .inner::after{ content:""; position:absolute; left:0; right:0; top:100%; height:13svh;
       pointer-events:none;
-      background:linear-gradient(180deg,rgba(8,14,8,.78) 0%,rgba(8,14,8,.72) 26%,rgba(8,14,8,.50) 56%,rgba(8,14,8,0) 100%); }
+      background:linear-gradient(180deg,rgba(8,14,8,.78) 0%,rgba(8,14,8,.56) 30%,rgba(8,14,8,.22) 62%,rgba(8,14,8,0) 100%); }
     .chapter[data-tone="light"] .inner::after{
-      background:linear-gradient(180deg,rgba(244,234,210,.88) 0%,rgba(244,234,210,.82) 26%,rgba(244,234,210,.58) 56%,rgba(244,234,210,0) 100%); }
+      background:linear-gradient(180deg,rgba(244,234,210,.88) 0%,rgba(244,234,210,.62) 30%,rgba(244,234,210,.26) 62%,rgba(244,234,210,0) 100%); }
     #world > .inner::after{ display:none; }
     /* the merch inner carries an INLINE `margin:0 auto`, which beats the stylesheet and centred a
        373px plate in a 375px chapter — a 1px hairline of film down each edge, which is exactly the
@@ -1616,9 +1616,13 @@ function initCan(canvas){
   function build(){
     gsap.set(syl,{xPercent:-50,yPercent:-50}); gsap.set(wordmark,{xPercent:-50,yPercent:-50});
     tl=gsap.timeline({ paused:QA, defaults:{ ease:'power3.out' }, onComplete:finish });
-    /* A 4.5s title sequence is a cinema opening on a 27" screen and an obstacle on a phone, where
-       the first gesture is a thumb already moving. Same choreography, 1.6x faster (~2.8s). */
-    if(window.COQ_SMALL) tl.timeScale(1.6);
+    /* I first set this to 1.6x (~2.8s) reasoning that a 4.5s title sequence is an obstacle on a
+       phone. That is the app instinct and it is the inverse of the brand instinct: the entrance is
+       the one moment with nothing competing for attention, and at 1.6x the four colour-pop
+       syllables get 0.275s each instead of 0.44s — a flash rather than a pop. The site was opening
+       by announcing it was in a hurry, on the device Pedro said feels "rushed".
+       1.2x (~3.75s) keeps the pop-in legible while staying well inside the unlock failsafe. */
+    if(window.COQ_SMALL) tl.timeScale(1.2);
     tl.to(kicker,{opacity:.85,duration:.5},0.05);
     tl.add(function(){ audioOn(); coqui(.45,0); seed.x=.62; seed.y=.42; seed.on=1; gsap.to(S,{bloom:.35,duration:.5,ease:'power2.out'}); },0.5);
     var beats=[0.9,1.55,2.1,2.6], levels=[0.28,0.52,0.74,1.0], mixes=[0.15,0.5,0.78,1.0];
@@ -1645,7 +1649,7 @@ function initCan(canvas){
        eventually released it. Pedro: "i cant even move in mobile preview."
        A phone gets 3.8s, which is past the (time-scaled) intro with room to spare, and is short
        enough that a stall never reads as a broken page. */
-    setTimeout(function(){ if(!done) finish(); }, window.COQ_SMALL ? 3800 : 12000);
+    setTimeout(function(){ if(!done) finish(); }, window.COQ_SMALL ? 4800 : 12000);
   }
   function flipToHero(){
     if(!navbrand){ return; }
