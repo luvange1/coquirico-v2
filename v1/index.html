@@ -670,16 +670,25 @@
       var fig = ch.querySelector('.pic-frame');
       var words = [].slice.call(ch.querySelectorAll(':scope > .inner > :not(.pic-frame)'));
       if(fig){
-        gsap.fromTo(fig, {y:30, autoAlpha:0}, {y:0, autoAlpha:1, ease:'power2.out', duration:.9,
+        gsap.fromTo(fig, {y:30, opacity:0}, {y:0, opacity:1, ease:'power2.out', duration:.9,
           scrollTrigger:{ trigger:fig, start:'top 92%', toggleActions:'play none none reverse' }});
       }
       if(words.length){
-        gsap.fromTo(words, {y:18, autoAlpha:0}, {y:0, autoAlpha:1, ease:'power2.out',
+        gsap.fromTo(words, {y:18, opacity:0}, {y:0, opacity:1, ease:'power2.out',
           duration:.75, stagger:.07, delay:.12,
           scrollTrigger:{ trigger:words[0], start:'top 94%', toggleActions:'play none none reverse' }});
       }
     });
     ScrollTrigger.refresh();
+    /* FAILSAFE. Whatever happens — GSAP missing, ScrollTrigger mis-measuring after the images
+       settle, a trigger that never fires — the page must not be left blank. Three seconds after
+       the reveal is wired, anything still at zero opacity is simply shown. This is the difference
+       between a missed animation and "mobile is broken for me completely". */
+    setTimeout(function(){
+      document.querySelectorAll('.pic-frame, .chapter > .inner > *').forEach(function(el){
+        if(parseFloat(getComputedStyle(el).opacity) < 0.05){ el.style.opacity = 1; el.style.transform = 'none'; }
+      });
+    }, 3000);
   }
   if(document.readyState === 'complete') setTimeout(start, 300);
   else addEventListener('load', function(){ setTimeout(start, 300); });
@@ -720,7 +729,7 @@
 
   <div class="chapter" data-ch="0" data-tone="dark" id="hero">
     <div class="inner">
-      <figure class="pic-frame" data-clip="coquirico-handoff/assets/LIVE_BACKGROUNDS/01-HERO-NIGHT-RAINFOREST/01-HERO-NIGHT-RAINFOREST-WEB-1080.mp4"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/01-HERO-NIGHT-RAINFOREST/01-HERO-NIGHT-RAINFOREST-POSTER.webp" alt="Night rainforest — the coquí calling into the dark" loading="lazy" decoding="async"></figure>
+      <figure class="pic-frame" data-clip="coquirico-handoff/assets/LIVE_BACKGROUNDS/01-HERO-NIGHT-RAINFOREST/01-HERO-NIGHT-RAINFOREST-WEB-1080.mp4"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/01-HERO-NIGHT-RAINFOREST/01-HERO-NIGHT-RAINFOREST-POSTER.webp" alt="Night rainforest — the coquí calling into the dark" decoding="async"></figure>
       <p class="eyebrow">Puerto Rican style coconut drink</p>
       <p class="sensory">The rainforest exhales &mdash; warm wet air, the hush of leaves, and the first coqui calling into the dark.</p>
       <h1>Sip a taste of the Caribbean.</h1>
@@ -731,7 +740,7 @@
 
   <div class="chapter" data-ch="1" data-tone="dark" id="world">
     <div class="inner" style="max-width:44rem">
-      <figure class="pic-frame"><img src="coquirico-handoff/assets/concept/brand-world/environments/brand-world-night-poster-v1.webp" alt="The Coquírico brand world at night" loading="lazy" decoding="async"></figure>
+      <figure class="pic-frame"><img src="coquirico-handoff/assets/concept/brand-world/environments/brand-world-night-poster-v1.webp" alt="The Coquírico brand world at night" decoding="async"></figure>
       <p class="eyebrow">04 / After Dark</p>
       <p class="sensory">The coqui&rsquo;s song settles into rhythm &mdash; and the can is the beginning, not the boundary.</p>
       <h2>One island. Many expressions.</h2>
@@ -751,7 +760,7 @@
 
   <div class="chapter" data-ch="2" data-tone="dark" id="story">
     <div class="inner">
-      <figure class="pic-frame" data-clip="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-LITHO-V1-SITE-1080.mp4"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-LITHO-V1-POSTER.webp" alt="A coquí on a monstera leaf, throat lit, under the moon" loading="lazy" decoding="async"></figure>
+      <figure class="pic-frame" data-clip="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-LITHO-V1-SITE-1080.mp4"><img src="coquirico-handoff/assets/LIVE_BACKGROUNDS/03-ABOUT-COQUI-CALL/03-ABOUT-COQUI-CALL-LITHO-V1-POSTER.webp" alt="A coquí on a monstera leaf, throat lit, under the moon" decoding="async"></figure>
       <p class="eyebrow">02 / The Island</p>
       <p class="sensory">The story breathes &mdash; the can steps aside, and the island itself takes the screen.</p>
       <h2>Born of El Yunque</h2>
@@ -761,7 +770,7 @@
 
   <div class="chapter" data-ch="2" data-tone="light" data-side="right" id="drink">
     <div class="inner">
-      <figure class="pic-frame" data-clip="coquirico-handoff/assets/concept/about/motion/about-pour-loop-1080-v1.mp4"><img src="coquirico-handoff/assets/concept/about/motion/about-pour-poster-v1.webp" alt="Coconut and cinnamon breaking over ice" loading="lazy" decoding="async"></figure>
+      <figure class="pic-frame" data-clip="coquirico-handoff/assets/concept/about/motion/about-pour-loop-1080-v1.mp4"><img src="coquirico-handoff/assets/concept/about/motion/about-pour-poster-v1.webp" alt="Coconut and cinnamon breaking over ice" decoding="async"></figure>
       <p class="eyebrow">03 / The Pour</p>
       <p class="sensory">Cool coconut breaks over ice, and a thread of cinnamon lifts to meet the vanilla.</p>
       <h2>What waits inside</h2>
@@ -784,7 +793,7 @@
 
   <div class="chapter" data-ch="4" data-tone="dark" id="merch">
     <div class="inner" style="max-width:100%;text-align:center;margin:0 auto">
-      <figure class="pic-frame" data-clip="coquirico-handoff/assets/LIVE_BACKGROUNDS/06-MERCH-CARIBBEAN-PAVILION/06-MERCH-CARIBBEAN-PAVILION-WEB-1080.mp4"><img src="coquirico-handoff/assets/concept/merch/carousel-environment/merch-pavilion-poster-v1.webp" alt="The Isla Drop pavilion" loading="lazy" decoding="async"></figure>
+      <figure class="pic-frame" data-clip="coquirico-handoff/assets/LIVE_BACKGROUNDS/06-MERCH-CARIBBEAN-PAVILION/06-MERCH-CARIBBEAN-PAVILION-WEB-1080.mp4"><img src="coquirico-handoff/assets/concept/merch/carousel-environment/merch-pavilion-poster-v1.webp" alt="The Isla Drop pavilion" decoding="async"></figure>
       <p class="eyebrow">05 / Isla Drop 01</p>
       <h2 style="margin-bottom:.2rem">Wear the Rainforest</h2>
       <p class="body" style="opacity:.75;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase">Concept drop &middot; presentation only</p>
