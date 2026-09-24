@@ -587,8 +587,8 @@ p{margin:0}
 /* 44px hit area for the Menu button with zero layout shift */
 .nav-toggle{padding:14px 12px;margin:-14px -12px}
 /* serve card 3: reframe below the render's halo rings (stopgap until the photo is re-exported) */
-/* (the 1.45x zoom on the dusk card existed only to hide two AI lens-flare rings; the rings were
-   inpainted out of the source on 2026-09-23, so the card shows its real framing again) */
+.serve-grid li:nth-child(3) .photo img{transform:scale(1.45);transform-origin:50% 96%}
+.serve-grid li:nth-child(3):hover .photo img{transform:scale(1.5)}
 /* touch screens have no hover: the door into V1 must announce itself */
 @media (hover:none){
   .drink-detail .fig::after{opacity:.92;transform:translate(-50%,0)}
@@ -625,15 +625,11 @@ p{margin:0}
 /* paper has tooth */
 body{background:var(--grain) 0 0/var(--grain-size) repeat,var(--paper)}
 
-/* the hero overlay was the only COLD colour on the page — rgba(8,12,14) is a blue-black. Warm ink. */
-.hero-bg{background:#1A120D}
-.hero-scrim{background:var(--grain) 0 0/var(--grain-size) repeat,linear-gradient(90deg,rgba(30,19,12,.40) 0%,rgba(30,19,12,.16) 28%,rgba(30,19,12,0) 50%),linear-gradient(180deg,rgba(30,19,12,.44) 0%,rgba(30,19,12,.10) 30%,rgba(30,19,12,0) 55%,rgba(30,19,12,.28) 100%)}
+/* (the warm tint + grain over the hero video was removed 2026-09-23 at Pedro's request — the video
+   shows through its ORIGINAL scrim again. Only these text shadows remain.) */
 .hero-copy .eyebrow{text-shadow:0 1px 18px rgba(22,13,8,.55)}
 .hero h1{text-shadow:0 2px 30px rgba(22,13,8,.45)}
 .hero .sub{text-shadow:0 1px 18px rgba(22,13,8,.5)}
-@media (max-width:960px){
-  .hero-scrim{background:var(--grain) 0 0/var(--grain-size) repeat,linear-gradient(90deg,rgba(30,19,12,.40) 0%,rgba(30,19,12,.16) 28%,rgba(30,19,12,0) 50%),linear-gradient(265deg,rgba(30,19,12,.30) 0%,rgba(30,19,12,0) 45%),linear-gradient(180deg,rgba(30,19,12,.55) 0%,rgba(30,19,12,.12) 30%,rgba(30,19,12,0) 55%,rgba(30,19,12,.28) 100%)}
-}
 
 /* tonal steps instead of pure #fff */
 .benefit .disc,:root[data-noche] .benefit .disc{background:radial-gradient(120% 120% at 32% 22%,var(--paper-lift) 0%,var(--paper-2) 80%);box-shadow:var(--sh-rest)}
@@ -645,12 +641,8 @@ body{background:var(--grain) 0 0/var(--grain-size) repeat,var(--paper)}
 .map-card{background:var(--grain) 0 0/var(--grain-size) repeat,linear-gradient(180deg,#F3E0C6 0%,#E3EFE4 46%,#DCEFE9 100%)}
 :root[data-noche] .map-card{background:var(--grain) 0 0/var(--grain-size) repeat,linear-gradient(180deg,#0A111C 0%,#0F1B1A 55%,#13201C 100%)}
 
-/* photos as prints: the same grain and the same lens falloff on every photograph, plus a hairline
-   edge. It lives in ::after because an inset shadow on the container would paint UNDER the img. */
-.media::after,.story-media::after,.serve .photo::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;
-  background:var(--grain) 0 0/var(--grain-size) repeat,radial-gradient(130% 100% at 50% 42%,rgba(26,17,12,0) 62%,rgba(26,17,12,.14) 100%);
-  box-shadow:inset 0 0 0 1px var(--edge)}
-.kinetic,.media .cap{z-index:2}
+/* (the grain + vignette + hairline laid over every photo was removed 2026-09-23 at Pedro's request —
+   photos show exactly as their files are) */
 .serve .photo,.story-media{box-shadow:var(--sh-rest)}
 
 /* one lift recipe for every hover */
@@ -693,27 +685,10 @@ body{background:var(--grain) 0 0/var(--grain-size) repeat,var(--paper)}
 :root[data-noche] .ing .disc{background:radial-gradient(circle at 50% 36%,color-mix(in srgb,var(--tint) 24%,var(--paper-2)) 0%,var(--paper-2) 72%)}
 /* ════════════ end BUILD 1 ════════════ */
 
-/* ════════════ PREMIUM PASS · BUILD 2 — one shoot (2026-09-23) ════════════
-   Six photographs came from six different "shoots" — a stock beach clip, an emerald rain render,
-   a cream golden-hour render, a navy dusk render with AI lens-flare rings, a cold moonlit macro,
-   an HDR-turquoise postcard — each with its own white point, black point and saturation.
-   All stills are now baked from their lossless masters with ONE grade: every image's white is
-   --paper, every image's black is a warm ink that is never #000, mids warmed, saturation -8%. That
-   is what makes separate images read as one camera, one stock, one colourist. Ungraded originals
-   are kept in v2/_originals-ungraded/ (outside assets/, so they never deploy). The hero video, the can cut-outs and the ingredient cut-outs are
-   deliberately NOT graded (finished label art; the poster must match video frame 1). */
-
-/* serve plates: 3:4 with a static 112% overscan cropped the can/glass pairs for no reason — there
-   is no parallax on these. 4:5 and the whole frame; each card's --pos frames its pair whole. */
-.serve .photo{aspect-ratio:4/5}
-.serve .photo img{inset:0;height:100%}
-
-/* the courtyard band: the cream kinetic words need a little shade under the bright sky */
-.media::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(180deg,rgba(22,14,9,.34) 0%,rgba(22,14,9,0) 38%)}
-.media picture{display:contents}
-@media (max-width:700px){ .media img{object-position:38% 50%} }
-/* ════════════ end BUILD 2 ════════════ */
+/* ════════════ PREMIUM PASS · BUILD 2 — REMOVED 2026-09-23 ════════════
+   Pedro: the colour grade on the photos was a downgrade. Every photo is back to its original file
+   and original framing (the band is the Coquetearte rain photo again; the dusk card keeps its 1.45x
+   zoom). Do not re-grade photos or video without asking him first. */
 
 /* ════════════ PREMIUM PASS · BUILD 3 — Questions: "co… quí" (2026-09-23) ════════════
    Pedro: "the questions page could be more brand identity / Coquírico coded, and more fun." It was
@@ -950,12 +925,9 @@ p,.lead,.faq-list .a{text-wrap:pretty}
 <!-- ============ MEDIA BLOCK ============ -->
 <section class="wrap-wide">
   <div class="media reveal-img" id="media">
-    <picture>
-      <source media="(max-width:700px)" srcset="assets/story/courtyard-band-phone.webp" width="794" height="992">
-      <img src="assets/story/courtyard-band.webp" alt="An empty travertine courtyard: green glazed tile, palm shadows, a flamboyán over the sea" width="1586" height="992" loading="eager" data-media-img>
-    </picture>
+    <img src="assets/serves/serve-rainline.webp" alt="A tall glass of Coquetearte over ice beside the can, in a rain-washed courtyard" width="1536" height="1024" loading="eager" data-media-img>
     <div class="kinetic" lang="es" aria-hidden="true" data-kinetic><span>frío,</span><span>cremoso,</span><span>sin prisa —</span><span>frío,</span><span>cremoso,</span><span>sin prisa —</span></div>
-    <p class="cap">El patio · a la hora dorada</p>
+    <p class="cap">Coquetearte · sobre hielo</p>
   </div>
 </section>
 
@@ -1053,15 +1025,15 @@ p,.lead,.faq-list .a{text-wrap:pretty}
     </div>
     <ul class="serve-grid">
       <li class="serve">
-        <div class="photo reveal-img" style="--pos:70% 50%"><img src="assets/serves/serve-rainline.webp" alt="A tall glass of Coquetearte over ice beside the can" width="1536" height="1024" loading="lazy"></div>
+        <div class="photo reveal-img" style="--pos:52% 50%"><img src="assets/serves/serve-rainline.webp" alt="A tall glass of Coquetearte over ice beside the can" width="1536" height="1024" loading="lazy"></div>
         <div class="txt reveal"><p class="eyebrow">Over ice</p><b lang="es">Sobre hielo</b><p>Straight from the can over a tall glass of ice. Nothing else.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
       </li>
       <li class="serve">
-        <div class="photo reveal-img" style="--pos:70% 50%"><img src="assets/serves/serve-golden-hour.webp" alt="A short glass of Coquetearte at sunset beside the can" width="1536" height="1024" loading="lazy"></div>
+        <div class="photo reveal-img" style="--pos:58% 50%"><img src="assets/serves/serve-golden-hour.webp" alt="A short glass of Coquetearte at sunset beside the can" width="1536" height="1024" loading="lazy"></div>
         <div class="txt reveal"><p class="eyebrow">Golden hour</p><b lang="es">La hora dorada</b><p>Straight and very cold, poured as the sun drops — the island’s happy hour without the hour.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
       </li>
       <li class="serve">
-        <div class="photo reveal-img" style="--pos:47% 50%"><img src="assets/serves/serve-dusk.webp" alt="A small glass of Coquetearte at dusk beside the can" width="1536" height="1024" loading="lazy"></div>
+        <div class="photo reveal-img" style="--pos:50% 96%"><img src="assets/serves/serve-dusk.webp" alt="A small glass of Coquetearte at dusk beside the can" width="1536" height="1024" loading="lazy"></div>
         <div class="txt reveal"><p class="eyebrow">After dark</p><b lang="es">De noche</b><p>A short glass, ice, and the can opened at blue hour — when the coquí starts.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
       </li>
     </ul>
