@@ -1012,6 +1012,54 @@ html:not(.js) .lnote + .lnote{margin-top:28px}
 .serve .tiny{margin-top:auto;padding-top:6px}
 
 /* ════════════ end BUILD 7 ════════════ */
+
+/* ════════════ NOCHE + 4K · BUILD 8 (2026-09-23) ════════════
+   Pedro: "when we go nighttime … seems like a lot needs to be fixed for nighttime." A section-by-
+   section night audit (80 screenshots, desktop + phone) found these; each is scoped to noche. */
+/* the grain tile was ~16x louder against the night ground than the day one (luminance sd 34.5% vs
+   2.1%): the night tile is the same noise at a third of the alpha */
+:root[data-noche]{--grain:url(assets/tex/grain-15.webp)}
+/* the footer merged into the page (#0A0F0A on #0C110D): its own near-black band with a gold edge */
+:root[data-noche] .footer{background:var(--grain) 0 0/var(--grain-size) repeat,#050805;box-shadow:inset 0 1px 0 rgba(233,192,106,.2)}
+/* "Síguela · vive el mundo" inverted into a cream/grey slab over the can: keep the day look */
+:root[data-noche] .drink-detail .fig::after{background:rgba(8,12,8,.86);color:#F2E9D6;box-shadow:inset 0 0 0 1px rgba(233,192,106,.35)}
+/* benefit discs vanished into the page: one step lighter, with a faint gold ring */
+:root[data-noche] .benefit .disc{background:radial-gradient(120% 120% at 32% 22%,#26352A 0%,#19241A 80%);box-shadow:inset 0 0 0 1px rgba(233,192,106,.2),var(--sh-rest)}
+/* pills: "real" gets a hairline so the shape reads; the 21+ concept chip stays dark, not a cream glow */
+:root[data-noche] .pill.real{box-shadow:inset 0 0 0 1px rgba(127,191,138,.38)}
+:root[data-noche] .pill.concept{background:#070A07;border-color:#070A07;color:#E8DFC8;box-shadow:inset 0 0 0 1px rgba(232,223,200,.42)}
+/* the rum bottle (dark glass on a dark arch) needs a little back-light */
+:root[data-noche] .drink[data-id="future-rum"] .field img{filter:drop-shadow(0 0 18px rgba(233,192,106,.22)) drop-shadow(0 18px 24px rgba(0,0,0,.45))}
+/* form buttons were the brightest thing on the night screen (a cream slab): brand gold instead */
+:root[data-noche] #notify .btn,:root[data-noche] #news .btn{background:#E2BE6E;border-color:#E2BE6E;color:#171108}
+:root[data-noche] .join-card{box-shadow:var(--sh-rest),inset 0 0 0 1px rgba(233,192,106,.16)}
+/* the El Yunque origin label on the night map was a tiny dark italic across the coastline */
+:root[data-noche] .map-card .pin.origen text{fill:#E2BE6E}
+/* El Yunque kept its own beat by day; at night it sat one shade off the page — more moon, firmer edges */
+:root[data-noche] #story{background:var(--grain) 0 0/var(--grain-size) repeat,radial-gradient(70% 60% at 22% 42%,rgba(233,192,106,.11) 0%,rgba(233,192,106,0) 70%),#040704;
+  box-shadow:inset 0 1px 0 rgba(233,192,106,.28),inset 0 -1px 0 rgba(233,192,106,.28)}
+@media (max-width:700px){ :root[data-noche] .story-media img{object-position:40% 30%} }   /* keep the moon in the phone crop */
+/* the day/night toggle: in noche it offers the SUN — a disc with eight rays, not a radio dot */
+.mode-toggle[aria-pressed="true"] .moon{width:8px;height:8px;background:currentColor;outline:none;
+  box-shadow:0 -7px 0 -2.5px currentColor,0 7px 0 -2.5px currentColor,7px 0 0 -2.5px currentColor,-7px 0 0 -2.5px currentColor,
+    5px 5px 0 -2.5px currentColor,-5px -5px 0 -2.5px currentColor,5px -5px 0 -2.5px currentColor,-5px 5px 0 -2.5px currentColor}
+/* ════════════ end BUILD 8 ════════════ */
+
+/* ════════════ NOCHE PHOTOS · BUILD 9 (2026-09-23) ════════════
+   Pedro: "when we go nighttime there's no background photos for nighttime?" — the only thing night
+   mode swapped was the hero video. Chosen by 3 judges on real night renders (4 sets): at night the
+   serve row becomes nightfall → moonlight → midnight (the lantern card leads, so the light darkens
+   left to right, mirroring the day row's midday → golden hour → nightfall), and the El Yunque inset
+   trades its sunny aerial for the moon over the canopy. Night images are separate <img class="n-img">
+   (lazy + display:none by day, so they only download when night mode is on); the words are
+   .d/.n spans so the EN/ES switch keeps working. Crops only — no grade. */
+.n-img,.serve .n,.story-inset .n{display:none}
+:root[data-noche] .d-img,:root[data-noche] .serve .d{display:none}
+:root[data-noche] .n-img{display:block}
+:root[data-noche] .serve .n{display:inline}
+:root[data-noche] .serve-grid li:nth-child(3){order:-1}
+.story-inset .n-img{width:150px;height:100px;object-fit:cover;border-radius:16px;flex:none}
+/* ════════════ end BUILD 9 ════════════ */
 </style>
 </head>
 <body>
@@ -1050,15 +1098,38 @@ html:not(.js) .lnote + .lnote{margin-top:28px}
 <section class="hero" id="hero">
   <div class="hero-bg" data-parallax>
     <video class="hero-vid" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1" poster="assets/video/hero-beach-poster-1080.jpg">
-      <source src="assets/video/hero-beach-1080.mp4" type="video/mp4">
+      <source type="video/mp4">
     </video>
   </div>
   <script>
-  /* phones get the 6.7MB 720p encode instead of the 15MB desktop file */
-  (function(){ if (innerWidth <= 768){ var v = document.querySelector('.hero-vid');
-    v.poster = 'assets/video/hero-beach-poster-720.jpg';
-    v.querySelector('source').src = 'assets/video/hero-beach-720.mp4'; v.load();
-    var p = v.play(); if (p && p.catch) p.catch(function(){}); } })();
+  /* NOCHE + 4K · BUILD 8 — the hero is encoded from Pedro's 4K master (Pexels 10495024) as a ladder:
+     2160 (36 MB) · 1440 (30 MB) · 1080 (21 MB) · 720 (7 MB) · phone portrait crop (7.5 MB). heroTier()
+     picks the smallest file that is still sharp at the size the cover-fit video is DRAWN at (box ×
+     DPR), so a phone never downloads the 4K file and a HiDPI laptop never gets an upscaled 1080.
+     The <source> has no src in the markup, so nothing starts downloading before the pick. */
+  window.__heroTier = function(){
+    var bg = document.querySelector('.hero-bg'); if (!bg) return '1080';
+    var r = bg.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    var c = navigator.connection || {};
+    var lean = c.saveData === true || /2g|3g/.test(c.effectiveType || '');
+    var coarse = matchMedia('(pointer: coarse)').matches;
+    var phone = coarse && Math.min(screen.width, screen.height) < 600;
+    if (r.width / r.height <= 0.776) return 'phone';   /* portrait box: the 840x1080 crop = what object-position 22% shows */
+    if (phone || lean) return '720';
+    var need = Math.max(r.width, r.height * 1920 / 1012) * dpr;
+    var t = need <= 2112 ? 1080 : need <= 2560 ? 1440 : 2160;
+    if (coarse) t = Math.min(t, 1440);                 /* touch tablets never get 4K */
+    return String(t);
+  };
+  (function(){
+    var noche = false;
+    try { noche = /[?&]noche=1/.test(location.search) || localStorage.getItem('coq-mode') === 'noche'; } catch(e){}
+    if (noche) return;                                  /* applyMode(true) will load the night file */
+    var v = document.querySelector('.hero-vid'), t = __heroTier();
+    v.poster = 'assets/video/hero-beach-poster-' + (t === 'phone' ? 'phone' : t === '720' ? '720' : '1080') + '.jpg';
+    v.querySelector('source').src = 'assets/video/hero-beach-' + t + '.mp4';
+    v.load(); var p = v.play(); if (p && p.catch) p.catch(function(){});
+  })();
   </script>
   <div class="hero-scrim" aria-hidden="true"></div>
 
@@ -1215,7 +1286,7 @@ html:not(.js) .lnote + .lnote{margin-top:28px}
       <h2 class="h2 reveal">The frog that names us.</h2>
       <p class="reveal">El Yunque is the rainforest that sits over the island — warm, wet, awake after dark. The coquí is the small tree frog who lives in it. At dusk he starts: two notes, <span lang="es">co… quí</span>, over and over, until the whole hillside is answering.</p>
       <p class="reveal">That call is our name, our sound and our first ingredient. The rest is coconut — water and milk, a little cane and agave, cinnamon, vanilla. Cold, non-alcoholic, Puerto Rican. Everything we make starts on that hillside, after dark.</p>
-      <div class="story-inset reveal"><img src="assets/story/el-yunque-coast.webp" alt="Puerto Rico, from El Yunque down to the coast" width="150" height="100" loading="lazy"><p class="tiny">El Yunque, down to the coast. The coquí sings two notes, all night, from this hillside.</p></div>
+      <div class="story-inset reveal"><img class="d-img" src="assets/story/el-yunque-coast.webp" alt="Puerto Rico, from El Yunque down to the coast" width="150" height="100" loading="lazy"><img class="n-img" src="assets/story/el-yunque-night.webp" alt="El Yunque at night: the moon over the rainforest canopy" width="150" height="100" loading="lazy"><p class="tiny">El Yunque, down to the coast. The coquí sings two notes, all night, from this hillside.</p></div>
     </div>
   </div>
 </section>
@@ -1230,12 +1301,12 @@ html:not(.js) .lnote + .lnote{margin-top:28px}
     </div>
     <ul class="serve-grid">
       <li class="serve">
-        <div class="photo reveal-img" style="--pos:50% 60%"><img src="assets/serves/serve-midday-can.webp" alt="A cold can of Coquetearte on white stone under a bright blue midday sky" width="1024" height="1536" loading="lazy"></div>
-        <div class="txt reveal"><p class="eyebrow">Midday</p><b lang="es">Al mediodía</b><p>Straight from the can, ice-cold, in the midday sun. Nothing else.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
+        <div class="photo reveal-img" style="--pos:50% 60%"><img class="d-img" src="assets/serves/serve-midday-can.webp" alt="A cold can of Coquetearte on white stone under a bright blue midday sky" width="1024" height="1536" loading="lazy"><img class="n-img" src="assets/serves/serve-night-bay.webp" alt="The moon high over a quiet bay at night, a jungle headland on the right" width="2400" height="1344" loading="lazy" style="object-position:35% 50%"></div>
+        <div class="txt reveal"><p class="eyebrow"><span class="d">Midday</span><span class="n">Moonlight</span></p><b lang="es"><span class="d">Al mediodía</span><span class="n">Bajo la luna</span></b><p><span class="d">Straight from the can, ice-cold, in the midday sun. Nothing else.</span><span class="n">Straight from the can, ice-cold, with the moon on the water. Nothing else.</span></p><p class="tiny">Serving suggestion — no measurements.</p></div>
       </li>
       <li class="serve">
-        <div class="photo reveal-img" style="--pos:0% 50%"><img src="assets/serves/serve-courtyard-golden.webp" alt="Golden hour through a travertine arch: a flamboyán in bloom, green tile and a turquoise sea" width="1586" height="992" loading="lazy"></div>
-        <div class="txt reveal"><p class="eyebrow">Golden hour</p><b lang="es">La hora dorada</b><p>Straight and very cold as the sun drops — the island’s happy hour without the hour.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
+        <div class="photo reveal-img" style="--pos:0% 50%"><img class="d-img" src="assets/serves/serve-courtyard-golden.webp" alt="Golden hour through a travertine arch: a flamboyán in bloom, green tile and a turquoise sea" width="1586" height="992" loading="lazy"><img class="n-img" src="assets/serves/serve-night-pool.webp" alt="A moonlit pool at the edge of the jungle, fireflies in the leaves" width="1586" height="992" loading="lazy" style="object-position:100% 50%"></div>
+        <div class="txt reveal"><p class="eyebrow"><span class="d">Golden hour</span><span class="n">Midnight</span></p><b lang="es"><span class="d">La hora dorada</span><span class="n">A medianoche</span></b><p><span class="d">Straight and very cold as the sun drops — the island’s happy hour without the hour.</span><span class="n">Ice-cold at the water’s edge, under a high moon, with the coquí in full chorus.</span></p><p class="tiny">Serving suggestion — no measurements.</p></div>
       </li>
       <li class="serve">
         <div class="photo reveal-img" style="--pos:100% 50%"><img src="assets/serves/serve-lantern-bluehour.webp" alt="A lit lantern on a wet stone terrace under a stone arch, the sea glowing at dusk beyond" width="1586" height="992" loading="lazy"></div>
@@ -1668,8 +1739,8 @@ html:not(.js) .lnote + .lnote{margin-top:28px}
     ['.story-inset .tiny', 'De El Yunque hasta la costa. El coquí canta dos notas, toda la noche, desde esta ladera.'],
     ['#serve .sec-head .h2', 'Así nos gusta'],
     ['#serve .sec-head .lead', 'Sugerencias para servir, no recetas. Tres maneras de tomarlo frío — sin medidas, sin mezclar nada.'],
-    ['.serve .txt .eyebrow', ['Mediodía', 'Hora dorada', 'Al anochecer']],
-    ['.serve .txt > p:not(.eyebrow):not(.tiny)', ['Directo de la lata, bien fría, bajo el sol del mediodía. Nada más.', 'Pura y bien fría mientras baja el sol — la hora feliz de la isla, sin la hora.', 'La lata, bien fría, abierta a la hora azul — cuando se encienden los faroles y empieza el coquí.']],
+    ['.serve .txt .eyebrow', ['<span class="d">Mediodía</span><span class="n">Luz de luna</span>', '<span class="d">Hora dorada</span><span class="n">Medianoche</span>', 'Al anochecer']],
+    ['.serve .txt > p:not(.eyebrow):not(.tiny)', ['<span class="d">Directo de la lata, bien fría, bajo el sol del mediodía. Nada más.</span><span class="n">Directo de la lata, bien fría, con la luna sobre el agua. Nada más.</span>', '<span class="d">Pura y bien fría mientras baja el sol — la hora feliz de la isla, sin la hora.</span><span class="n">Bien fría, al borde del agua, con la luna alta y el coquí en pleno coro.</span>', 'La lata, bien fría, abierta a la hora azul — cuando se encienden los faroles y empieza el coquí.']],
     ['.serve .txt .tiny', ['Sugerencia para servir — sin medidas.', 'Sugerencia para servir — sin medidas.', 'Sugerencia para servir — sin medidas.']],
     ['.map-card > .tiny', 'De El Yunque a toda la isla — zonas hacia las que trabajamos. No son puntos de venta.'],
     ['.town-card p', ['Donde empieza el canto.', 'Donde zumban las primeras neveras.', 'El valle en el medio de todo.', 'Señorial, y más lento que el resto.', 'El lado del atardecer.']],
@@ -1915,9 +1986,12 @@ html:not(.js) .lnote + .lnote{margin-top:28px}
      the beach for molten-gold water; the coquí calls once as night falls (a real click = a gesture). */
   function setHeroVideo(noche){
     var v = document.querySelector('.hero-vid'); if (!v) return;
-    var base = noche ? 'hero-gold' : 'hero-beach', res = innerWidth <= 768 ? '720' : '1080';
-    v.poster = 'assets/video/' + base + '-poster-' + res + '.jpg';
-    v.querySelector('source').src = 'assets/video/' + base + '-' + res + '.mp4';
+    var t = window.__heroTier ? __heroTier() : (innerWidth <= 768 ? '720' : '1080');
+    var base = noche ? 'hero-gold' : 'hero-beach';
+    /* the night clip only exists at 1080/720 until its 4K master arrives */
+    if (noche) t = (t === 'phone' || t === '720') ? '720' : '1080';
+    v.poster = 'assets/video/' + base + '-poster-' + (t === 'phone' ? 'phone' : t === '720' ? '720' : '1080') + '.jpg';
+    v.querySelector('source').src = 'assets/video/' + base + '-' + t + '.mp4';
     v.load(); var p = v.play(); if (p && p.catch) p.catch(function(){});
   }
   var modeBtn = document.getElementById('mode-toggle');
