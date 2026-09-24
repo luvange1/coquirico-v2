@@ -586,9 +586,7 @@ p{margin:0}
 }
 /* 44px hit area for the Menu button with zero layout shift */
 .nav-toggle{padding:14px 12px;margin:-14px -12px}
-/* serve card 3: reframe below the render's halo rings (stopgap until the photo is re-exported) */
-.serve-grid li:nth-child(3) .photo img{transform:scale(1.45);transform-origin:50% 96%}
-.serve-grid li:nth-child(3):hover .photo img{transform:scale(1.5)}
+/* (the dusk card's 1.45x zoom is gone with the dusk render — see BUILD 7) */
 /* touch screens have no hover: the door into V1 must announce itself */
 @media (hover:none){
   .drink-detail .fig::after{opacity:.92;transform:translate(-50%,0)}
@@ -994,6 +992,26 @@ html:not(.js) .lnote + .lnote{margin-top:28px}
   .js .lnote,.js .lnote.is-on{transition:none;transform:none}
 }
 /* ════════════ end BUILD 6 ════════════ */
+
+/* ════════════ IMAGE VARIETY · BUILD 7 (2026-09-23) ════════════
+   Pedro: "we kinda use the same 3-4 images over and over … looks super unprofessional." The band
+   was the SAME file as serve card 1, and all three serve cards were the Coquetearte can + glass on
+   a stone ledge. Chosen by a judged workflow (48 candidates catalogued, 3 art directors, 4 judges on
+   real renders): the band is now the moonlit bay (a pillar-free crop of the 4K night loop — the
+   statement above it, pictured); the serve row reads at three distances — close (the one can+glass
+   shot left on the page), wide (the golden courtyard), mid (a lantern at
+   blue hour). A ship-check critic found the stock palm soft on a DPR-3 phone, so golden hour is the
+   courtyard render instead (sharp, the brand's flamboyán, the same green-tile world as card 1).
+   Every SCENE photo appears once (the Coquetearte can render itself still recurs in the product
+   sections). Crops only — no grade, no retouch. */
+.media img{object-position:50% 50%}
+@media (max-width:700px){ .media img{object-position:34% 50%} }
+/* the three cards' small print sits on one line across the row, whatever the copy length */
+.serve .txt{flex:1}
+.serve .tiny{margin-top:auto;padding-top:6px}
+/* laptop widths: keep the band's foreground leaf fully out rather than as a sliver at the edge */
+@media (min-width:701px) and (max-width:1400px){ .media img{object-position:44% 50%} }
+/* ════════════ end BUILD 7 ════════════ */
 </style>
 </head>
 <body>
@@ -1080,9 +1098,9 @@ html:not(.js) .lnote + .lnote{margin-top:28px}
 <!-- ============ MEDIA BLOCK ============ -->
 <section class="wrap-wide">
   <div class="media reveal-img" id="media">
-    <img src="assets/serves/serve-rainline.webp" alt="A tall glass of Coquetearte over ice beside the can, in a rain-washed courtyard" width="1536" height="1024" loading="eager" data-media-img>
+    <img src="assets/story/band-night.webp" alt="A moonlit cove at night: stars, a path of moonlight on the sea and a dark jungle headland" width="2880" height="1392" loading="eager" data-media-img>
     <div class="kinetic" lang="es" aria-hidden="true" data-kinetic><span>frío,</span><span>cremoso,</span><span>sin prisa —</span><span>frío,</span><span>cremoso,</span><span>sin prisa —</span></div>
-    <p class="cap">Coquetearte · sobre hielo</p>
+    <p class="cap">La bahía · bajo la luna</p>
   </div>
 </section>
 
@@ -1212,16 +1230,16 @@ html:not(.js) .lnote + .lnote{margin-top:28px}
     </div>
     <ul class="serve-grid">
       <li class="serve">
-        <div class="photo reveal-img" style="--pos:52% 50%"><img src="assets/serves/serve-rainline.webp" alt="A tall glass of Coquetearte over ice beside the can" width="1536" height="1024" loading="lazy"></div>
+        <div class="photo reveal-img" style="--pos:70% 50%"><img src="assets/serves/serve-rainline.webp" alt="A tall glass of Coquetearte over ice beside the can" width="1536" height="1024" loading="lazy"></div>
         <div class="txt reveal"><p class="eyebrow">Over ice</p><b lang="es">Sobre hielo</b><p>Straight from the can over a tall glass of ice. Nothing else.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
       </li>
       <li class="serve">
-        <div class="photo reveal-img" style="--pos:58% 50%"><img src="assets/serves/serve-golden-hour.webp" alt="A short glass of Coquetearte at sunset beside the can" width="1536" height="1024" loading="lazy"></div>
-        <div class="txt reveal"><p class="eyebrow">Golden hour</p><b lang="es">La hora dorada</b><p>Straight and very cold, poured as the sun drops — the island’s happy hour without the hour.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
+        <div class="photo reveal-img" style="--pos:0% 50%"><img src="assets/serves/serve-courtyard-golden.webp" alt="Golden hour through a travertine arch: a flamboyán in bloom, green tile and a turquoise sea" width="1586" height="992" loading="lazy"></div>
+        <div class="txt reveal"><p class="eyebrow">Golden hour</p><b lang="es">La hora dorada</b><p>Straight and very cold as the sun drops — the island’s happy hour without the hour.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
       </li>
       <li class="serve">
-        <div class="photo reveal-img" style="--pos:50% 96%"><img src="assets/serves/serve-dusk.webp" alt="A small glass of Coquetearte at dusk beside the can" width="1536" height="1024" loading="lazy"></div>
-        <div class="txt reveal"><p class="eyebrow">After dark</p><b lang="es">De noche</b><p>A short glass, ice, and the can opened at blue hour — when the coquí starts.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
+        <div class="photo reveal-img" style="--pos:100% 50%"><img src="assets/serves/serve-lantern-bluehour.webp" alt="A lit lantern on a wet stone terrace under a stone arch, the sea glowing at dusk beyond" width="1586" height="992" loading="lazy"></div>
+        <div class="txt reveal"><p class="eyebrow">Nightfall</p><b lang="es">De noche</b><p>The can, ice-cold, opened at blue hour — when the lanterns come on and the coquí starts.</p><p class="tiny">Serving suggestion — no measurements.</p></div>
       </li>
     </ul>
   </div>
@@ -1651,7 +1669,7 @@ html:not(.js) .lnote + .lnote{margin-top:28px}
     ['#serve .sec-head .h2', 'Así nos gusta'],
     ['#serve .sec-head .lead', 'Sugerencias para servir, no recetas. Tres maneras de tomarlo frío — sin medidas, sin mezclar nada.'],
     ['.serve .txt .eyebrow', ['Sencillo', 'Hora dorada', 'Al anochecer']],
-    ['.serve .txt > p:not(.eyebrow):not(.tiny)', ['Directo de la lata sobre un vaso alto con hielo. Nada más.', 'Pura y bien fría, servida mientras baja el sol — la hora feliz de la isla, sin la hora.', 'Un vaso corto, hielo, y la lata abierta a la hora azul — cuando empieza el coquí.']],
+    ['.serve .txt > p:not(.eyebrow):not(.tiny)', ['Directo de la lata sobre un vaso alto con hielo. Nada más.', 'Pura y bien fría mientras baja el sol — la hora feliz de la isla, sin la hora.', 'La lata, bien fría, abierta a la hora azul — cuando se encienden los faroles y empieza el coquí.']],
     ['.serve .txt .tiny', ['Sugerencia para servir — sin medidas.', 'Sugerencia para servir — sin medidas.', 'Sugerencia para servir — sin medidas.']],
     ['.map-card > .tiny', 'De El Yunque a toda la isla — zonas hacia las que trabajamos. No son puntos de venta.'],
     ['.town-card p', ['Donde empieza el canto.', 'Donde zumban las primeras neveras.', 'El valle en el medio de todo.', 'Señorial, y más lento que el resto.', 'El lado del atardecer.']],
