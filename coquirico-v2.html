@@ -839,6 +839,161 @@ p,.lead,.faq-list .a{text-wrap:pretty}
   .js .h2.reveal,.js .reveal-img,.js .serve .photo.reveal-img{clip-path:none!important;transform:none!important;transition:none!important}
 }
 /* ════════════ end BUILD 5 ════════════ */
+
+/* ════════════ LO QUE LLEVA · BUILD 6 — the can, opened up (2026-09-23) ════════════
+   Pedro: "add more depth to What's inside — more creative, fun, more brand identity."
+   Three discs became the real Coquetearte can on a lit arch, with its ingredients riding a gold
+   ring around it: the back of the ring passes BEHIND the can, the front passes IN FRONT of it.
+   Scrolling turns the ring so the ingredients come forward in the can's own order, and a card set
+   like the back label highlights each word as it arrives. Coconut water + coconut milk share one
+   coconut ("two on the list, one coconut"); natural flavors is a seal, not a picture — the can
+   doesn't say what they are, so we don't draw them. Read all seven and the coquí stamps the card.
+   The cutouts are the site's existing ingredient photos, CROPPED only (alpha floor zeroed) — no
+   grade, no retouch. Revert: delete this block, the lata-js script and the section markup
+   (backup: coquirico-v2--backup-before-lo-que-lleva-2026-09-23.html). */
+.lata{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(40px,5vw,96px);align-items:center}
+.lata-col{min-width:0}
+.lata-stage{--accent:#CAA24C;--tok:clamp(100px,11.6vw,184px);position:relative;aspect-ratio:1/.9;
+  user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+
+/* the set: the same lit arch as Las latas, with a contact shadow where the can stands */
+.lata-arch{position:absolute;left:50%;bottom:4%;width:44%;height:82%;transform:translateX(-50%);
+  translate:calc(var(--px,0) * -3px) 0;border-radius:999px 999px 18px 18px;box-shadow:var(--sh-rest);
+  background:var(--grain) 0 0/var(--grain-size) repeat,
+    radial-gradient(34% 3.2% at 50% 97.6%,rgba(45,28,12,.32) 0%,rgba(45,28,12,0) 100%),
+    linear-gradient(0deg,color-mix(in srgb,var(--accent) 20%,transparent) 0%,transparent 24%),
+    radial-gradient(120% 78% at 50% 24%,color-mix(in srgb,var(--accent) 16%,var(--arch-base)) 0%,color-mix(in srgb,var(--accent) 44%,var(--arch-base)) 72%,color-mix(in srgb,var(--accent) 54%,var(--arch-base)) 100%)}
+
+/* the ring: two halves of one dotted gold ellipse, one behind the can and one in front */
+.lata-orbit{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;
+  translate:calc(var(--px,0) * 5px) calc(var(--py,0) * 3px)}
+.lata-orbit path{fill:none;stroke:color-mix(in srgb,var(--accent) 80%,var(--ink));stroke-width:1.6;stroke-linecap:round;stroke-dasharray:.1 7}
+.lata-orbit-back{z-index:4;opacity:.45}
+.lata-orbit-front{z-index:20;opacity:.9}
+
+/* the can — tap it and it spins the ring */
+.lata-can{position:absolute;left:50%;bottom:3%;height:71%;aspect-ratio:1080/1446;transform:translateX(-50%);z-index:10;cursor:pointer;border-radius:32px}
+.lata-can img{width:100%;height:100%;object-fit:contain;translate:calc(var(--px,0) * -4px) calc(var(--py,0) * -2px);transition:transform .5s var(--ease-out)}
+.lata-can:hover img{transform:translateY(-6px) rotate(-1.5deg)}
+.lata-can:focus-visible,.lt:focus-visible{outline:2px solid color-mix(in srgb,var(--accent) 70%,var(--ink));outline-offset:4px}
+.lata-can.hop{animation:lataHop .9s var(--ease-out)}
+@keyframes lataHop{
+  0%{transform:translateX(-50%)}
+  22%{transform:translateX(-50%) translateY(-18px) rotate(-4deg)}
+  46%{transform:translateX(-50%) translateY(0) rotate(2deg)}
+  66%{transform:translateX(-50%) translateY(-5px) rotate(-1deg)}
+  100%{transform:translateX(-50%)}
+}
+
+/* the ingredients */
+.lata-toks{list-style:none;margin:0;padding:0}
+.lata-toks li{display:contents}
+.lt{position:relative;display:block;width:var(--tok);height:var(--tok);border-radius:50%}
+.js .lt{position:absolute;left:0;top:0;margin:calc(var(--tok) / -2) 0 0 calc(var(--tok) / -2);will-change:transform,opacity;transform-origin:50% 50%}
+.lt img{width:100%;height:100%;object-fit:contain;
+  filter:drop-shadow(0 14px 14px rgba(36,24,18,.17)) drop-shadow(0 3px 3px rgba(36,24,18,.12));transition:transform .45s var(--ease-out)}
+.lt:hover img,.lt:hover .lt-seal{transform:translateY(-5px) scale(1.05) rotate(-3deg)}
+.lt .sr,.lata-can .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* hover label: a strip of the can's own gold band */
+.lt-tag{position:absolute;left:50%;top:94%;transform:translate(-50%,0);white-space:nowrap;pointer-events:none;
+  font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#3A2A10;padding:5px 11px;border-radius:3px;
+  background:linear-gradient(90deg,#B8893A 0%,#EBCB82 30%,#C99D4C 58%,#F1D596 82%,#C0913F 100%);
+  box-shadow:0 6px 14px -6px rgba(36,24,18,.4);opacity:0;transition:opacity .25s ease}
+.lt:hover .lt-tag,.lt:focus-visible .lt-tag,.lt.is-on .lt-tag{opacity:1}
+/* natural flavors: the one we don't picture — a label seal instead */
+.lt-seal{position:absolute;inset:15%;border-radius:50%;display:grid;place-items:center;text-align:center;
+  background:radial-gradient(circle at 34% 28%,#FFFDF8 0%,#F6ECD8 58%,#EAD8B4 100%);
+  box-shadow:inset 0 0 0 2px #C9A04E,inset 0 0 0 7px #FBF4E4,inset 0 0 0 8px rgba(201,160,78,.75),
+    0 16px 20px -12px rgba(36,24,18,.4),0 3px 4px rgba(36,24,18,.1);transition:transform .45s var(--ease-out)}
+.lt-seal b{display:block;font-family:var(--serif);font-style:italic;font-weight:500;font-size:calc(var(--tok) * .135);line-height:.98;color:#3B2A14}
+.lt-seal::before,.lt-seal::after{content:"";position:absolute;left:50%;width:5px;height:5px;margin-left:-2.5px;background:#C9A04E;transform:rotate(45deg)}
+.lt-seal::before{top:17%}.lt-seal::after{bottom:17%}
+html:not(.js) .lata-toks{position:absolute;left:0;right:0;bottom:0;z-index:30;display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+html:not(.js) .lt{width:76px;height:76px}
+
+.lata-hint{margin-top:12px;text-align:center;text-wrap:balance;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+
+/* the reading side: the back label, set large */
+.lata-read{display:flex;flex-direction:column;gap:38px;min-width:0}
+.lata-src{display:flex;flex-direction:column;gap:14px}
+.lata-label{position:relative;padding:38px clamp(20px,2.4vw,38px) 34px;border-radius:18px;text-align:center;overflow:hidden;
+  background:var(--grain) 0 0/var(--grain-size) repeat,var(--paper-lift);box-shadow:var(--sh-rest),inset 0 0 0 1px var(--edge)}
+.lata-label::before,.lata-label::after{content:"";position:absolute;left:0;right:0;height:10px;
+  background:linear-gradient(90deg,#A77B2F 0%,#E6C377 20%,#C29546 42%,#F3DA9C 66%,#B98A3B 86%,#D9B465 100%)}
+.lata-label::before{top:0}.lata-label::after{bottom:0}
+.ll-h{font-size:12.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#A98336;margin-bottom:10px}
+.ll-list{font-size:clamp(17px,.85rem + .5vw,23px);line-height:1.62;color:var(--ink-3);text-wrap:balance}
+.ll-list span{white-space:nowrap;padding:0 .1em;margin:0 -.1em;border-radius:3px;-webkit-box-decoration-break:clone;box-decoration-break:clone;
+  background:linear-gradient(180deg,transparent 56%,rgba(230,190,104,.5) 56%,rgba(230,190,104,.5) 90%,transparent 90%) no-repeat 0 0/0% 100%;
+  transition:color .45s ease,background-size .6s var(--ease-out)}
+.ll-list span.is-read{color:var(--ink-2)}
+.ll-list span.is-on{color:var(--ink);background-size:100% 100%}
+.ll-stamp{position:absolute;right:18px;top:20px;width:46px;height:auto;opacity:0;transform:scale(1.9) rotate(-22deg);pointer-events:none}
+.lata-label.done .ll-stamp{opacity:.88;transform:scale(1) rotate(-9deg);transition:opacity .2s ease,transform .6s cubic-bezier(.34,1.56,.64,1)}
+.lnote-count{display:flex;align-items:center;gap:10px;font-size:11.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.lnote-count::before{content:"";width:24px;height:1px;background:currentColor;opacity:.6}
+.lnote-count.done{color:#A98336}
+
+/* the note for whichever ingredient is in front — all six are stacked in one cell, so the column
+   never changes height and never jumps */
+.lata-notes{display:grid}
+.lnote{grid-area:1/1;align-self:start}
+html:not(.js) .lata-notes{display:block}
+html:not(.js) .lnote + .lnote{margin-top:28px}
+.js .lnote{opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .28s ease,transform .45s var(--ease-out),visibility 0s linear .28s}
+.js .lnote.is-on{opacity:1;visibility:visible;transform:none;transition:opacity .45s ease .06s,transform .6s var(--ease-out) .06s,visibility 0s}
+.lnote-n{font-family:var(--serif);font-style:italic;font-size:24px;line-height:1;color:#A98336;font-variant-numeric:lining-nums tabular-nums;margin-bottom:12px}
+.lnote-n span{font-family:var(--sans);font-style:normal;font-size:12px;font-weight:600;letter-spacing:.14em;color:var(--ink-3);margin-left:4px}
+.lnote-name{font-size:var(--fs-d3);line-height:1.02;letter-spacing:-.014em;text-wrap:balance}
+.lnote-sub{font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.3;color:color-mix(in srgb,var(--theme) 42%,var(--leaf-deep));margin-top:8px}
+.lnote-txt{margin-top:14px;font-size:var(--fs-lead);line-height:1.6;color:var(--ink-2);max-width:42ch;text-wrap:pretty}
+
+.inside-foot{grid-template-columns:1fr}
+.inside-foot .small{max-width:74ch}
+
+@media (max-width:1100px){
+  .lata{grid-template-columns:minmax(0,1fr) minmax(0,.92fr);gap:40px}
+  .lata-stage{--tok:clamp(92px,12.4vw,148px)}
+}
+@media (max-width:900px){
+  .lata{grid-template-columns:1fr;gap:30px}
+  .lata-col,.lata-read{width:100%;max-width:560px;margin-inline:auto}
+  .lata-stage{--tok:clamp(88px,21vw,140px)}
+  .lata-notes{order:-1;display:block}
+  /* one column (tablets + phones): no stacked cell (it left a tall gap under short notes) — the current note takes its own
+     height and fades in; anything that shifts sits BELOW the stage, never under the thumb */
+  .js .lnote{display:none;transition:none;transform:none}
+  .js .lnote.is-on{display:block;animation:lnIn .45s var(--ease-out)}
+}
+@media (max-width:700px){
+  .lata-stage{aspect-ratio:1/1;--tok:clamp(76px,27vw,112px)}
+  .lata-arch{width:54%;height:84%}
+  .lata-read{gap:30px}
+  .lata-label{padding:30px 18px 26px}
+  .ll-stamp{width:36px;right:12px;top:16px}
+  .lnote-sub{font-size:20px}
+}
+
+/* night: a spotlit set, a brighter ring, a label on dark stock */
+:root[data-noche] .lata-arch{background:var(--grain) 0 0/var(--grain-size) repeat,
+  radial-gradient(34% 3.2% at 50% 97.6%,rgba(0,0,0,.55) 0%,rgba(0,0,0,0) 100%),
+  radial-gradient(90% 62% at 50% 30%,color-mix(in srgb,var(--accent) 38%,var(--arch-base)) 0%,color-mix(in srgb,var(--accent) 14%,var(--arch-base)) 68%,color-mix(in srgb,var(--accent) 8%,var(--arch-base)) 100%)}
+:root[data-noche] .lata-orbit path{stroke:#E2BE6E}
+:root[data-noche] .lt img{filter:drop-shadow(0 16px 18px rgba(0,0,0,.5)) drop-shadow(0 3px 4px rgba(0,0,0,.35))}
+:root[data-noche] .lt-seal{background:radial-gradient(circle at 34% 28%,#2B3527 0%,#1C261D 60%,#151D16 100%);
+  box-shadow:inset 0 0 0 2px #C9A04E,inset 0 0 0 7px #1A231B,inset 0 0 0 8px rgba(201,160,78,.7),0 16px 20px -12px rgba(0,0,0,.6)}
+:root[data-noche] .lt-seal b{color:#F2E9D6}
+:root[data-noche] .ll-h,:root[data-noche] .lnote-n,:root[data-noche] .lnote-count.done{color:#E2BE6E}
+:root[data-noche] .ll-list span{background-image:linear-gradient(180deg,transparent 56%,rgba(233,192,106,.26) 56%,rgba(233,192,106,.26) 90%,transparent 90%)}
+:root[data-noche] .ll-stamp{filter:brightness(0) invert(1) drop-shadow(0 0 6px rgba(233,192,106,.5))}
+
+@keyframes lnIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .lata-can.hop,.js .lnote.is-on{animation:none}
+  .lata-can:hover img,.lt:hover img,.lt:hover .lt-seal{transform:none}
+  .js .lnote,.js .lnote.is-on{transition:none;transform:none}
+}
+/* ════════════ end BUILD 6 ════════════ */
 </style>
 </head>
 <body>
@@ -989,13 +1144,45 @@ p,.lead,.faq-list .a{text-wrap:pretty}
       <h2 class="h2 reveal">What’s inside</h2>
       <p class="lead reveal">Everything in Coquetearte, straight off the back of the can. Seven ingredients — and that list is the whole list.</p>
     </div>
-    <ul class="inside-grid">
-      <li class="ing reveal" style="--tint:#E4E8D9"><div class="disc"><img src="assets/ingredients/ing-coconut-water-milk.webp" srcset="assets/ingredients/ing-coconut-water-milk.webp 300w, assets/ingredients/ing-coconut-water-milk@2x.webp 600w" sizes="320px" alt="A halved coconut, water and milk" width="300" height="300" loading="lazy"></div><b>Coconut water &amp; milk</b><p>The base. Both, so it drinks cool and creamy.</p></li>
-      <li class="ing reveal" style="--tint:#F1D8C3"><div class="disc"><img src="assets/ingredients/ing-cinnamon.webp" srcset="assets/ingredients/ing-cinnamon.webp 300w, assets/ingredients/ing-cinnamon@2x.webp 600w" sizes="320px" alt="Cinnamon quills" width="300" height="300" loading="lazy"></div><b>Cinnamon</b><p>Canela — the warm note under&nbsp;the&nbsp;coconut.</p></li>
-      <li class="ing reveal" style="--tint:#F3E6C3"><div class="disc"><img src="assets/ingredients/ing-vanilla-extract.webp" srcset="assets/ingredients/ing-vanilla-extract.webp 300w, assets/ingredients/ing-vanilla-extract@2x.webp 600w" sizes="320px" alt="Vanilla extract" width="300" height="300" loading="lazy"></div><b>Vanilla extract</b><p>The last soft edge before the finish.</p></li>
-    </ul>
+    <div class="lata" id="lata">
+      <div class="lata-col">
+        <div class="lata-stage" id="lata-stage">
+          <div class="lata-arch" aria-hidden="true"></div>
+          <svg class="lata-orbit lata-orbit-back" aria-hidden="true" focusable="false"><path d=""/></svg>
+          <button type="button" class="lata-can" id="lata-can"><img src="assets/product/coquetearte-can@2x.webp" srcset="assets/product/coquetearte-can.webp 540w, assets/product/coquetearte-can@2x.webp 1080w" sizes="(max-width:700px) 220px, 400px" alt="" width="540" height="723" loading="lazy" decoding="async"><span class="sr">Spin the can</span></button>
+          <svg class="lata-orbit lata-orbit-front" aria-hidden="true" focusable="false"><path d=""/></svg>
+          <ul class="lata-toks" aria-label="The seven ingredients">
+          <li><button type="button" class="lt" data-w="0,1" aria-pressed="true"><img src="assets/ingredients/tok-coconut.webp" alt="" width="220" height="220" loading="lazy" decoding="async"><span class="sr">Coconut water and coconut milk</span><span class="lt-tag" aria-hidden="true">Coconut water · milk</span></button></li>
+          <li><button type="button" class="lt" data-w="2" aria-pressed="false"><img src="assets/ingredients/tok-cane-sugar.webp" alt="" width="220" height="220" loading="lazy" decoding="async"><span class="sr">Cane sugar</span><span class="lt-tag" aria-hidden="true">Cane sugar</span></button></li>
+          <li><button type="button" class="lt" data-w="3" aria-pressed="false"><img src="assets/ingredients/tok-agave.webp" alt="" width="220" height="220" loading="lazy" decoding="async"><span class="sr">Agave syrup</span><span class="lt-tag" aria-hidden="true">Agave syrup</span></button></li>
+          <li><button type="button" class="lt lt-is-seal" data-w="4" aria-pressed="false"><span class="lt-seal" aria-hidden="true"><b>natural<br>flavors</b></span><span class="sr">Natural flavors</span><span class="lt-tag" aria-hidden="true">Natural flavors</span></button></li>
+          <li><button type="button" class="lt" data-w="5" aria-pressed="false"><img src="assets/ingredients/tok-cinnamon.webp" alt="" width="220" height="220" loading="lazy" decoding="async"><span class="sr">Cinnamon</span><span class="lt-tag" aria-hidden="true">Cinnamon</span></button></li>
+          <li><button type="button" class="lt" data-w="6" aria-pressed="false"><img src="assets/ingredients/tok-vanilla.webp" alt="" width="220" height="220" loading="lazy" decoding="async"><span class="sr">Vanilla extract</span><span class="lt-tag" aria-hidden="true">Vanilla extract</span></button></li>
+          </ul>
+        </div>
+        <p class="lata-hint">Scroll to turn it · tap an ingredient · spin the can</p>
+      </div>
+      <div class="lata-read">
+        <div class="lata-src">
+          <p class="eyebrow">Off the back of the can</p>
+          <div class="lata-label" id="lata-label">
+            <p class="ll-h">Ingredients:</p>
+            <p class="ll-list"><span>Coconut Water</span>, <span>Coconut Milk</span>, <span>Cane Sugar</span>, <span>Agave Syrup</span>, <span>Natural Flavors</span>, <span>Cinnamon</span>, <span>Vanilla Extract</span></p>
+            <img class="ll-stamp" src="assets/label/coqui-mark-ink.webp" srcset="assets/label/coqui-mark-ink.webp 1x, assets/label/coqui-mark-ink@2x.webp 2x" alt="" aria-hidden="true" width="46" height="46" loading="lazy">
+          </div>
+          <p class="lnote-count" id="lata-count" aria-live="polite">0 of 7 read</p>
+        </div>
+        <div class="lata-notes">
+          <article class="lnote is-on"><p class="lnote-n">01 · 02 <span>/ 07</span></p><h3 class="lnote-name">Coconut water &amp; coconut milk</h3><p class="lnote-sub">agua de coco y leche de coco</p><p class="lnote-txt">The first two on the can — and one coconut covers both. The base, so it drinks cool and creamy.</p></article>
+          <article class="lnote"><p class="lnote-n">03 <span>/ 07</span></p><h3 class="lnote-name">Cane sugar</h3><p class="lnote-sub">azúcar de caña</p><p class="lnote-txt">Sweetness, part one. It rounds the coconut off.</p></article>
+          <article class="lnote"><p class="lnote-n">04 <span>/ 07</span></p><h3 class="lnote-name">Agave syrup</h3><p class="lnote-sub">sirope de agave</p><p class="lnote-txt">Sweetness, part two — so the sweet stays soft.</p></article>
+          <article class="lnote"><p class="lnote-n">05 <span>/ 07</span></p><h3 class="lnote-name">Natural flavors</h3><p class="lnote-sub">sabores naturales</p><p class="lnote-txt">That’s exactly how the can says it — so that’s exactly how we say it. No guessing, and no picture.</p></article>
+          <article class="lnote"><p class="lnote-n">06 <span>/ 07</span></p><h3 class="lnote-name">Cinnamon</h3><p class="lnote-sub">canela</p><p class="lnote-txt">Canela — the warm note under&nbsp;the&nbsp;coconut.</p></article>
+          <article class="lnote"><p class="lnote-n">07 <span>/ 07</span></p><h3 class="lnote-name">Vanilla extract</h3><p class="lnote-sub">extracto de vainilla</p><p class="lnote-txt">The last soft edge before the finish.</p></article>
+        </div>
+      </div>
+    </div>
     <div class="inside-foot reveal">
-      <p class="small"><strong>Coquetearte:</strong> coconut water · coconut milk · cane sugar · agave syrup · natural flavors · cinnamon · vanilla extract.</p>
       <p class="small">The artist editions are the same drink. The flavor studies are imagined, not bottled — they have no formula. No alcohol: the can’s gold band says it out loud — keep refrigerated · non-alcoholic.</p>
     </div>
   </div>
@@ -1448,9 +1635,16 @@ p,.lead,.faq-list .a{text-wrap:pretty}
     ['.drinks .sec-head .lead', 'Dos de estas son de verdad. Las demás son estudios, ediciones e ideas — y cada tarjeta dice cuál es.'],
     ['#ingredients .sec-head .h2', 'Todo lo que lleva'],
     ['#ingredients .sec-head .lead', 'Todo lo que lleva Coquetearte, directo de la parte de atrás de la lata. Siete ingredientes — y esa lista es toda la lista.'],
-    ['.ing b', ['Agua y leche de coco', 'Canela', 'Extracto de vainilla']],
-    ['.ing p', ['La base. Las dos, para que se beba fresco y cremoso.', 'La nota cálida debajo del coco.', 'El último borde suave antes del final.']],
-    ['.inside-foot .small', ['<strong>Coquetearte:</strong> agua de coco · leche de coco · azúcar de caña · sirope de agave · sabores naturales · canela · extracto de vainilla.', 'Las ediciones de artista son la misma bebida. Los estudios de sabor son imaginados, no embotellados — no tienen fórmula. Sin alcohol: la banda dorada de la lata lo dice bien claro — manténgase refrigerado · sin alcohol.']],
+    ['.inside-foot .small', 'Las ediciones de artista son la misma bebida. Los estudios de sabor son imaginados, no embotellados — no tienen fórmula. Sin alcohol: la banda dorada de la lata lo dice bien claro — manténgase refrigerado · sin alcohol.'],
+    ['.lata-hint', 'Baja para girarla · toca un ingrediente · gira la lata'],
+    ['.lata-src > .eyebrow', 'De la parte de atrás de la lata'],
+    ['.lata-can .sr', 'Gira la lata'],
+    ['.lt .sr', ["Agua de coco y leche de coco","Azúcar de caña","Sirope de agave","Sabores naturales","Canela","Extracto de vainilla"]],
+    ['.lt-tag', ["Agua · leche de coco","Azúcar de caña","Sirope de agave","Sabores naturales","Canela","Vainilla"]],
+    ['.lt-seal b', 'sabores<br>naturales'],
+    ['.lnote-name', ["Agua de coco y leche de coco","Azúcar de caña","Sirope de agave","Sabores naturales","Canela","Extracto de vainilla"]],
+    ['.lnote-sub', ["coconut water & coconut milk","cane sugar","agave syrup","natural flavors","cinnamon","vanilla extract"]],
+    ['.lnote-txt', ["Los dos primeros de la lata — y un solo coco los cubre. La base, para que se beba fresco y cremoso.","El dulce, primera parte. Redondea el coco.","El dulce, segunda parte — para que el dulce quede suave.","Así mismo lo dice la lata — y así mismo lo decimos. Sin adivinar, y sin dibujo.","La nota cálida debajo del coco.","El último borde suave antes del final."]],
     ['#story .h2', 'La rana que nos da el nombre.'],
     ['.story-text > p.reveal', ['El Yunque es el bosque lluvioso que corona la isla — cálido, húmedo, despierto de noche. El coquí es la ranita que vive en él. Al anochecer empieza: dos notas, co… quí, una y otra vez, hasta que toda la ladera contesta.', 'Ese canto es nuestro nombre, nuestro sonido y nuestro primer ingrediente. Lo demás es coco — agua y leche, un poco de caña y agave, canela, vainilla. Frío, sin alcohol, puertorriqueño. Todo lo que hacemos empieza en esa ladera, de noche.']],
     ['.story-inset .tiny', 'De El Yunque hasta la costa. El coquí canta dos notas, toda la noche, desde esta ladera.'],
@@ -1503,6 +1697,7 @@ p,.lead,.faq-list .a{text-wrap:pretty}
     if (cd) paintDetail(cd);
     if (window.__coqGuideRelabel) window.__coqGuideRelabel();
     if (window.__qaRelabel) window.__qaRelabel();
+    if (window.__insideRelabel) window.__insideRelabel();
     try { localStorage.setItem('coq-lang', LANG); } catch(e){}
   }
   document.querySelectorAll('.lang-btn').forEach(function(b){
@@ -1742,7 +1937,7 @@ p,.lead,.faq-list .a{text-wrap:pretty}
 
   /* scroll choreography — one signature entrance per section, played once, calm */
   if (window.gsap && window.ScrollTrigger && !quietMotion && innerWidth > 760){
-    ['.benefit', '.ing', '.serve'].forEach(function(s){
+    ['.benefit', '.serve'].forEach(function(s){
       document.querySelectorAll(s).forEach(function(el){ el.classList.remove('reveal'); });
     });
     var sm = document.querySelector('.story-media'); if (sm) sm.classList.remove('reveal-img');
@@ -1751,8 +1946,6 @@ p,.lead,.faq-list .a{text-wrap:pretty}
       scrollTrigger: { trigger: '.media', start: 'top 90%', end: 'top 12%', scrub: true } });
     gsap.from('.benefit', { y: 34, opacity: 0, duration: .9, stagger: .14, ease: 'power3.out',
       scrollTrigger: { trigger: '.benefit-row', start: 'top 84%' } });
-    gsap.from('.ing', { y: 44, opacity: 0, rotate: -2, duration: .9, stagger: .12, ease: 'power3.out',
-      scrollTrigger: { trigger: '.inside-grid', start: 'top 84%' } });
     gsap.fromTo('.story-media', { clipPath: 'inset(9% 9% 9% 9% round 40px)' },
       { clipPath: 'inset(0% 0% 0% 0% round 40px)', duration: 1.15, ease: 'power3.inOut',
         scrollTrigger: { trigger: '.story-media', start: 'top 80%' } });
@@ -2254,6 +2447,172 @@ html.ov-lock, html.ov-lock body{ overflow:hidden !important; height:100%; touch-
   function boot(){ lock(); build(); }
   if(document.fonts && document.fonts.ready){ document.fonts.ready.then(boot); setTimeout(function(){ if(!tl) boot(); }, 1000); }
   else boot();
+})();
+</script>
+<script id="lata-js">
+/* LO QUE LLEVA · BUILD 6 — the ring of ingredients around the can.
+   One rAF loop, running only while the stage is on screen (or still settling). Scroll position
+   drives two things: EMERGE (the ingredients rise out of the can as the stage comes up the page)
+   and TURN (the ring advances one ingredient at a time, in the can's order, as it crosses the
+   middle of the screen). When scrolling stops, the ring settles on the nearest ingredient. Taps
+   add an offset on top of the scroll — tap an ingredient to bring it forward, tap the can to spin.
+   Positions are plain transforms from the stage's measured geometry; nothing here can hide the
+   page — with no JS the ingredients sit in a row, and reduced motion places them without motion. */
+(function(){
+  var stage = document.getElementById('lata-stage');
+  if (!stage) return;
+  var can = document.getElementById('lata-can'),
+      label = document.getElementById('lata-label'),
+      countEl = document.getElementById('lata-count'),
+      toks = [].slice.call(stage.querySelectorAll('.lt')),
+      notes = [].slice.call(document.querySelectorAll('#lata .lnote')),
+      words = [].slice.call(label.querySelectorAll('.ll-list span')),
+      backPath = stage.querySelector('.lata-orbit-back path'),
+      frontPath = stage.querySelector('.lata-orbit-front path'),
+      N = toks.length, STEP = Math.PI * 2 / N, TOTAL = words.length;
+  var WORDS = toks.map(function(t){ return t.getAttribute('data-w').split(',').map(Number); });
+  var quiet = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  var G = { cx:0, cy:0, rx:0, ry:0, mx:0, my:0 };
+  var shown = 0, shownE = quiet ? 1 : 0, offset = 0, cur = -1, nRead = 0, done = false, read = {};
+  var px = 0, py = 0, tpx = 0, tpy = 0, running = false, last = 0, snapT = 0;
+
+  function clamp01(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
+  function easeOut(t){ return 1 - Math.pow(1 - t, 3); }
+  function isEs(){ return document.documentElement.lang === 'es'; }
+
+  function measure(){
+    var r = stage.getBoundingClientRect();
+    var W = r.width, H = r.height;
+    /* the can box's geometry comes straight from CSS (bottom 3%, height 76%), so read it from the
+       layout rather than its live rect — the hop animation would otherwise skew the measurement */
+    var h = can.offsetHeight, top = can.offsetTop;
+    if (!W || !h) return;
+    G.cx = W / 2;
+    G.cy = top + h * (.066 + .895 * .55);   /* 55% down the can itself (its art spans 6.6–96.1%) */
+    G.rx = W * (W < 480 ? .41 : .43);
+    G.ry = H * .17;
+    G.mx = W / 2; G.my = top + h * .08;      /* the can's mouth — where they rise from */
+    var vb = '0 0 ' + W.toFixed(1) + ' ' + H.toFixed(1);
+    var L = (G.cx - G.rx).toFixed(1), R = (G.cx + G.rx).toFixed(1), Y = G.cy.toFixed(1),
+        A = G.rx.toFixed(1) + ' ' + G.ry.toFixed(1);
+    backPath.parentNode.setAttribute('viewBox', vb);
+    frontPath.parentNode.setAttribute('viewBox', vb);
+    backPath.setAttribute('d', 'M' + L + ' ' + Y + 'A' + A + ' 0 0 1 ' + R + ' ' + Y);
+    frontPath.setAttribute('d', 'M' + L + ' ' + Y + 'A' + A + ' 0 0 0 ' + R + ' ' + Y);
+  }
+
+  /* c = where the stage's centre sits, as a fraction of the viewport height */
+  function sstate(){
+    var r = stage.getBoundingClientRect(), vh = innerHeight || 800;
+    var c = (r.top + r.height / 2) / vh;
+    return { e: clamp01((1.12 - c) / .4), p: clamp01((.72 - c) / .42), vis: r.bottom > -80 && r.top < vh + 80 };
+  }
+
+  function paintCount(){
+    if (done) countEl.textContent = isEs() ? TOTAL + ' de ' + TOTAL + ' — esa es toda la lata.' : TOTAL + ' of ' + TOTAL + ' — that’s the whole can.';
+    else countEl.textContent = isEs() ? nRead + ' de ' + TOTAL + ' leídos' : nRead + ' of ' + TOTAL + ' read';
+  }
+  window.__insideRelabel = paintCount;
+
+  function setCur(c){
+    cur = c;
+    toks.forEach(function(t, i){ t.setAttribute('aria-pressed', i === c ? 'true' : 'false'); t.classList.toggle('is-on', i === c); });
+    notes.forEach(function(n, i){ n.classList.toggle('is-on', i === c); });
+    words.forEach(function(w, i){ w.classList.toggle('is-on', WORDS[c].indexOf(i) > -1); });
+  }
+  function markRead(c){
+    var changed = false;
+    WORDS[c].forEach(function(wi){ if (!read[wi] && words[wi]){ read[wi] = 1; nRead++; words[wi].classList.add('is-read'); changed = true; } });
+    if (!changed) return;
+    if (!done && nRead >= TOTAL){ done = true; label.classList.add('done'); countEl.classList.add('done');
+      /* all seven read: the coquí stamps the card and the can gives one little hop */
+      if (!quiet) setTimeout(function(){ can.classList.remove('hop'); void can.offsetWidth; can.classList.add('hop'); }, 350); }
+    paintCount();
+  }
+
+  function frame(now){
+    var dt = last ? Math.min(.05, (now - last) / 1000) : .016; last = now;
+    var s = sstate();
+    var target = s.p * (N - 1) + offset;
+    if (quiet){ shown = target; shownE = 1; }
+    else {
+      var k = Math.abs(target - shown) > 1.5 ? 3.4 : 8.5;   /* long moves (a spin) glide; short ones snap */
+      shown += (target - shown) * (1 - Math.exp(-dt * k));
+      shownE += (s.e - shownE) * (1 - Math.exp(-dt * 7));
+      if (fine){ px += (tpx - px) * (1 - Math.exp(-dt * 5)); py += (tpy - py) * (1 - Math.exp(-dt * 5)); }
+    }
+    var t = now / 1000;
+    for (var i = 0; i < N; i++){
+      /* the current ingredient rests front-RIGHT (+half a step), beside the can and next to the text
+         about it; the next waits front-left. Between stops they pass in front of the can. */
+      var th = (shown - i) * STEP + STEP / 2, cs = Math.cos(th), d = (cs + 1) / 2;
+      var dth = Math.abs(((th - STEP / 2) % (2 * Math.PI) + 3 * Math.PI) % (2 * Math.PI) - Math.PI);
+      var near = Math.max(0, 1 - dth / (STEP / 2));
+      var ei = quiet ? 1 : easeOut(clamp01(shownE * 1.6 - i * .12));
+      var bob = quiet ? 0 : Math.sin(t * 1.3 + i * 1.7) * 3.5 * ei;
+      var x = G.cx + G.rx * Math.sin(th) + px * 10 * d;
+      var y = G.cy + G.ry * cs + py * 6 * d + bob;
+      x = G.mx + (x - G.mx) * ei; y = G.my + (y - G.my) * ei;
+      var sc = (.5 + .5 * d) * (1 + .08 * near) * (.3 + .7 * ei);
+      var el = toks[i];
+      el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0) scale(' + sc.toFixed(3) + ')';
+      el.style.opacity = ((.42 + .58 * d) * clamp01(ei * 2)).toFixed(3);
+      el.style.zIndex = cs > 0 ? 30 + Math.round(d * 9) : 3 + Math.round(d * 5);
+      if (fine && !quiet){ var b = d < .62 ? ((.62 - d) * 3.4).toFixed(2) : 0; el.style.filter = b ? 'blur(' + b + 'px)' : ''; }
+    }
+    if (fine && !quiet){ stage.style.setProperty('--px', px.toFixed(3)); stage.style.setProperty('--py', py.toFixed(3)); }
+    var c = ((Math.round(shown) % N) + N) % N;
+    if (c !== cur) setCur(c);
+    if (s.vis && shownE > .85) markRead(c);
+    var settling = Math.abs(target - shown) > .002 || Math.abs(s.e - shownE) > .002 ||
+                   Math.abs(tpx - px) > .002 || Math.abs(tpy - py) > .002;
+    if (s.vis || settling) requestAnimationFrame(frame);
+    else { running = false; last = 0; }
+  }
+  function kick(){ if (!running){ running = true; last = 0; requestAnimationFrame(frame); } }
+
+  /* taps */
+  toks.forEach(function(tk, i){
+    tk.addEventListener('click', function(){
+      var base = sstate().p * (N - 1) + offset;
+      var dl = ((i - base) % N + N) % N; if (dl > N / 2) dl -= N;
+      offset += dl; kick();
+    });
+  });
+  can.addEventListener('click', function(){
+    offset += N;
+    if (!quiet){ can.classList.remove('hop'); void can.offsetWidth; can.classList.add('hop'); }
+    kick();
+  });
+  can.addEventListener('animationend', function(){ can.classList.remove('hop'); });
+
+  /* a little depth under the cursor */
+  if (fine && !quiet){
+    stage.addEventListener('pointermove', function(e){
+      var r = stage.getBoundingClientRect();
+      tpx = clamp01((e.clientX - r.left) / r.width) * 2 - 1; tpy = clamp01((e.clientY - r.top) / r.height) * 2 - 1; kick();
+    });
+    stage.addEventListener('pointerleave', function(){ tpx = 0; tpy = 0; kick(); });
+  }
+
+  /* scroll turns it; when scrolling stops it settles on the nearest ingredient */
+  addEventListener('scroll', function(){
+    kick();
+    clearTimeout(snapT);
+    snapT = setTimeout(function(){
+      var tg = sstate().p * (N - 1) + offset;
+      offset += Math.round(tg) - tg; kick();
+    }, 160);
+  }, { passive: true });
+  addEventListener('resize', function(){ measure(); kick(); });
+  if (window.ResizeObserver) new ResizeObserver(function(){ measure(); kick(); }).observe(stage);
+
+  measure(); setCur(0); paintCount(); kick();
+  /* QA: settle() jumps the ring to where it is heading (headless captures run on virtual time) */
+  window.__lata = { state: function(){ return { shown: shown, shownE: shownE, offset: offset, cur: cur, nRead: nRead, done: done, G: G }; }, measure: measure, kick: kick,
+    settle: function(){ var s = sstate(); offset += Math.round(s.p * (N - 1) + offset) - (s.p * (N - 1) + offset); shown = s.p * (N - 1) + offset; shownE = s.e; px = tpx; py = tpy; running = false; kick(); } };
 })();
 </script>
 </body>
