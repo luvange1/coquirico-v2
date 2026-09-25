@@ -1060,6 +1060,287 @@ html:not(.js) .lnote + .lnote{margin-top:28px}
 :root[data-noche] .serve-grid li:nth-child(3){order:-1}
 .story-inset .n-img{width:150px;height:100px;object-fit:cover;border-radius:16px;flex:none}
 /* ════════════ end BUILD 9 ════════════ */
+
+/* DOORWAY · BUILD 10 — "the arch is a doorway" (2026-09-25) ══════════════════════════════════════
+   Pedro: "if we click one we're gonna go learn more about it — something should make us want to
+   click and know we're gonna travel somewhere, especially for mobile."
+   The contest winner (B, "the arch is a doorway"), finished with the grafts from A:
+   · every arch is a door — a gilded frame line inside it and A's gold coin in its corner (cut from
+     the can's own gold band, ink arrow), kept clear of the can and bottle art. As each row first
+     arrives, each coin comes alive ONCE: a pop, one glint across the gold, a thin gold call-ring.
+   · one small-caps line under the lead says it plainly: "Tap one — step into its world" on touch
+     screens, "Choose one — …" with a pointer (EN/ES). No fake button in it — a flat gold mark.
+   · a tap lifts the can off its shelf for a beat (A's lift-off), then the arch opens into the room
+     (full screen on phones, a centred room on desktop) that hosts the real #drink-detail card — its
+     ‹ › tour, pour wave and "Síguela" door into V1 all still work inside.
+   · the room grows by clip-path + opacity + transform only (no per-frame layout), over a warm paper
+     scrim tinted by the drink (no blur); ×, Escape, the scrim, swipe-down and Back all close it —
+     into the arch of the drink you ended on, which the in-page card then shows.
+   Reduced motion (or ?motion=0): no beat, no lift, no flight — the room simply fades.
+   Also fixes two pre-existing phone bugs (both on the real page too): the ES "EDICIÓN DE ARTISTA"
+   pill widening the 2-column grid past its box, and the reduced-motion layout growing to ~600px
+   (the Lo que lleva ingredients sat in their no-JS flex row AND were translated onto the ring).
+   Final pass: the grow keeps the arch's semicircular crown until the last 20% (doorFrames); tablets and
+   laptops 961–1280px get the two-column room fitted to the viewport height; × is first in the room's DOM
+   and Tab is trapped inside it; the scrim and the landing can ignore taps until the room is fully open.
+   Revert = delete this block + the DOORWAY script region. */
+
+/* ─ the grid: a door frame with warm light inside ─ */
+.drink .field img{z-index:1}
+.drink .field::before{content:"";position:absolute;inset:12px 12px 0;z-index:0;pointer-events:none;
+  border:1px solid rgba(190,148,62,.62);border-bottom:0;border-radius:999px 999px 0 0;
+  background:radial-gradient(64% 44% at 50% 66%,rgba(255,240,206,.78) 0%,rgba(255,240,206,.34) 46%,rgba(255,240,206,0) 76%);
+  box-shadow:inset 0 0 26px -6px rgba(255,208,128,.7);
+  opacity:.9;transition:opacity .5s ease,border-color .5s ease}
+:root[data-noche] .drink .field::before{border-color:rgba(233,192,106,.5);
+  background:radial-gradient(64% 44% at 50% 66%,rgba(233,192,106,.30) 0%,rgba(233,192,106,.10) 50%,rgba(233,192,106,0) 78%);
+  box-shadow:inset 0 0 30px -6px rgba(233,192,106,.42)}
+.drink:hover .field::before,.drink.qa-hover .field::before,.drink .field:focus-visible::before{opacity:1;border-color:rgba(190,148,62,.95)}
+.drink .field:focus-visible{outline:2px solid var(--leaf-deep);outline-offset:5px}
+
+/* the coin: A's gold, cut from the can's band — the whole arch is the (≥44px) button, the coin says where it goes */
+.door-coin{position:absolute;right:12px;bottom:12px;z-index:3;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  overflow:hidden;isolation:isolate;pointer-events:none;color:#3A2A10;
+  background:linear-gradient(135deg,#B8893A 0%,#EBCB82 32%,#C99D4C 58%,#F1D596 82%,#C0913F 100%);
+  box-shadow:inset 0 1px 0 rgba(255,250,235,.6),inset 0 0 0 1px rgba(110,82,32,.26),0 8px 16px -8px rgba(36,24,18,.5);
+  transition:transform .45s var(--ease-out),box-shadow .45s ease}
+.door-coin svg{width:14px;height:14px;display:block;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;overflow:visible;
+  transition:transform .45s var(--ease-out)}
+/* the glint: a sliver of light crossing the gold, like the band catching the sun (parked off the coin) */
+.door-coin::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(105deg,rgba(255,255,255,0) 30%,rgba(255,252,240,.85) 50%,rgba(255,255,255,0) 70%);transform:translateX(-140%)}
+/* the call-ring: the same thin gold ring the Questions section rings */
+.door-ring{position:absolute;right:12px;bottom:12px;z-index:2;width:34px;height:34px;border-radius:50%;pointer-events:none;
+  box-shadow:0 0 0 1.5px #B98A3B;opacity:0}
+:root[data-noche] .door-ring{box-shadow:0 0 0 1.5px #E2BE6E}
+:root[data-noche] .door-coin{box-shadow:inset 0 1px 0 rgba(255,250,235,.55),inset 0 0 0 1px rgba(110,82,32,.3),0 8px 18px -8px rgba(0,0,0,.7)}
+@media (hover:hover){
+  .drink:hover .door-coin,.drink.qa-hover .door-coin{transform:translateY(-2px);
+    box-shadow:inset 0 1px 0 rgba(255,250,235,.6),inset 0 0 0 1px rgba(110,82,32,.26),0 12px 22px -10px rgba(36,24,18,.55)}
+  .drink:hover .door-coin svg,.drink.qa-hover .door-coin svg{transform:translateX(2px)}
+}
+.drink .field:focus-visible .door-coin svg{transform:translateX(2px)}
+/* once per card, as its row first arrives: pop + glint + ring (and the arrow leans forward) */
+.drink.door-alive .door-coin{animation:doorPop .8s cubic-bezier(.34,1.56,.5,1) both}
+.drink.door-alive .door-coin::before{animation:doorGlint 1.1s cubic-bezier(.4,0,.2,1) .05s both}
+.drink.door-alive .door-ring{animation:doorRing 1.3s cubic-bezier(.2,.7,.2,1) .15s both}
+.drink.door-alive .door-coin svg{animation:doorLean 1s cubic-bezier(.34,1.56,.5,1) .25s both}
+@keyframes doorPop{0%,100%{transform:none}35%{transform:scale(1.14)}}
+@keyframes doorGlint{from{transform:translateX(-140%)}to{transform:translateX(140%)}}
+@keyframes doorRing{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.6)}}
+@keyframes doorLean{0%,100%{transform:none}40%{transform:translateX(3.5px)}}
+/* the tap: the can lifts off its shelf with a soft shadow, a beat before the door opens (A's lift-off).
+   `translate` stacks on top of the approved hover/open pose instead of replacing it. */
+.drink .field img{transition:transform .6s cubic-bezier(.2,.7,.2,1),translate .28s cubic-bezier(.2,.7,.2,1),filter .28s ease}
+.drink.door-lift .field img{translate:0 -16px;filter:drop-shadow(0 6px 6px rgba(36,24,18,.14)) drop-shadow(0 26px 24px rgba(36,24,18,.22))}
+:root[data-noche] .drink.door-lift .field img{filter:drop-shadow(0 6px 7px rgba(0,0,0,.5)) drop-shadow(0 30px 28px rgba(0,0,0,.42))}
+.drink.door-lift .door-coin svg{transform:translateX(3px)}
+/* QA twin of the approved hover (CSS :hover can't be triggered from a script) */
+.drink.qa-hover .field{transform:translateY(-6px);box-shadow:0 22px 44px -14px color-mix(in srgb,var(--accent) 46%,rgba(36,24,18,.32))}
+.drink.qa-hover .field img{transform:translate(-50%,-18px) rotate(-1.8deg) scale(1.025)}
+.drink.qa-hover .name{color:color-mix(in srgb,var(--accent) 52%,var(--ink))}
+.drink.qa-hover .pill{opacity:1}
+/* the line that says what the arches are: A's small-caps eyebrow, one line, a flat mark (not a button) */
+.door-hint{display:inline-flex;align-items:center;justify-content:center;gap:12px;max-width:100%;margin-top:2px;font-family:var(--sans);
+  font-size:11.5px;font-weight:600;line-height:1.5;letter-spacing:.2em;text-transform:uppercase;color:var(--amber-ink);text-wrap:balance}
+.door-hint-mark{flex:none;width:24px;height:10px;display:block;fill:none;stroke:#B98A3B;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+:root[data-noche] .door-hint{color:#E2BE6E}
+:root[data-noche] .door-hint-mark{stroke:#E2BE6E}
+
+/* ─ the room behind the door ─ */
+@property --door-tint{syntax:'<color>';inherits:true;initial-value:#CAA24C}
+/* locked without a jump: the scrollbar's width goes back as padding (no gutter strip for a pour to miss) */
+html.door-lock{overflow:hidden;overscroll-behavior:none}
+html.door-lock body{overflow:visible;padding-right:var(--door-sbw,0px)}
+html.door-lock .nav{padding-right:var(--door-sbw,0px)}
+html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px)}
+#door-sheet{position:fixed;inset:0;z-index:150;display:none;--door-tint:#CAA24C;transition:--door-tint .7s ease}
+#door-sheet.is-open{display:block}
+/* the scrim: warm paper, tinted by the drink — lighter, never grey, never blurred */
+.door-backdrop{position:absolute;inset:0;z-index:0;opacity:0;transition:opacity .5s ease;touch-action:none;
+  background:radial-gradient(85% 75% at 50% 48%,color-mix(in srgb,var(--door-tint) 12%,rgba(251,246,242,.6)) 0%,color-mix(in srgb,var(--door-tint) 20%,rgba(236,224,206,.86)) 100%)}
+:root[data-noche] .door-backdrop{background:radial-gradient(85% 75% at 50% 48%,color-mix(in srgb,var(--door-tint) 7%,rgba(3,6,4,.66)) 0%,color-mix(in srgb,var(--door-tint) 4%,rgba(3,6,4,.8)) 100%)}
+#door-sheet.door-dim .door-backdrop{opacity:1}
+/* the arch you chose, held bright above the scrim while the room grows out of it (a still clone) */
+.door-skin{position:fixed;z-index:1;margin:0;display:block;pointer-events:none}
+.door-skin .field{transform:none;transition:none}
+/* the room's surface, full-screen but CLIPPED: arch → room is one clip-path tween (no layout per frame).
+   Its light is laid exactly where the lent card's own wash will sit (--door-px/py/pw/ph), so the hand-off
+   to the settled room is seamless. */
+.door-portal{position:fixed;inset:0;z-index:2;display:none;pointer-events:none;will-change:clip-path,opacity;
+  background:var(--grain) var(--door-px,0px) var(--door-py,0px)/var(--grain-size) repeat,
+    radial-gradient(52% 74% at 25% 52%,color-mix(in srgb,var(--accent) 34%,var(--arch-base)) 0%,color-mix(in srgb,var(--accent) 34%,var(--arch-base) 0%) 76%) var(--door-px,0px) var(--door-py,0px)/var(--door-pw,100%) var(--door-ph,100%) no-repeat,
+    color-mix(in srgb,var(--accent) 13%,var(--paper))}
+:root[data-noche] .door-portal{background:var(--grain) var(--door-px,0px) var(--door-py,0px)/var(--grain-size) repeat,
+    radial-gradient(52% 74% at 25% 52%,color-mix(in srgb,var(--accent) 16%,var(--arch-base)) 0%,color-mix(in srgb,var(--accent) 16%,var(--arch-base) 0%) 76%) var(--door-px,0px) var(--door-py,0px)/var(--door-pw,100%) var(--door-ph,100%) no-repeat,
+    color-mix(in srgb,var(--accent) 3%,var(--paper))}
+.door-portal.on{display:block}
+.door-can{position:fixed;left:0;top:0;z-index:4;display:none;pointer-events:none;transform-origin:50% 50%;max-width:none;will-change:transform,opacity;
+  filter:drop-shadow(0 4px 5px rgba(36,24,18,.16)) drop-shadow(0 22px 22px rgba(36,24,18,.14))}
+:root[data-noche] .door-can{filter:drop-shadow(0 4px 6px rgba(0,0,0,.45)) drop-shadow(0 24px 26px rgba(0,0,0,.35))}
+.door-can.on{display:block}
+.door-panel{position:fixed;inset:0;margin:auto;z-index:3;width:min(1280px,100vw - 128px);height:min(780px,100vh - 120px);
+  border-radius:var(--r-card);overflow:hidden;color:var(--ink);transition:box-shadow .5s ease}
+#door-sheet.door-settled .door-panel{box-shadow:0 50px 100px -40px rgba(60,36,16,.4),0 2px 10px rgba(60,36,16,.07)}
+:root[data-noche] #door-sheet.door-settled .door-panel{box-shadow:0 40px 90px -30px rgba(0,0,0,.7)}
+/* the scroller rounds its own corners: once the panel has been clip-animated, Chrome composites the
+   scroller and the panel's rounded overflow clip alone no longer reaches it */
+.door-scroll{position:absolute;inset:0;border-radius:inherit;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.door-close{position:absolute;top:22px;right:22px;z-index:6;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;
+  border:1.5px solid var(--rule-2);background:color-mix(in srgb,var(--paper-lift) 72%,transparent);color:var(--ink);
+  opacity:0;transition:opacity .4s ease,background .3s ease,border-color .3s ease,transform .35s cubic-bezier(.2,.7,.2,1)}
+.door-close svg{width:16px;height:16px;display:block}
+@media (hover:hover){ .door-close:hover{background:var(--ink);border-color:var(--ink);color:var(--paper);transform:rotate(90deg)} }
+#door-sheet .drink-detail .tags,#door-sheet .d-count{color:var(--ink-2)}   /* 5.3-6.9:1 on every drink's wash (ink-3 fell to 2.4:1) */
+.door-close:focus-visible{outline:2px solid var(--leaf-deep);outline-offset:3px}
+.door-grab{display:none}
+#door-sheet.door-in .door-close{opacity:1}
+/* the lent card: same content, same renderer — it just stands in the drink's own light now */
+#door-sheet .drink-detail{margin:0;min-height:100%;border:0;border-radius:0;background:transparent;align-content:center;
+  padding:72px 88px 56px 64px}
+#door-sheet .drink-detail::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .36s ease;
+  background:var(--grain) 0 0/var(--grain-size) repeat,
+    radial-gradient(52% 74% at 25% 52%,color-mix(in srgb,var(--accent) 34%,var(--arch-base)) 0%,color-mix(in srgb,var(--accent) 34%,var(--arch-base) 0%) 76%),
+    color-mix(in srgb,var(--accent) 13%,var(--paper))}
+:root[data-noche] #door-sheet .drink-detail::before{background:var(--grain) 0 0/var(--grain-size) repeat,
+    radial-gradient(52% 74% at 25% 52%,color-mix(in srgb,var(--accent) 16%,var(--arch-base)) 0%,color-mix(in srgb,var(--accent) 16%,var(--arch-base) 0%) 76%),
+    color-mix(in srgb,var(--accent) 3%,var(--paper))}
+#door-sheet.door-settled .drink-detail::before{opacity:1}
+#door-sheet .drink-detail > .fig,#door-sheet .drink-detail > .body{position:relative;z-index:1}
+#door-sheet .drink-detail > .fig,#door-sheet .drink-detail > .body,#door-sheet .d-nav{opacity:0;transition:opacity .5s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+#door-sheet .drink-detail > .body{transform:translateY(14px)}
+#door-sheet.door-in .drink-detail > .fig,#door-sheet.door-in .drink-detail > .body,#door-sheet.door-in .d-nav{opacity:1;transform:none}
+#door-sheet.door-in .drink-detail.fade > .fig,#door-sheet.door-in .drink-detail.fade > .body{opacity:0}
+#door-sheet.door-out .drink-detail > .fig,#door-sheet.door-out .drink-detail > .body,#door-sheet.door-out .d-nav,#door-sheet.door-out .door-close{opacity:0;transition-duration:.18s}
+/* the can, the pill and the tour only take taps once the room is fully open (.door-ready = state 'open'):
+   a tap on the can still landing mid-grow, or anything mid-close, falls on the bare card and does nothing.
+   The × takes taps once it is visible. */
+#door-sheet:not(.door-ready) .drink-detail > .fig,#door-sheet:not(.door-ready) .d-nav{pointer-events:none}
+#door-sheet:not(.door-in) .door-close{pointer-events:none}
+/* inside the room the next door — "Síguela", on into the V1 world — is stated, not whispered */
+#door-sheet .drink-detail .fig::after{opacity:.9}
+#door-sheet .drink-detail .fig:hover::after,#door-sheet .drink-detail .fig:focus-visible::after{opacity:1}
+#door-sheet .drink-detail .fig img{transition:transform .5s cubic-bezier(.2,.7,.2,1),opacity .3s ease}
+#door-sheet.door-can-away .drink-detail .fig img,#door-sheet.door-can-away .drink-detail .fig::after{opacity:0}
+/* in the room the can stands in its own lit doorway — the same frame you just walked through */
+#door-sheet .drink-detail .fig .disc::before{content:"";position:absolute;inset:14px 14px 0;border:1px solid rgba(190,148,62,.62);border-bottom:0;border-radius:999px 999px 0 0;
+  background:radial-gradient(64% 44% at 50% 66%,rgba(255,240,206,.8) 0%,rgba(255,240,206,.34) 46%,rgba(255,240,206,0) 76%);
+  box-shadow:inset 0 0 30px -6px rgba(255,208,128,.7)}
+:root[data-noche] #door-sheet .drink-detail .fig .disc::before{border-color:rgba(233,192,106,.5);
+  background:radial-gradient(64% 44% at 50% 66%,rgba(233,192,106,.30) 0%,rgba(233,192,106,.10) 50%,rgba(233,192,106,0) 78%);
+  box-shadow:inset 0 0 30px -6px rgba(233,192,106,.42)}
+#door-sheet .d-nav{top:30px;right:92px}
+@media (max-width:1280px){ #door-sheet .drink-detail{padding:40px 40px 48px;align-content:start} }
+/* laptops and landscape tablets (iPad 1024×768 up to 1280): the room keeps the can and the words side by
+   side, as on desktop — the can on the left, the words on the right. The can's arch (--fh) is sized to the
+   room's height (panel = min(780px, 100vh − 120px), less the 104px of padding), so the whole can and its
+   Síguela pill are on screen at open without a scroll; 470px (the approved laptop size) is the cap. */
+@media (min-width:961px) and (max-width:1280px){
+  #door-sheet .drink-detail{--fh:clamp(300px,calc(100vh - 224px),470px);grid-template-columns:380px minmax(0,1fr);gap:52px;padding:56px 76px 48px 48px;align-content:center}
+  #door-sheet .drink-detail .fig{height:var(--fh)}
+  #door-sheet .drink-detail .fig .disc{width:calc(var(--fh) * .617);height:var(--fh);border-radius:calc(var(--fh) * .3085) calc(var(--fh) * .3085) 14px 14px}
+  #door-sheet .drink-detail .fig img{width:calc(var(--fh) * .72)}
+  #door-sheet .d-nav{top:24px;right:84px}
+}
+/* the narrower of those (iPad 1024 landscape, small laptops): a slimmer can column and gutters, so the
+   words keep a comfortable measure (~440px at 1024) */
+@media (min-width:961px) and (max-width:1099px){
+  #door-sheet .drink-detail{--fh:clamp(300px,calc(100vh - 224px),440px);grid-template-columns:320px minmax(0,1fr);gap:40px;padding:56px 60px 48px 36px}
+}
+/* phones: the door opens onto the whole screen — sized to the VISIBLE viewport (dvh, then
+   visualViewport from the script) so Safari's bar never cuts it; safe areas padded.
+   Short screens count as phones too (a phone on its side is ~390px tall): the same query lives in
+   the script as mqSheet — keep the two identical. */
+@media (max-width:760px), (max-height:520px){
+  .door-panel{inset:auto;top:0;left:0;margin:0;width:100%;height:100vh;height:100dvh;border-radius:0}
+  .door-close{top:calc(env(safe-area-inset-top) + 16px);right:max(14px,calc(env(safe-area-inset-right) + 8px));width:44px;height:44px}
+  .door-grab{display:block;position:absolute;z-index:6;top:calc(env(safe-area-inset-top) + 6px);left:50%;width:40px;height:4px;margin-left:-20px;border-radius:4px;background:var(--rule-2);opacity:0;transition:opacity .4s ease}
+  #door-sheet.door-in .door-grab{opacity:1}
+  #door-sheet .drink-detail{padding:calc(env(safe-area-inset-top) + 16px) max(22px,env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 56px) max(22px,env(safe-area-inset-left));gap:22px}
+  #door-sheet .drink-detail::before,.door-portal{background:var(--grain) var(--door-px,0px) var(--door-py,0px)/var(--grain-size) repeat,
+    radial-gradient(110% 34% at 50% 27%,color-mix(in srgb,var(--accent) 34%,var(--arch-base)) 0%,color-mix(in srgb,var(--accent) 34%,var(--arch-base) 0%) 80%) var(--door-px,0px) var(--door-py,0px)/var(--door-pw,100%) var(--door-ph,100%) no-repeat,
+    color-mix(in srgb,var(--accent) 13%,var(--paper))}
+  :root[data-noche] #door-sheet .drink-detail::before,:root[data-noche] .door-portal{background:var(--grain) var(--door-px,0px) var(--door-py,0px)/var(--grain-size) repeat,
+    radial-gradient(110% 34% at 50% 27%,color-mix(in srgb,var(--accent) 16%,var(--arch-base)) 0%,color-mix(in srgb,var(--accent) 16%,var(--arch-base) 0%) 80%) var(--door-px,0px) var(--door-py,0px)/var(--door-pw,100%) var(--door-ph,100%) no-repeat,
+    color-mix(in srgb,var(--accent) 3%,var(--paper))}
+  #door-sheet .drink-detail::before{--door-px:0px;--door-py:0px;--door-pw:100%;--door-ph:100%}
+  #door-sheet .drink-detail .fig{height:392px}
+  #door-sheet .drink-detail .fig .disc{width:240px;height:392px;border-radius:120px 120px 12px 12px}
+  #door-sheet .drink-detail .fig img{width:294px}
+  .door-panel.door-drag{transition:none}
+  #door-sheet .drink-detail .fig .disc::before{inset:10px 10px 0}
+}
+/* a phone on its side: the can keeps the left of the room, whole and still (sticky), with the Síguela
+   pill on screen at open; the words take the right column and are what scrolls. Sizes come from the
+   visible height, so the can never overflows a ~340-390px landscape screen. */
+@media (max-height:520px) and (orientation:landscape){
+  #door-sheet .drink-detail{--fh:calc(100vh - 32px);grid-template-columns:minmax(0,40%) minmax(0,1fr);grid-template-rows:auto 1fr;
+    column-gap:clamp(20px,4vw,44px);row-gap:12px;align-items:start;align-content:start;
+    /* clip, not hidden: `hidden` would make the card its own (never-scrolled) scroll container and the
+       sticky can would ride away with the words. No bottom padding: the can's grid area must reach the
+       card's end, or sticky lets it slide up at the bottom of the scroll (the body carries that space). */
+    overflow:visible;overflow:clip;
+    padding:16px max(24px,calc(env(safe-area-inset-right) + 12px)) 0 max(24px,calc(env(safe-area-inset-left) + 8px))}
+  @supports (height:100dvh){ #door-sheet .drink-detail{--fh:calc(100dvh - 32px)} }
+  #door-sheet .drink-detail > .fig{grid-column:1;grid-row:1 / span 2;position:sticky;top:16px;height:var(--fh)}
+  #door-sheet .drink-detail .fig .disc{height:var(--fh);width:calc(var(--fh) * .612);border-radius:calc(var(--fh) * .306) calc(var(--fh) * .306) 12px 12px}
+  #door-sheet .drink-detail .fig img{width:calc(var(--fh) * .75)}
+  #door-sheet .drink-detail .fig::after{bottom:22px}
+  /* the tour row heads the words column, left-aligned with them and clear of the × */
+  #door-sheet .d-nav{grid-column:2;grid-row:1;position:static;order:0;justify-content:flex-start;margin:6px 0 0;padding-right:64px}
+  #door-sheet .drink-detail > .body{grid-column:2;grid-row:2;gap:14px;padding-right:8px;padding-bottom:calc(env(safe-area-inset-bottom) + 32px)}
+  #door-sheet .drink-detail h3{font-size:34px}
+  #door-sheet .drink-detail .desc{font-size:17px;line-height:1.55}
+  /* the room's light sits behind the can (left), as on desktop — not in the portrait top band */
+  #door-sheet .drink-detail::before,.door-portal{background:var(--grain) var(--door-px,0px) var(--door-py,0px)/var(--grain-size) repeat,
+    radial-gradient(52% 74% at 22% 50%,color-mix(in srgb,var(--accent) 34%,var(--arch-base)) 0%,color-mix(in srgb,var(--accent) 34%,var(--arch-base) 0%) 76%) var(--door-px,0px) var(--door-py,0px)/var(--door-pw,100%) var(--door-ph,100%) no-repeat,
+    color-mix(in srgb,var(--accent) 13%,var(--paper))}
+  :root[data-noche] #door-sheet .drink-detail::before,:root[data-noche] .door-portal{background:var(--grain) var(--door-px,0px) var(--door-py,0px)/var(--grain-size) repeat,
+    radial-gradient(52% 74% at 22% 50%,color-mix(in srgb,var(--accent) 16%,var(--arch-base)) 0%,color-mix(in srgb,var(--accent) 16%,var(--arch-base) 0%) 76%) var(--door-px,0px) var(--door-py,0px)/var(--door-pw,100%) var(--door-ph,100%) no-repeat,
+    color-mix(in srgb,var(--accent) 3%,var(--paper))}
+}
+/* phone grid: the coin pulled into the arch's corner (grid-level, so width-keyed only) */
+@media (max-width:760px){
+  .drink .field::before{inset:8px 8px 0}
+  /* the coin pulled into the corner, clear of the can and bottle art (checked on all ten, incl. the
+     open, lifted Coquetearte and the tall El Original / Rum bottles) */
+  .door-coin,.door-ring{right:4px;bottom:4px;width:clamp(23px,6.6vw,28px);height:clamp(23px,6.6vw,28px)}
+  .door-coin svg{width:12px;height:12px}
+}
+@media (max-width:960px){
+  .door-hint{font-size:10.5px;letter-spacing:.15em;gap:10px}
+  .door-hint-mark{width:20px}
+}
+/* reduced motion: no flight, no growing arch — the room simply fades in and out */
+#door-sheet.door-quiet .door-panel{opacity:0;transition:opacity .22s ease}
+#door-sheet.door-quiet.door-in .door-panel{opacity:1}
+#door-sheet.door-quiet .drink-detail > .body{transform:none}
+@media (prefers-reduced-motion:reduce){
+  .door-coin,.door-coin svg,.drink .field img{transition:none}
+  .drink:hover .door-coin,.drink:hover .door-coin svg,.drink.qa-hover .door-coin,.drink.qa-hover .door-coin svg{transform:none}
+}
+
+/* ─ pre-existing phone bugs this section surfaced (both also on the real page) ─ */
+/* 1 · ES: "EDICIÓN DE ARTISTA" set the 2-column grid's min-content, pushing it ~20px past its box.
+      Columns may now shrink below their content; the pill tightens, and wraps as a last resort. */
+@media (max-width:960px){
+  .drink-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .drink{min-width:0}
+  .drink .pill{max-width:100%;height:auto;min-height:24px;padding:6px 9px 5px;line-height:1.15;white-space:normal;text-align:center}
+}
+@media (max-width:440px){
+  .drink .pill{letter-spacing:.08em;padding-inline:8px}
+  html[lang="es"] .drink .pill{font-size:10px}
+}
+/* 2 · reduced motion: the ingredients kept their no-JS flex row AND got the ring's translate on top,
+      so on phones they ran ~200px off-screen and the layout grew to ~600px. Whenever the script runs
+      (motion or not) they are positioned on the ring, exactly as the motion build does. */
+.lata-stage.door-lt-fix .lata-toks{position:static;display:block}
+.lata-stage.door-lt-fix .lt{position:absolute;left:0;top:0;width:var(--tok);height:var(--tok);margin:calc(var(--tok) / -2) 0 0 calc(var(--tok) / -2);transform-origin:50% 50%}
+/*   and the front-right ingredient's gold label could still poke ~1px past a phone's edge: the section clips
+     sideways (clip, not hidden — no scroll container, nothing else changes) */
+@media (max-width:960px){ #ingredients{overflow-x:clip} }
+/* end DOORWAY · BUILD 10 */
 </style>
 </head>
 <body>
@@ -1792,6 +2073,561 @@ html:not(.js) .lnote + .lnote{margin-top:28px}
   document.querySelectorAll('.lang-btn').forEach(function(b){
     b.addEventListener('click', function(){ if (b.getAttribute('data-lang') !== LANG) setLang(b.getAttribute('data-lang')); });
   });
+
+  /* DOORWAY · BUILD 10 — "the arch is a doorway" (script region; the story is in the DOORWAY CSS block).
+     Lives inside the drinks IIFE so it can reuse open() (and through it paintDetail), the lent
+     #drink-detail card, followBottle and its pour overlay, LANG and quietMotion. Grid clicks are
+     caught in the CAPTURE phase, so the original li listener (glide down to the card) never runs. */
+  (function(){
+    var quiet = quietMotion || /[?&]motion=0/.test(location.search);   /* fade only */
+    var LIFT = 170;                                  /* ms — the can leaves its shelf first… */
+    var EXP = 640;                                   /* ms — …then the arch grows into the room */
+    var SHRINK = 560;                                /* ms — and back into the drink's arch */
+    var mqSheet = matchMedia('(max-width:760px), (max-height:520px)');    /* = the CSS phone-room query */
+    var touchUI = matchMedia('(hover:none)');
+    var TXT = {
+      en:{ tap:'Tap one — step into its world', pick:'Choose one — step into its world', knob:' — step into its world', close:'Close', title:'Drink details', prev:'Previous drink', next:'Next drink', follow:'Síguela — open the full Coquírico world themed to this drink' },
+      es:{ tap:'Toca una y entra en su mundo', pick:'Elige una y entra en su mundo', knob:' — entra en su mundo', close:'Cerrar', title:'Detalles de la bebida', prev:'Bebida anterior', next:'Bebida siguiente', follow:'Síguela — entra al mundo Coquírico de esta bebida' }
+    };
+    function T(k){ return TXT[LANG === 'es' ? 'es' : 'en'][k]; }
+    var ARROW = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8h10.5M9 4l4 4-4 4"/></svg>';
+    var MARK = '<svg class="door-hint-mark" viewBox="0 0 24 10" aria-hidden="true"><path d="M1 5h21M18.2 1.6 21.8 5l-3.6 3.4"/></svg>';
+    function byId(id){ return DRINKS.filter(function(x){ return x.id === id; })[0]; }
+    function liOf(id){ return grid.querySelector('.drink[data-id="' + id + '"]'); }
+    function px(v){ return (Math.round(v * 10) / 10) + 'px'; }
+
+    /* pre-existing fix: whenever this script runs, Lo que lleva's ingredients sit ON the ring (see CSS) */
+    var lataStage = document.getElementById('lata-stage');
+    if (lataStage) lataStage.classList.add('door-lt-fix');
+
+    /* 1 · every arch gets its coin (and its call-ring) */
+    Array.prototype.forEach.call(grid.children, function(li){
+      var f = li.querySelector('.field'); if (!f) return;
+      var ring = document.createElement('span'); ring.className = 'door-ring'; ring.setAttribute('aria-hidden', 'true');
+      var coin = document.createElement('span'); coin.className = 'door-coin'; coin.setAttribute('aria-hidden', 'true'); coin.innerHTML = ARROW;
+      f.appendChild(ring); f.appendChild(coin);
+      f.setAttribute('aria-haspopup', 'dialog');
+    });
+    /* 2 · one line that says what the arches are (touch: "Tap one", pointer: "Choose one") */
+    var lead = document.querySelector('.drinks .sec-head .lead'), hint = null;
+    if (lead){
+      hint = document.createElement('p'); hint.className = 'door-hint reveal';
+      hint.innerHTML = MARK + '<span class="door-hint-t"></span>';
+      lead.parentNode.insertBefore(hint, lead.nextSibling);
+    }
+    /* 3 · "this is alive": once per card as its row first arrives, left to right (never in reduced motion) */
+    if (!quiet && 'IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          if (!e.isIntersecting) return;
+          var li = e.target; io.unobserve(li);
+          var gl = grid.getBoundingClientRect().left, step = li.offsetWidth + (parseFloat(getComputedStyle(grid).columnGap) || 0);
+          var col = Math.max(0, Math.round((li.getBoundingClientRect().left - gl) / (step || 1)));
+          setTimeout(function(){
+            li.classList.add('door-alive');
+            setTimeout(function(){ li.classList.remove('door-alive'); }, 1700);
+          }, 380 + col * 170);
+        });
+      }, { threshold: 0.6 });
+      Array.prototype.forEach.call(grid.children, function(li){ io.observe(li); });
+    }
+
+    /* 4 · the room */
+    var sheet = document.createElement('div');
+    sheet.id = 'door-sheet';
+    sheet.setAttribute('role', 'dialog'); sheet.setAttribute('aria-modal', 'true');
+    /* the × is FIRST in the room's DOM (reading and Tab order: × → ‹ → › → Síguela → …); it is
+       absolutely placed (z 6), so where it shows is unchanged */
+    sheet.innerHTML = '<div class="door-backdrop"></div><div class="door-portal" aria-hidden="true"></div>' +
+      '<div class="door-panel"><button type="button" class="door-close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.6 3.6l8.8 8.8M12.4 3.6l-8.8 8.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>' +
+      '<div class="door-scroll" data-lenis-prevent></div><span class="door-grab" aria-hidden="true"></span></div>' +
+      '<img class="door-can" alt="" aria-hidden="true">';
+    document.body.appendChild(sheet);
+    var backdrop = sheet.querySelector('.door-backdrop'), portal = sheet.querySelector('.door-portal'),
+        panel = sheet.querySelector('.door-panel'), scroller = sheet.querySelector('.door-scroll'),
+        closeBtn = sheet.querySelector('.door-close'), flyer = sheet.querySelector('.door-can');
+    var h3 = detail.querySelector('h3'); if (h3 && !h3.id) h3.id = 'door-title';
+    sheet.setAttribute('aria-labelledby', 'door-title');
+
+    var state = 'closed', pendingClose = null, ph = null, inerted = [], pushed = false, skipPop = 0,
+        timers = [], anims = [], hiddenImgs = [], skin = null, liftAt = 0, pressT = null, dropT = null, sw = null, openedId = null;
+    function later(fn, ms){ timers.push(setTimeout(fn, ms)); }
+    function hideImg(img){ if (img && hiddenImgs.indexOf(img) < 0){ img.style.visibility = 'hidden'; hiddenImgs.push(img); } }
+    function showImgs(){ hiddenImgs.forEach(function(i){ i.style.visibility = ''; }); hiddenImgs = []; }
+    /* the cans the room borrowed go back on their shelves — softly, when anyone can see the grid */
+    function revealImgs(){
+      var list = hiddenImgs.slice(); showImgs();
+      if (!quiet) list.forEach(function(i){ try { i.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 220, easing: 'ease-out' }); } catch(e){} });
+    }
+    /* a tour pour still running when the room is asked to close: land it NOW (the drink you ended on is
+       painted at once, the pour lifts off in step with the room's own fade), so the close shrinks into
+       the right arch with the right can — never a stale card under a sloshing pour */
+    function settleWave(){
+      var d = byId(current); if (!d) return;
+      if (waving || detail.classList.contains('fade')){ paintDetail(d); detail.classList.remove('fade'); }
+      if (waving && waveSvg.classList.contains('on')){
+        var a = waveSvg.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 170, easing: 'ease-out', fill: 'forwards' });
+        a.onfinish = function(){ waveSvg.classList.remove('on'); a.cancel(); };
+      }
+    }
+    function preload(id){ var d = byId(id); if (d){ var im = new Image(); im.src = 'assets/product/' + d.img + '@2x.webp'; } }
+    function run(el, kf, opt){ var a = el.animate(kf, opt); anims.push(a); return a; }
+
+    /* the page holds still behind the room: no scroll, no rubber-band, no scrollbar jump */
+    function lock(){
+      var sbw = innerWidth - document.documentElement.clientWidth;
+      document.documentElement.style.setProperty('--door-sbw', (sbw > 0 && sbw < 30 ? sbw : 0) + 'px');
+      document.documentElement.classList.add('door-lock');
+      if (window.__lenis && __lenis.stop) __lenis.stop();
+      inerted = [];
+      Array.prototype.forEach.call(document.body.children, function(n){
+        if (n === sheet || n === fSvg || n === fFrog || n.tagName === 'SCRIPT' || n.tagName === 'STYLE' || n.inert) return;
+        n.inert = true; inerted.push(n);
+      });
+    }
+    function unlock(){
+      inerted.forEach(function(n){ n.inert = false; }); inerted = [];
+      document.documentElement.classList.remove('door-lock');
+      document.documentElement.style.removeProperty('--door-sbw');
+      if (window.__lenis && __lenis.start) __lenis.start();
+    }
+    /* phones: the room is the VISIBLE viewport (Safari's bars come and go) */
+    var vv = window.visualViewport;
+    function fitPanel(){
+      var s = panel.style;
+      if (!mqSheet.matches || !vv){ s.top = s.left = s.width = s.height = ''; return; }
+      s.top = Math.round(vv.offsetTop) + 'px'; s.left = Math.round(vv.offsetLeft) + 'px';
+      s.width = Math.round(vv.width) + 'px'; s.height = Math.round(vv.height) + 'px';
+    }
+    if (vv){ var refit = function(){ if (state === 'open') fitPanel(); }; vv.addEventListener('resize', refit); vv.addEventListener('scroll', refit); }
+
+    /* the featured card is LENT to the room; a still copy holds its place so nothing below moves */
+    function stand(){
+      var c = detail.cloneNode(true);
+      c.removeAttribute('id'); c.removeAttribute('aria-live');
+      Array.prototype.forEach.call(c.querySelectorAll('[id]'), function(n){ n.removeAttribute('id'); });
+      c.setAttribute('aria-hidden', 'true'); c.inert = true; c.classList.add('door-ph');
+      return c;
+    }
+    function lend(){ ph = stand(); detail.parentNode.insertBefore(ph, detail); scroller.appendChild(detail); scroller.scrollTop = 0; }
+    function refreshStand(){ if (ph){ var c = stand(); ph.parentNode.replaceChild(c, ph); ph = c; } }
+    function giveBack(){ if (ph){ ph.parentNode.replaceChild(detail, ph); ph = null; } }
+
+    /* the room's light, laid where the lent card's wash sits */
+    function setWash(){
+      var r = detail.getBoundingClientRect(), s = sheet.style;
+      s.setProperty('--door-px', px(r.left)); s.setProperty('--door-py', px(r.top));
+      s.setProperty('--door-pw', px(r.width)); s.setProperty('--door-ph', px(r.height));
+    }
+    function tint(accent){ if (accent){ sheet.style.setProperty('--accent', accent); sheet.style.setProperty('--door-tint', accent); } }
+    /* the arch you chose, held bright above the scrim (a still clone of its field, can removed) */
+    function makeSkin(li, fr){
+      dropSkin();
+      var f = li && li.querySelector('.field'); if (!f || !fr) return;
+      var w = document.createElement('div'); w.className = 'drink door-skin'; w.setAttribute('aria-hidden', 'true'); w.inert = true;
+      w.style.setProperty('--accent', li.style.getPropertyValue('--accent'));
+      w.style.left = px(fr.left); w.style.top = px(fr.top); w.style.width = px(fr.width);
+      var c = f.cloneNode(true); c.removeAttribute('aria-label'); c.removeAttribute('aria-haspopup'); c.tabIndex = -1;
+      var im = c.querySelector('img'); if (im) im.parentNode.removeChild(im);
+      c.style.boxShadow = getComputedStyle(f).boxShadow;
+      w.appendChild(c); sheet.insertBefore(w, portal); skin = w;
+      return w;
+    }
+    function dropSkin(){ if (skin && skin.parentNode) skin.parentNode.removeChild(skin); skin = null; }
+
+    /* shapes: clip-path inset() of a box down to a rect, with the arch's own radii or the room's */
+    function archR(r){ return [r.width / 2, r.height * 0.32, 14]; }
+    /* the grow's shape over time: the rect eases arch → room (the old cubic-bezier(.72,0,.2,1), solved
+       here), but the CROWN stays a semicircle — radius = half the CURRENT width — until the last 20% of
+       the time, and only then relaxes to the room's corners. A straight radius tween had already squared
+       it off into a rounded card by mid-grow; this reads as a door opening. Sampled as keyframes (linear
+       between them, 16ms apart) — still one clip-path animation, no layout per frame. */
+    function cubicBez(x1, y1, x2, y2){
+      function B(a, b, s){ return 3 * a * s * (1 - s) * (1 - s) + 3 * b * s * s * (1 - s) + s * s * s; }
+      return function(x){
+        if (x <= 0) return 0; if (x >= 1) return 1;
+        var lo = 0, hi = 1, s = x;
+        for (var i = 0; i < 30; i++){ s = (lo + hi) / 2; if (B(x1, x2, s) < x) lo = s; else hi = s; }
+        return B(y1, y2, (lo + hi) / 2);
+      };
+    }
+    var growEase = cubicBez(.72, 0, .2, 1), CROWN = 0.8, GROW_N = 40;
+    function doorFrames(box, a, b){
+      var room = roomR(), out = [];
+      for (var i = 0; i <= GROW_N; i++){
+        var t = i / GROW_N, p = growEase(t);
+        var r = { left: a.left + (b.left - a.left) * p, top: a.top + (b.top - a.top) * p,
+                  width: a.width + (b.width - a.width) * p, height: a.height + (b.height - a.height) * p };
+        var bot = 14 + (room[2] - 14) * p;
+        var crown = Math.max(0, Math.min(r.width / 2, r.height - bot) - 0.1);   /* a semicircle, never taller than the door */
+        var k = t <= CROWN ? 0 : (t - CROWN) / (1 - CROWN); k = k * k * (3 - 2 * k);
+        out.push({ offset: t, clipPath: clipTo(box, r, [crown + (room[0] - crown) * k, crown + (room[1] - crown) * k, bot]) });
+      }
+      return out;
+    }
+    function roomR(){ var k = mqSheet.matches ? 0 : 28; return [k, k, k]; }
+    function clipTo(box, r, rad){
+      var t = r.top - box.top, l = r.left - box.left,
+          rt = (box.left + box.width) - (r.left + r.width), b = (box.top + box.height) - (r.top + r.height);
+      return 'inset(' + px(t) + ' ' + px(rt) + ' ' + px(b) + ' ' + px(l) + ' round ' +
+        px(rad[0]) + ' ' + px(rad[0]) + ' ' + px(rad[2]) + ' ' + px(rad[2]) + ' / ' +
+        px(rad[1]) + ' ' + px(rad[1]) + ' ' + px(rad[2]) + ' ' + px(rad[2]) + ')';
+    }
+    /* where a can really is: rect centre, un-rotated width, and its lean */
+    function poseOf(img){
+      var r = img.getBoundingClientRect(), m = getComputedStyle(img).transform, s = 1, a = 0;
+      var v = m && m.match(/matrix\(([^)]+)\)/);
+      if (v){ var p = v[1].split(',').map(parseFloat); s = Math.sqrt(p[0] * p[0] + p[1] * p[1]); a = Math.atan2(p[1], p[0]) * 180 / Math.PI; }
+      return { cx: r.left + r.width / 2, cy: r.top + r.height / 2, w: (img.offsetWidth || r.width) * s, a: a };
+    }
+    /* the can in flight: its box is the BIG rect (crisp), posed down onto the small one — transform only */
+    function fly(src, big, small, home, dur, ease, delay){
+      flyer.getAnimations().forEach(function(a){ a.cancel(); });
+      flyer.style.opacity = '';
+      flyer.src = src;
+      flyer.style.left = px(big.left); flyer.style.top = px(big.top);
+      flyer.style.width = px(big.width); flyer.style.height = px(big.height);
+      flyer.classList.add('on');
+      var g = 'translate(' + px(small.cx - (big.left + big.width / 2)) + ',' + px(small.cy - (big.top + big.height / 2)) + ') rotate(' +
+        small.a.toFixed(2) + 'deg) scale(' + (small.w / big.width).toFixed(4) + ')';
+      return run(flyer, home ? [{ transform: 'none' }, { transform: g }] : [{ transform: g }, { transform: 'none' }],
+        { duration: dur, easing: ease, delay: delay || 0, fill: 'both' });
+    }
+    function focusIn(){ try { closeBtn.focus({ preventScroll: true }); } catch(e){ closeBtn.focus(); } }
+    /* the grid's entry is marked scroll-restoration 'manual' while a room is open, so leaving the room's
+       entry (Back, ×) never snaps the page back over the arch we just scrolled to; 'auto' returns on landing */
+    function pushEntry(){ try { history.scrollRestoration = 'manual'; history.pushState({ coqDoor: true }, ''); pushed = true; } catch(e){ pushed = false; } }
+    function autoRestore(){ try { if (!(history.state && history.state.coqDoor)) history.scrollRestoration = 'auto'; } catch(e){} }
+
+    /* tap → lift (a beat) → grow */
+    function openDoor(id, li){
+      if (state !== 'closed' || !li) return;
+      if (!byId(id)) return;
+      if (waving){ setTimeout(function(){ openDoor(id, li); }, 300); return; }   /* a pour is mid-flight on the card */
+      state = 'lifting';
+      clearTimeout(dropT); clearTimeout(pressT);
+      preload(id);
+      var wait = 0;
+      if (!quiet){
+        if (!li.classList.contains('door-lift')){ li.classList.add('door-lift'); liftAt = performance.now(); }
+        wait = Math.max(0, LIFT - (performance.now() - liftAt));
+      }
+      if (wait > 8) later(function(){ grow(id, li); }, wait); else grow(id, li);
+    }
+    function grow(id, li){
+      var d = byId(id);
+      state = 'opening';
+      /* paint through the real open(): without .ready it paints at once (no wave, no glide) */
+      if (id !== current){ detail.classList.remove('ready', 'fade'); open(id); }
+      var field = li.querySelector('.field'), gimg = field.querySelector('img');
+      var fr = field.getBoundingClientRect(), from = poseOf(gimg);          /* the lifted can, before anything moves */
+      closeBtn.setAttribute('aria-label', T('close'));
+      lend(); lock(); fitPanel(); tint(d.accent);
+      if (quiet) sheet.classList.add('door-quiet');
+      sheet.classList.add('is-open');
+      /* every room opens at its top: lend()'s reset ran while the sheet was display:none (a no-op), and
+         the browser would hand back the LAST room's scroll offset — so reset it now it's laid out,
+         before the can's landing rect (tr) and the wash are measured */
+      scroller.scrollTop = 0;
+      openedId = id;
+      pushEntry();
+      focusIn();                                                            /* focus leaves the (now inert) grid at once */
+      if (quiet){
+        li.classList.remove('door-lift');
+        sheet.classList.add('door-quiet', 'door-dim');
+        later(function(){ sheet.classList.add('door-in', 'door-settled'); }, 20);
+        later(ready, 260);
+        return;
+      }
+      var small = mqSheet.matches;
+      var pr = panel.getBoundingClientRect(), vp = { left: 0, top: 0, width: innerWidth, height: innerHeight };
+      var timg = detail.querySelector('.fig img'), tr = timg.getBoundingClientRect();
+      setWash();
+      makeSkin(li, fr);
+      portal.classList.add('on');
+      sheet.classList.add('door-can-away');
+      /* the arch grows into the room keeping its crown (doorFrames carries the easing) */
+      run(portal, doorFrames(vp, fr, pr), { duration: EXP, easing: 'linear', fill: 'both' });
+      run(portal, [{ opacity: 0 }, { opacity: 1 }], { duration: Math.round(EXP * 0.34), easing: 'ease-out', fill: 'both' });
+      run(panel, doorFrames(pr, fr, pr), { duration: EXP, easing: 'linear', fill: 'both' });
+      if (skin) run(skin, [{ opacity: 1 }, { opacity: 0 }], { duration: 240, delay: Math.round(EXP * 0.36), fill: 'both' });
+      /* the can rides with the arch from where it was lifted, landing a beat after it */
+      var src = (timg.complete && timg.naturalWidth) ? (timg.currentSrc || timg.src) : (gimg.currentSrc || gimg.src);
+      fly(src, tr, from, false, EXP + 60, 'cubic-bezier(.66,0,.2,1)');
+      hideImg(gimg); li.classList.remove('door-lift');
+      later(function(){ sheet.classList.add('door-dim'); }, 16);
+      later(function(){ sheet.classList.add('door-in'); }, Math.round(EXP * 0.45));
+      later(function(){
+        sheet.classList.add('door-settled');
+        ready();                                                             /* the door is open: take taps now, not 0.4 s later */
+        var land = function(){
+          sheet.classList.remove('door-can-away');                            /* the real can fades in over the flyer… */
+          var a = flyer.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, delay: 260, fill: 'both' });
+          a.onfinish = function(){ if (state !== 'closing') { flyer.classList.remove('on'); a.cancel(); } };   /* …then it steps away */
+        };
+        if (timg.complete && timg.naturalWidth) land();
+        else { timg.addEventListener('load', land, { once: true }); timg.addEventListener('error', land, { once: true }); }
+      }, EXP + 80);
+      later(function(){
+        if (state !== 'open') return;                                        /* a close already owns the layers (finishClose tidies) */
+        portal.classList.remove('on'); dropSkin();
+        anims.forEach(function(a){ if (a.effect && a.effect.target !== flyer) a.cancel(); });
+        anims = anims.filter(function(a){ return a.effect && a.effect.target === flyer; });
+      }, EXP + 460);
+    }
+    function runPending(){ if (pendingClose){ var how = pendingClose; pendingClose = null; closeDoor(how); } }
+    /* fully open: only now do the can, the pill, the tour and the scrim take taps (see .door-ready) */
+    function ready(){ state = 'open'; sheet.classList.add('door-ready'); runPending(); }
+
+    /* make sure the arch we close into is on screen — but move the page as little as possible, and only
+       when it has to. The arch you opened, still on screen, is never chased (the room shrinks into it
+       where it is); a toured drink's arch is only brought in when it is essentially off-screen, and then
+       by the nearest edge, not centred. Behind a full-screen room / a fade the jump is invisible. */
+    function bringIntoView(field){
+      var r = field.getBoundingClientRect(), top = 84, bot = innerHeight - 12;
+      var vis = Math.min(r.bottom, bot) - Math.max(r.top, top);               /* px of the arch in the clear band */
+      if (current === openedId && r.bottom > top && r.top < bot) return;
+      if (vis >= Math.max(120, r.height * 0.4) || (r.top >= top && r.bottom <= bot)) return;
+      var dy = (r.top < top || r.height > bot - top) ? r.top - top : r.bottom - bot;
+      var max = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+      var y = Math.min(max, Math.max(0, Math.round(scrollY + dy)));
+      if (window.__lenis && __lenis.scrollTo) __lenis.scrollTo(y, { immediate: true, force: true });
+      if (Math.abs(scrollY - y) > 1) window.scrollTo(0, y);
+    }
+
+    function closeDoor(how){
+      if (state === 'lifting'){ timers.forEach(clearTimeout); timers = []; drop(); state = 'closed'; return; }   /* changed their mind mid-lift */
+      if (state === 'opening'){ pendingClose = how; return; }
+      if (state !== 'open') return;
+      state = 'closing'; sheet.classList.remove('door-ready');
+      if (how === 'pop') pushed = false;
+      else if (pushed){ pushed = false; skipPop++; try { history.back(); } catch(e){ skipPop--; } }
+      settleWave();                                                          /* a pour mid-tour lands first */
+      refreshStand();                                                        /* the page's card now shows the drink you ended on */
+      var small = mqSheet.matches;
+      var li = liOf(current), field = li && li.querySelector('.field'), gimg = field && field.querySelector('img');
+      /* every way out lands you on the drink you ended on (an instant jump, hidden by the room) */
+      if (field) bringIntoView(field);
+      if (quiet){
+        sheet.classList.remove('door-in', 'door-dim');
+        later(finishClose, 240); return;
+      }
+      var fr = field && field.getBoundingClientRect();
+      var inView = fr && fr.bottom > 0 && fr.top < innerHeight;
+      if (how === 'swipe' || !inView){
+        /* a swipe (or no arch to go to): the room slides away instead — the grid behind it whole again */
+        revealImgs();
+        panel.style.transition = small ? 'transform .4s cubic-bezier(.4,0,.2,1)' : 'transform .42s cubic-bezier(.4,0,.2,1), opacity .32s ease';
+        panel.style.transform = small ? 'translateY(100%)' : 'translateY(28px) scale(.97)';
+        if (!small) panel.style.opacity = '0';
+        backdrop.style.opacity = ''; sheet.classList.remove('door-dim');
+        later(finishClose, 440); return;
+      }
+      /* the door closes behind you: the room shrinks back into THIS drink's arch, the can rides home */
+      var pr = panel.getBoundingClientRect(), vp = { left: 0, top: 0, width: innerWidth, height: innerHeight };
+      var timg = detail.querySelector('.fig img'), tr = timg.getBoundingClientRect();
+      var to = poseOf(gimg);
+      /* the flyer is THIS drink's can: the room's own image only if it has already loaded this drink */
+      var cd = byId(current), want = cd ? 'assets/product/' + cd.img + '@2x.webp' : '';
+      var fsrc = (timg.complete && timg.naturalWidth && (!want || (timg.currentSrc || timg.src).indexOf(want) >= 0)) ? (timg.currentSrc || timg.src)
+        : (gimg && gimg.complete && gimg.naturalWidth) ? (gimg.currentSrc || gimg.src) : (want || timg.src);
+      showImgs(); hideImg(gimg);
+      tint((byId(current) || {}).accent);
+      setWash();
+      makeSkin(li, fr);
+      portal.classList.add('on');
+      var ease = 'cubic-bezier(.6,0,.22,1)', D = 150;
+      run(portal, [{ clipPath: clipTo(vp, pr, roomR()) }, { clipPath: clipTo(vp, fr, archR(fr)) }], { duration: SHRINK, delay: D, easing: ease, fill: 'both' });
+      run(portal, [{ opacity: 1 }, { opacity: 0 }], { duration: Math.round(SHRINK * 0.3), delay: D + Math.round(SHRINK * 0.7), fill: 'both' });
+      run(panel, [{ clipPath: clipTo(pr, pr, roomR()) }, { clipPath: clipTo(pr, fr, archR(fr)) }], { duration: SHRINK, delay: D, easing: ease, fill: 'both' });
+      if (skin) run(skin, [{ opacity: 0 }, { opacity: 1 }], { duration: Math.round(SHRINK * 0.4), delay: D + Math.round(SHRINK * 0.45), fill: 'both' });
+      if (tr.bottom > 0 && tr.top < innerHeight){
+        sheet.classList.add('door-can-away');
+        fly(fsrc, tr, to, true, SHRINK + 40, 'cubic-bezier(.5,0,.2,1)', 110);
+      } else flyer.classList.remove('on');
+      sheet.classList.add('door-out');
+      sheet.classList.remove('door-in', 'door-settled');
+      later(function(){ sheet.classList.remove('door-dim'); }, 120);
+      later(finishClose, D + SHRINK + 40);
+    }
+    function finishClose(){
+      timers.forEach(clearTimeout); timers = [];
+      anims.forEach(function(a){ try { a.cancel(); } catch(e){} }); anims = [];
+      flyer.getAnimations().forEach(function(a){ a.cancel(); });
+      portal.classList.remove('on'); flyer.classList.remove('on'); dropSkin();
+      sheet.classList.remove('is-open', 'door-in', 'door-settled', 'door-dim', 'door-out', 'door-can-away', 'door-quiet', 'door-ready');
+      panel.style.transition = ''; panel.style.transform = ''; panel.style.opacity = ''; backdrop.style.opacity = ''; backdrop.style.transition = '';
+      panel.style.top = panel.style.left = panel.style.width = panel.style.height = '';
+      Array.prototype.forEach.call(grid.querySelectorAll('.door-lift'), function(n){ n.classList.remove('door-lift'); });
+      giveBack(); unlock(); showImgs();
+      state = 'closed'; pendingClose = null;
+      var li = liOf(current), f = li && li.querySelector('.field');         /* focus returns to the arch you closed into */
+      if (f){ try { f.focus({ preventScroll: true }); } catch(e){} }
+    }
+
+    /* 5 · the grid opens doors now (capture phase: the original glide listener never fires) —
+           including the drink that is already featured (Coquetearte at load), which used to be a dead tap */
+    grid.addEventListener('click', function(e){
+      var li = e.target.closest ? e.target.closest('.drink') : null;
+      if (!li || !grid.contains(li)) return;
+      e.stopPropagation(); e.preventDefault();
+      openDoor(li.getAttribute('data-id'), li);
+    }, true);
+    /* the lift starts on finger-down (touch waits a beat, so a scroll that starts on a card doesn't flicker it) */
+    function drop(){ clearTimeout(pressT); Array.prototype.forEach.call(grid.querySelectorAll('.door-lift'), function(n){ n.classList.remove('door-lift'); }); }
+    grid.addEventListener('pointerdown', function(e){
+      var li = e.target.closest ? e.target.closest('.drink') : null; if (!li) return;
+      preload(li.getAttribute('data-id'));
+      if (quiet || state !== 'closed' || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      clearTimeout(pressT); clearTimeout(dropT);
+      var go = function(){ drop(); li.classList.add('door-lift'); liftAt = performance.now(); };
+      if (e.pointerType === 'touch') pressT = setTimeout(go, 90); else go();
+    });
+    document.addEventListener('pointerup', function(){ clearTimeout(pressT); if (state === 'closed'){ clearTimeout(dropT); dropT = setTimeout(drop, 90); } });
+    document.addEventListener('pointercancel', function(){ if (state === 'closed') drop(); });
+    grid.addEventListener('mouseover', function(e){ var li = e.target.closest ? e.target.closest('.drink') : null; if (li) preload(li.getAttribute('data-id')); });
+
+    /* 6 · the ways back */
+    closeBtn.addEventListener('click', function(){ closeDoor('ui'); });
+    /* the scrim only closes a room that is fully open: a tap on it mid-grow (often a second tap aimed at the
+       can as it lands — the grow's clip leaves the scrim under that spot) is ignored, never queued */
+    backdrop.addEventListener('click', function(){ if (state === 'open') closeDoor('ui'); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && state !== 'closed' && state !== 'closing'){ e.preventDefault(); closeDoor('ui'); } });
+    /* Tab stays in the room while it is up: × → ‹ → › → Síguela → … → back to × (Shift+Tab the other way).
+       Inside the list the browser's own order runs (the room's DOM order); only the two ends wrap, and
+       focus that has somehow left the room is brought back in. */
+    function tabbables(){
+      return Array.prototype.filter.call(panel.querySelectorAll('button,[href],input,select,textarea,summary,[tabindex]'), function(n){
+        if (n.tabIndex < 0 || n.disabled || (n.closest && n.closest('[inert],[hidden]'))) return false;
+        return n.getClientRects().length > 0 && getComputedStyle(n).visibility !== 'hidden';
+      });
+    }
+    document.addEventListener('keydown', function(e){
+      if (e.key !== 'Tab' || state === 'closed' || e.altKey || e.ctrlKey || e.metaKey) return;
+      var list = tabbables(), n = list.length;
+      if (!n){ e.preventDefault(); return; }
+      var i = list.indexOf(document.activeElement), to = null;
+      if (e.shiftKey){ if (i <= 0) to = list[n - 1]; }
+      else if (i < 0 || i === n - 1) to = list[0];
+      if (to){ e.preventDefault(); try { to.focus(); } catch(err){} }
+    });
+    addEventListener('popstate', function(){
+      autoRestore();
+      if (skipPop > 0){ skipPop--; return; }
+      if (state === 'open' || state === 'opening'){ pushed = false; closeDoor('pop'); }
+    });
+    try { if (history.state && history.state.coqDoor) history.replaceState(null, ''); history.scrollRestoration = 'auto'; } catch(e){}
+    /* the room follows the drink as you tour it (the scrim's tint glides; the surface matches the card) */
+    new MutationObserver(function(){
+      if (state === 'closed') return;
+      tint(detail.style.getPropertyValue('--accent'));
+    }).observe(detail, { attributes: true, attributeFilter: ['style'] });
+    /* "Síguela" from inside the room: take the room's history entry back OUT before the pour carries
+       you to V1, so a single Back from V1 lands on the grid — not on a stale room entry */
+    function leaveThenFollow(e){
+      if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+      if (following || state === 'closed' || state === 'lifting') return;    /* on the page: the plain Síguela */
+      /* the room is leaving: a tap on where the can was is not a follow */
+      if (state === 'closing'){ e.preventDefault(); e.stopImmediatePropagation(); return; }
+      /* …nor is a tap on the can still landing mid-grow (CSS already keeps taps off it until .door-ready;
+         this also stops a synthetic click). The keyboard can still follow from a room that is opening. */
+      if (state === 'opening' && e.type === 'click'){ e.preventDefault(); e.stopImmediatePropagation(); return; }
+      if (!pushed) return;                                                   /* no room entry on the stack: the plain follow is clean */
+      /* 'open' (or a keyboard follow from a room still opening): the room's entry is already pushed, so
+         it must come off before the pour (the page's own followBottle never runs while a room entry is
+         on the stack) */
+      e.preventDefault(); e.stopImmediatePropagation();
+      pendingClose = null;
+      pushed = false;
+      try { history.replaceState(null, ''); } catch(err){}
+      var done = false, got = false;
+      var go = function(){ if (done) return; done = true; removeEventListener('popstate', onPop); if (!got && skipPop > 0) skipPop--; followBottle(); };
+      var onPop = function(){ got = true; setTimeout(go, 0); };
+      addEventListener('popstate', onPop);
+      skipPop++;
+      try { history.back(); } catch(err){ go(); return; }
+      setTimeout(go, 400);
+    }
+    figEl.addEventListener('click', leaveThenFollow, true);
+    figEl.addEventListener('keydown', leaveThenFollow, true);
+    /* the page never rubber-bands behind the room (iOS ignores overflow:hidden on some versions):
+       touch moves are only let through where the room's own scroller can actually scroll */
+    var lastY = 0;
+    sheet.addEventListener('touchstart', function(e){ if (e.touches.length === 1) lastY = e.touches[0].clientY; }, { passive: true });
+    sheet.addEventListener('touchmove', function(e){
+      if (state === 'closed' || e.touches.length !== 1) return;
+      if (sw && sw.drag) return;                                             /* the swipe-to-close owns this gesture */
+      var y = e.touches[0].clientY, dy = y - lastY; lastY = y;
+      if (!scroller.contains(e.target)){ if (e.cancelable) e.preventDefault(); return; }
+      var max = scroller.scrollHeight - scroller.clientHeight;
+      if (max <= 1 || (dy > 0 && scroller.scrollTop <= 0) || (dy < 0 && scroller.scrollTop >= max - 1)){ if (e.cancelable) e.preventDefault(); }
+    }, { passive: false });
+    /* swipe down from the top of the room (phones) */
+    panel.addEventListener('touchstart', function(e){
+      if (state !== 'open' || e.touches.length !== 1){ sw = null; return; }
+      var t = e.touches[0];
+      sw = { x: t.clientX, y: t.clientY, t: performance.now(), top: scroller.scrollTop <= 0, drag: false, dy: 0 };
+    }, { passive: true });
+    panel.addEventListener('touchmove', function(e){
+      if (!sw || !sw.top) return;
+      var t = e.touches[0], dx = t.clientX - sw.x, dy = t.clientY - sw.y;
+      if (!sw.drag){
+        if (dy > 10 && dy > Math.abs(dx) * 1.2){ sw.drag = true; sw.y = t.clientY - 10; sw.t = performance.now(); panel.classList.add('door-drag'); panel.style.transition = 'none'; backdrop.style.transition = 'none';
+          revealImgs(); }                                                    /* the grid peeking out above the room is whole */
+        else if (dy < -6 || Math.abs(dx) > 10){ sw = null; return; }
+        else return;
+      }
+      e.preventDefault();
+      sw.dy = Math.max(0, t.clientY - sw.y);
+      panel.style.transform = 'translateY(' + sw.dy + 'px)';
+      backdrop.style.opacity = String(Math.max(0, 1 - sw.dy / (innerHeight * 0.9)));
+    }, { passive: false });
+    function endSwipe(){
+      if (!sw || !sw.drag){ sw = null; return; }
+      var dy = sw.dy, v = dy / Math.max(1, performance.now() - sw.t); sw = null;
+      panel.classList.remove('door-drag'); backdrop.style.transition = '';
+      if (dy > 120 || (v > 0.55 && dy > 40)) closeDoor('swipe');
+      else { panel.style.transition = 'transform .42s cubic-bezier(.2,.7,.2,1)'; panel.style.transform = ''; backdrop.style.opacity = ''; }
+    }
+    panel.addEventListener('touchend', endSwipe); panel.addEventListener('touchcancel', endSwipe);
+    /* coming BACK from V1 (bfcache): lift the pour and land on the grid, the drink you followed featured */
+    addEventListener('pageshow', function(e){
+      if (!e.persisted) return;
+      following = false; fSvg.classList.remove('on'); fFrog.classList.remove('on');
+      document.documentElement.style.background = '';
+      if (state !== 'closed'){ pushed = false; finishClose(); }
+    });
+
+    /* 7 · EN / ES (and touch vs pointer) for what isn't innerHTML */
+    function relabel(){
+      Array.prototype.forEach.call(grid.children, function(li){
+        var d = byId(li.getAttribute('data-id')), f = li.querySelector('.field');
+        if (d && f) f.setAttribute('aria-label', d.name + T('knob'));
+      });
+      closeBtn.setAttribute('aria-label', T('close'));
+      Array.prototype.forEach.call(detail.querySelectorAll('.d-arrow'), function(b){ b.setAttribute('aria-label', T(+b.getAttribute('data-step') < 0 ? 'prev' : 'next')); });
+      var fg = detail.querySelector('.fig'); if (fg) fg.setAttribute('aria-label', T('follow'));
+      if (!h3) sheet.setAttribute('aria-label', T('title'));
+      if (hint) hint.querySelector('.door-hint-t').textContent = touchUI.matches ? T('tap') : T('pick');
+    }
+    relabel();
+    new MutationObserver(relabel).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+    if (touchUI.addEventListener) touchUI.addEventListener('change', relabel);
+
+    /* QA */
+    window.__door = {
+      open: function(id){ var li = liOf(id); if (li) openDoor(id, li); },
+      close: function(how){ closeDoor(how || 'ui'); },
+      state: function(){
+        var a = document.activeElement;
+        return { state: state, current: current, inSheet: detail.parentNode === scroller, locked: document.documentElement.classList.contains('door-lock'),
+          y: Math.round(scrollY), focus: a ? (a.className || a.tagName) + (a.closest && a.closest('.drink') ? '@' + a.closest('.drink').getAttribute('data-id') : '') : null,
+          pushed: pushed, hist: history.length, ph: !!ph, featured: detail.querySelector('[data-d="name"]').textContent };
+      }
+    };
+  })();
+  /* end DOORWAY · BUILD 10 */
+
   (function(){
     var p = new URLSearchParams(location.search).get('lang'); var saved = null;
     try { saved = localStorage.getItem('coq-lang'); } catch(e){}
