@@ -9,16 +9,18 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# fingerprinted-by-name media: safe to cache hard
+# media is NOT fingerprinted (hero-beach-1080.mp4 was re-encoded under the same name on 2026-09-23),
+# so it must revalidate: unchanged files still come from the browser cache via a 304, changed ones
+# are picked up. "immutable" here once meant returning visitors kept the old, softer hero for a year.
 [[headers]]
   for = "/assets/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/v1/coquirico-handoff/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # the pages themselves must always revalidate, or a deploy looks like "nothing changed"
 [[headers]]
