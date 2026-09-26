@@ -25,7 +25,35 @@
 <meta name="twitter:title" content="Coquírico — Coco, isla y calma.">
 <meta name="twitter:description" content="A Puerto Rican coconut drink from the island of the coquí. Cold, non-alcoholic, unhurried.">
 <meta name="twitter:image" content="https://peppy-granita-029b94.netlify.app/assets/social/og-cover.jpg">
-<link rel="preload" as="image" href="assets/video/hero-beach-poster-1080.jpg" fetchpriority="high">
+<!-- ════════════ V2-PERF · A — preload only the poster this screen will show (2026-09-25) ════════════
+     Was: an unconditional high-priority preload of hero-beach-poster-1080.jpg (126 KB), which a phone
+     never shows (it gets the 48 KB portrait poster). This runs before the stylesheet, so it is not held
+     up by it, and predicts heroTier() from the viewport with the same numbers as the .hero/.hero-bg CSS.
+     The hero script still decides for real; a wrong guess only costs what the old preload always cost. -->
+<script>
+(function(){
+  try {
+    var W = document.documentElement.clientWidth || innerWidth, H = innerHeight;
+    var minH = W <= 960 ? Math.min(900, Math.max(640, H)) : Math.min(985, Math.max(720, H));
+    var hh = Math.max(minH, Math.min(H, 985));                     /* .hero: 100vh, min-height, max 985 */
+    var bw = W * 1.05, bh = hh * 1.06;                             /* .hero-bg: inset -6% -2.5% 0 -2.5% */
+    var dpr = window.devicePixelRatio || 1, c = navigator.connection || {};
+    var lean = c.saveData === true || /2g|3g/.test(c.effectiveType || '');
+    var coarse = matchMedia('(pointer: coarse)').matches;
+    var phone = coarse && Math.min(screen.width, screen.height) < 600;
+    var t;
+    if (bw / bh <= 0.776) t = 'phone';
+    else if (phone || lean) t = '720';
+    else { var need = Math.max(bw, bh * 1920 / 1012) * dpr; t = need <= 2112 ? '1080' : need <= 2560 ? '1440' : '2160'; if (coarse && t === '2160') t = '1440'; }
+    var noche = false;
+    try { noche = /[?&]noche=1/.test(location.search) || localStorage.getItem('coq-mode') === 'noche'; } catch(e){}
+    var p = 'assets/video/' + (noche ? 'hero-night' : 'hero-beach') + '-poster-' + (t === 'phone' ? 'phone' : t === '720' ? '720' : '1080') + '.jpg';
+    var l = document.createElement('link'); l.rel = 'preload'; l.as = 'image'; l.href = p;
+    l.setAttribute('fetchpriority', 'high'); document.head.appendChild(l);
+  } catch(e){}
+})();
+</script>
+<!-- ════════════ end V2-PERF · A ════════════ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
@@ -1341,6 +1369,26 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
      sideways (clip, not hidden — no scroll container, nothing else changes) */
 @media (max-width:960px){ #ingredients{overflow-x:clip} }
 /* end DOORWAY · BUILD 10 */
+
+/* ════════════ V2-PERF · CSS (2026-09-25) — faster on phones, nothing looks different ════════════
+   F3 · the map's looping lights hold still while the card is off-screen (the script sets .perf-off). */
+.map-card.perf-off .map-sea,.map-card.perf-off .pin circle,.map-card.perf-off .map-ff{animation-play-state:paused}
+/* E · touch screens: a reveal lets go of its clip-path once it has finished. The end state was
+   inset(-120px round r) (photos) / inset(-.3em -.2em -.4em -.2em) (headlines) — a clip larger than the
+   element, i.e. nothing clipped — but it kept a mask layer alive for the rest of the visit, and the
+   parallaxed photo inside it repainted on every scroll. Same pixels, no mask. (Set by the reveal script
+   on the clip-path transitionend.) */
+@media (hover:none) and (pointer:coarse){
+  .js .reveal-img.in.perf-rv-done,.js .serve .photo.reveal-img.in.perf-rv-done,.js .h2.reveal.in.perf-rv-done{clip-path:none}
+}
+/* I · a --theme change the doorway applied while its room covered a phone's screen lands without the
+   colour glides (for two frames), so the page is simply already in the new colour when the room shrinks. */
+.perf-theme-snap .eyebrow,.perf-theme-snap .statement em,.perf-theme-snap .faq-h em,.perf-theme-snap .qa-inv,.perf-theme-snap .qa-qui{transition:none!important}
+/* V2-ROUTE (critic) · iOS Low Power Mode refuses autoplay: the hero film then rests on its poster (its first
+   frame) instead of WebKit drawing its native play glyph over the headline. It has no controls; nothing else changes. */
+.hero-vid::-webkit-media-controls-start-playback-button{display:none!important;-webkit-appearance:none}
+.hero-vid::-webkit-media-controls{display:none!important}
+/* ════════════ end V2-PERF · CSS ════════════ */
 </style>
 </head>
 <body>
@@ -1378,9 +1426,17 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
 <!-- ============ HERO ============ -->
 <section class="hero" id="hero">
   <div class="hero-bg" data-parallax>
-    <video class="hero-vid" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1" poster="assets/video/hero-beach-poster-1080.jpg">
+    <!-- V2-PERF · B: no poster in the markup — the script below sets the tier's poster at once (a phone
+         used to start the 1080 one too); <noscript> keeps the old still for a no-JS visit -->
+    <!-- V2-PERF · D: .perf-push is a plain full-size box around the film (position:absolute; inset:0, so
+         the film's own box is unchanged). At rest on a touch screen the film's slow push runs on it: a
+         transform animation on the <video> itself repainted the whole page every frame in Chrome. -->
+    <div class="perf-push" style="position:absolute;inset:0">
+    <video class="hero-vid" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
       <source type="video/mp4">
     </video>
+    </div>
+    <noscript><style>.hero-bg{background:#0d1418 url(assets/video/hero-beach-poster-1080.jpg) 50% 50%/cover no-repeat}</style></noscript>
   </div>
   <script>
   /* NOCHE + 4K · BUILD 8 — the hero is encoded from Pedro's 4K master (Pexels 10495024) as a ladder:
@@ -1402,14 +1458,42 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
     if (coarse) t = Math.min(t, 1440);                 /* touch tablets never get 4K */
     return String(t);
   };
+  /* ════════════ V2-PERF · B — the hero film waits for the overture (2026-09-25) ════════════
+     On a phone the 7.5 MB film used to download in full during EL LLAMADO, behind the veil, fighting the
+     intro and the page for the network and the main thread. Now, on touch screens, only its poster (= the
+     loop's first frame) loads up front; the film's source is set by __heroGate, which opens 2.4 s into the
+     overture (the page's own files are in by then; the veil only starts to drain at 4.05 s, so the water
+     is already moving when the hero shows), on finish/skip, when #ov is removed by a QA script, right
+     away when there is no overture (?motion=0, reduced motion, no GSAP), or after 14 s whatever happens.
+     Desktop opens it at once, as before. setHeroVideo() (DE NOCHE) goes through the same gate. */
+  window.__heroGate = (function(){
+    var open = false, job = null, fns = [];
+    function run(){ if (job){ var j = job; job = null; j(); } }
+    return {
+      when: function(fn){ job = fn; if (open) run(); },        /* the latest request wins */
+      open: function(why){ if (open) return; open = true; window.__heroGateWhy = why || 'open'; run();
+        fns.forEach(function(f){ try { f(); } catch(e){} }); fns = []; },
+      onOpen: function(f){ if (open) f(); else fns.push(f); },
+      isOpen: function(){ return open; }
+    };
+  })();
+  (function(){
+    var noOv = /[?&]motion=0/.test(location.search) || matchMedia('(prefers-reduced-motion: reduce)').matches || /^#[a-zA-Z][\w-]*$/.test(location.hash);
+    var touch = matchMedia('(hover: none) and (pointer: coarse)').matches;   /* desktop: as before, at once */
+    if (noOv || !touch) __heroGate.open(noOv ? 'no-overture' : 'desktop');
+    else setTimeout(function(){ __heroGate.open('timeout'); }, 14000);
+  })();
+  /* ════════════ end V2-PERF · B (see also its tail after the overture script) ════════════ */
   (function(){
     var noche = false;
     try { noche = /[?&]noche=1/.test(location.search) || localStorage.getItem('coq-mode') === 'noche'; } catch(e){}
     if (noche) return;                                  /* applyMode(true) will load the night file */
     var v = document.querySelector('.hero-vid'), t = __heroTier();
     v.poster = 'assets/video/hero-beach-poster-' + (t === 'phone' ? 'phone' : t === '720' ? '720' : '1080') + '.jpg';
-    v.querySelector('source').src = 'assets/video/hero-beach-' + t + '.mp4';
-    v.load(); var p = v.play(); if (p && p.catch) p.catch(function(){});
+    __heroGate.when(function(){   /* V2-PERF · B */
+      v.querySelector('source').src = 'assets/video/hero-beach-' + t + '.mp4';
+      v.load(); var p = v.play(); if (p && p.catch) p.catch(function(){});
+    });
   })();
   </script>
   <div class="hero-scrim" aria-hidden="true"></div>
@@ -1867,22 +1951,66 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
   fFrog.className = 'follow-frog'; fFrog.alt = ''; fFrog.setAttribute('aria-hidden', 'true');
   fFrog.src = 'assets/social/icon-frog-cream.png';
   document.body.appendChild(fFrog);
+  /* ════════════ V2-ROUTE · phones follow the can into the mundo (2026-09-25) ════════════
+     Decided ONCE per visit, and every Síguela path reads this one flag (v1Url, the prefetch, the warm-up):
+     a PHONE = primary pointer coarse AND the screen's smaller side ≤ 600 CSS px (the screen, not the window,
+     so rotation, Safari's bars or a split view never flip it). Phones follow the can into mundo.html — the
+     no-WebGL phone world built for them, whose arrival veil is this pour's colour + this same spinning coquí.
+     Everyone else (desktop, laptops, tablets) goes to V1 exactly as before. El Original arrives as
+     Coquetearte, as it always has. The mundo's path is relative: /v2/mundo.html beside this page in the
+     local tree, /mundo.html beside index.html on every deployed build. */
+  var MUNDO_PHONE = (function(){
+    try { return matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) <= 600; } catch(e){ return false; }
+  })();
   function v1Url(id){
     var known = ['coquetearte','brisa-de-parcha','guayaba-rosada','cafe-y-canela','future-rum','flamboyan-at-dusk','rain-on-palm','coqui-chorus','caribbean-night-01'];
     var d = known.indexOf(id) >= 0 ? id : 'coquetearte';
+    if (MUNDO_PHONE) return 'mundo.html?drink=' + d + '&handoff=1';   /* V2-ROUTE */
     /* host-agnostic (Pages, Netlify, anywhere): only the local dev tree serves this page from
        /v2/, where V1 is the sibling file; every deployed build has V1 at ./v1/ */
     var local = /\/v2\//.test(location.pathname);
     return (local ? '../coquirico-site.html' : 'v1/') + '?drink=' + d + '&handoff=1';
   }
+  window.__route = function(id){ return { phone: MUNDO_PHONE, url: new URL(v1Url(id || current || 'coquetearte'), location.href).href }; };   /* QA */
+  /* ════════════ end V2-ROUTE (see also prerenderV1 and V2-ROUTE · J in the DOORWAY region) ════════════ */
+  /* ════════════ V2-PERF · I/J helpers — the theme, the prerender and the V1 warm-up (2026-09-25) ════════════
+     I · --theme lives on :root, and every element inherits it: setting it restyles the whole page (~100 ms
+       at phone CPU). While a room fills a PHONE screen the page behind it cannot be seen, so the doorway
+       holds the change (perfThemeHold) and applies it when the room has finished growing and again as
+       the room starts to close — both moments when the room still covers everything — with the two
+       colour transitions that read --theme (.eyebrow, .statement em) snapped, so the page is already
+       in the new colour when it shows again, exactly as before. Desktop / tablets / reduced motion: as before.
+     J · Speculation rules exist only in Chromium. On a touch screen the V1 prerender (a whole WebGL page
+       in a hidden tab) no longer starts in the page's first second, competing with the intro; it starts
+       when a room opens. Desktop is unchanged. perfWarmV1(): see the DOORWAY region. */
+  var perfThemeHold = false, perfThemePending = null;
+  function perfSetTheme(a){
+    if (perfThemeHold){ perfThemePending = a; return; }
+    perfThemePending = null;                                   /* a newer colour wins over a held one */
+    document.documentElement.style.setProperty('--theme', a);
+  }
+  function perfThemeFlush(release){
+    if (release) perfThemeHold = false;
+    if (perfThemePending == null) return;
+    var a = perfThemePending, H = document.documentElement; perfThemePending = null;
+    H.classList.add('perf-theme-snap'); H.style.setProperty('--theme', a);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ H.classList.remove('perf-theme-snap'); }); });
+  }
+  var perfSpecLate = matchMedia('(hover: none) and (pointer: coarse)').matches, perfSpecOK = !perfSpecLate, perfSpecId = null;
+  /* ════════════ end V2-PERF · I/J helpers ════════════ */
   /* prerender the chosen drink's V1 world in the background, so following the bottle is instant */
   var specTag = null;
   function prerenderV1(id){
     if (!HTMLScriptElement.supports || !HTMLScriptElement.supports('speculationrules')) return;
+    if (!perfSpecOK){ perfSpecId = id; return; }             /* V2-PERF · J: touch → only once a room opens */
     if (specTag) specTag.remove();
     specTag = document.createElement('script');
     specTag.type = 'speculationrules';
-    specTag.textContent = JSON.stringify({ prerender: [{ urls: [v1Url(id)], eagerness: 'immediate' }] });
+    /* V2-ROUTE: the mundo is only PREFETCHED, never prerendered — its arrival veil (this pour's colour + the
+       coquí draining off the can) has to play live when you land, and a prerendered copy would have run it
+       already, in the dark. V1 (desktop / tablets) is prerendered exactly as before. */
+    specTag.textContent = JSON.stringify(MUNDO_PHONE ? { prefetch: [{ urls: [v1Url(id)], eagerness: 'immediate' }] }
+                                                    : { prerender: [{ urls: [v1Url(id)], eagerness: 'immediate' }] });
     document.head.appendChild(specTag);
   }
   var following = false;
@@ -1893,6 +2021,9 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
     var url = v1Url(current), accent = d ? d.accent : '#CAA24C';
     /* paint the page itself in the accent so no in-between frame can ever flash white */
     document.documentElement.style.background = accent;
+    /* V2-ROUTE: the exact pour colour, for the mundo's arrival veil to open in (El Original pours its own
+       #D39B5F but arrives as Coquetearte, whose veil is #CAA24C). Invisible; nothing here reads it back. */
+    if (MUNDO_PHONE){ try { sessionStorage.setItem('coq-pour', JSON.stringify({ drink: current, accent: accent, t: Date.now() })); } catch(e){} }
     if (quietMotion){ location.href = url; return; }
     fPath.style.fill = accent;
     fSvg.classList.add('on');
@@ -1920,7 +2051,7 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
     Array.prototype.forEach.call(grid.children, function(li){
       li.classList.toggle('is-open', li.getAttribute('data-id') === id);
     });
-    document.documentElement.style.setProperty('--theme', d.accent);
+    perfSetTheme(d.accent);   /* V2-PERF · I (was: document.documentElement.style.setProperty('--theme', d.accent)) */
     prerenderV1(id);
     var idx = DRINKS.map(function(x){ return x.id; }).indexOf(id);
     var cnt = detail.querySelector('.d-count');
@@ -2180,11 +2311,129 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
       document.documentElement.classList.add('door-lock');
       if (window.__lenis && __lenis.stop) __lenis.stop();
       inerted = [];
+      if (!perfRoom) inertPage();   /* V2-PERF · I: a phone room makes the page inert once it has grown (ready) */
+    }
+    function inertPage(){
       Array.prototype.forEach.call(document.body.children, function(n){
         if (n === sheet || n === fSvg || n === fFrog || n.tagName === 'SCRIPT' || n.tagName === 'STYLE' || n.inert) return;
         n.inert = true; inerted.push(n);
       });
     }
+    /* ════════════ V2-PERF · I/J — the phone room (2026-09-25) ════════════
+       perfRoom = a room that fills a phone's screen (mqSheet) with motion on. For those only:
+       · the two whole-page restyles the tap used to pay for BEFORE the grow could start (~100 ms each at
+         phone CPU: --theme on :root, and `inert` on every body child) run when the room has finished
+         growing, behind it (ready()); the tour's --theme changes wait for the close (see the helpers).
+         The scrim and the full-screen sheet already catch every tap and the × has focus from the start.
+       · the room's panel shows nothing until .door-in (45% of the grow: its card, ×, grab and light are
+         all at opacity 0 until then), so its clip-path only animates over the part you can see — the same
+         keyframes from 45% on; before that it holds the 45% shape. The portal (the arch you see grow,
+         crown and all) is untouched.
+       · J: once open, the drink's V1 world is warmed into the HTTP cache (perfWarmV1) and, on Chromium
+         touch devices, prerendered — so "Síguela" lands fast on an iPhone (no speculation rules there). */
+    var perfRoom = false;
+    var perfWarmed = {}, perfQ = [], perfBusy = 0, perfTourT = null;
+    function perfFetch(u){
+      return fetch(u, { priority: 'low', credentials: 'same-origin', cache: 'default' })
+        .then(function(r){ return r.ok ? r.blob().then(function(){ return r; }) : r; })
+        .catch(function(){ return null; });
+    }
+    function perfPump(){
+      while (perfBusy < 2 && perfQ.length){
+        var u = perfQ.shift(); perfBusy++;
+        perfFetch(u).then(function(){ perfBusy--; perfPump(); });
+      }
+      if (!perfBusy && !perfQ.length && perfIdle.length){ var f = perfIdle.shift(); f(); }   /* V2-ROUTE · J: the film goes last */
+    }
+    function perfWant(u){ if (!u || perfWarmed[u]) return; perfWarmed[u] = 1; perfQ.push(u); }
+    /* ════════════ V2-ROUTE · J — a PHONE warms the mundo, not V1 (2026-09-25) ════════════
+       Exactly what mundo.html asks for first when it opens as this drink, read from its own HTML (so the same
+       code is right locally and deployed — where build-deploy has rewritten its ../coquirico-handoff/ refs to
+       handoff/ — and it follows the page if the page changes):
+         0 · the page, at the very URL Síguela opens (mundo.html?drink=<id>&handoff=1)
+         1 · its Google-Fonts stylesheet — render-blocking there (its font FILES are this page's own, already
+             here). It answers with Vary: Sec-Fetch-Dest/Mode/Site, so a fetch() copy would never be reused:
+             a <link rel=stylesheet media="not all"> makes the very same request and never applies
+         2 · the drink's can render (the arrival veil waits for it to decode)
+         3 · the nine rail thumbs (small) · 4 · both film posters
+         5 · the island film (filmA, ~3 MB) — only on a 4g connection without Save-Data (so never where the
+             browser can't say: iOS has no navigator.connection), last, through a muted DETACHED
+             <video preload="auto">: the one request shape (Range + Accept-Encoding: identity) the mundo's own
+             video will find in the HTTP cache — a fetch() copy never matches on GitHub Pages (Vary: Accept-Encoding)
+       Nothing at all on Save-Data. Two at a time, low priority, bodies read into the cache and dropped.
+       A toured drink you stay on for 1.2 s adds its own page URL (+ its can, normally already here). */
+    var perfIdle = [], perfFilmEl = null;
+    function perfSheet(href){
+      if (!href || perfWarmed[href]) return; perfWarmed[href] = 1;
+      for (var ls = document.querySelectorAll('link[rel="stylesheet"]'), k = 0; k < ls.length; k++) if (ls[k].href === href) return;
+      var l = document.createElement('link'); l.rel = 'stylesheet'; l.media = 'not all'; l.href = href;
+      l.setAttribute('data-v2route-warm', ''); document.head.appendChild(l);
+    }
+    function perfFilm(u){
+      if (!u || perfWarmed[u]) return; perfWarmed[u] = 1;
+      perfIdle.push(function(){
+        try {
+          var v = perfFilmEl = document.createElement('video');
+          v.muted = true; v.defaultMuted = true; v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+          v.preload = 'auto'; v.src = u;
+        } catch(e){}
+      });
+    }
+    function perfWarmMundo(id){
+      var cn = navigator.connection || {};
+      var url = new URL(v1Url(id), location.href).href;
+      var mid = (/[?&]drink=([^&#]+)/.exec(url) || [])[1] || 'coquetearte';
+      if (perfWarmed['page:' + url]) return; perfWarmed['page:' + url] = 1;
+      fetch(url, { priority: 'low', credentials: 'same-origin', cache: 'default' }).then(function(r){ return r.ok ? r.text() : ''; }).then(function(html){
+        if (!html){ delete perfWarmed['page:' + url]; return; }
+        var abs = function(u){ try { return new URL(u.replace(/&amp;/g, '&'), url).href; } catch(e){ return null; } }, m, re;
+        re = /<link\b[^>]*\bhref="(https:\/\/fonts\.googleapis\.com\/css2[^"]+)"/g;               /* 1 */
+        while ((m = re.exec(html))) perfSheet(abs(m[1]));
+        var cs = html.match(/function\s+canSrc\s*\(\s*id\s*\)\s*\{\s*return\s+'([^']*)'\s*\+\s*T\[id\]\.img\s*\+\s*'([^']*)'/) || [0, 'assets/product/', '@2x.webp'];
+        m = html.match(new RegExp("'" + mid.replace(/[-]/g, '\\-') + "'\\s*:\\s*\\{[^}]*?\\bimg\\s*:\\s*'([^']+)'"));   /* 2 */
+        if (m) perfWant(abs(cs[1] + m[1] + cs[2]));
+        var ord = html.match(/MUNDO_ORDER\s*=\s*\[([^\]]*)\]/), th = html.match(/(assets\/mundo\/thumb-)'\s*\+\s*id\s*\+\s*'(\.\w+)/);   /* 3 */
+        if (ord && th) ord[1].replace(/'([^']+)'/g, function(all, t){ perfWant(abs(th[1] + t + th[2])); return all; });
+        re = /\sdata-poster="([^"]+)"/g; while ((m = re.exec(html))) perfWant(abs(m[1]));        /* 4 */
+        m = html.match(/<video\b[^>]*\bid="filmA"[^>]*\bdata-src="([^"]+)"/);                    /* 5 */
+        if (m && !cn.saveData && cn.effectiveType === '4g') perfFilm(abs(m[1]));
+        perfPump();
+      }).catch(function(){ delete perfWarmed['page:' + url]; });
+    }
+    /* ════════════ end V2-ROUTE · J ════════════ */
+    function perfWarmV1(id){
+      try {
+        if (!window.fetch || !id) return;
+        var cn = navigator.connection; if (cn && cn.saveData) return;
+        if (MUNDO_PHONE){ perfWarmMundo(id); return; }                        /* V2-ROUTE · J: phones land in the mundo */
+        var url = new URL(v1Url(id), location.href).href;
+        if (perfWarmed['page:' + url]) return; perfWarmed['page:' + url] = 1;
+        fetch(url, { priority: 'low', credentials: 'same-origin', cache: 'default' }).then(function(r){ return r.ok ? r.text() : ''; }).then(function(html){
+          if (!html) return;
+          var abs = function(u){ try { return new URL(u, url).href; } catch(e){ return null; } }, m, re;
+          /* the scripts and posters the page asks for; the base label texture and this drink's wrap */
+          re = /<script\b[^>]*\ssrc="([^"]+)"/g; while ((m = re.exec(html))) perfWant(abs(m[1]));
+          re = /\sposter="([^"]+)"/g; while ((m = re.exec(html))) perfWant(abs(m[1]));
+          m = html.match(/TextureLoader\(\)\.load\('([^']+\.(?:webp|png|jpe?g))'/); if (m) perfWant(abs(m[1]));
+          var tex = (html.match(/_TEX\s*=\s*'([^']+)'/) || [])[1];
+          var wr = html.match(new RegExp("'" + id.replace(/[-]/g, '\\-') + "'\\s*:\\s*\\{[^}]*?wrap\\s*:\\s*_TEX\\s*\\+\\s*'([^']+)'"));
+          if (tex && wr) perfWant(abs(tex + wr[1]));
+          /* its fonts (the latin files only, as the page itself loads) */
+          m = html.match(/<link[^>]+href="(https:\/\/fonts\.googleapis\.com\/css2[^"]+)"/);
+          perfPump();
+          if (m) fetch(m[1].replace(/&amp;/g, '&'), { priority: 'low' }).then(function(r){ return r.ok ? r.text() : ''; }).then(function(css){
+            var f, fr = /\/\*\s*latin\s*\*\/\s*@font-face\s*\{[^}]*?url\((https:[^)]+)\)/g;
+            while ((f = fr.exec(css))) perfWant(f[1]);
+            perfPump();
+          }).catch(function(){});
+        }).catch(function(){});
+      } catch(e){}
+    }
+    function perfOpened(){
+      if (perfSpecLate && !perfSpecOK){ perfSpecOK = true; prerenderV1(current || perfSpecId); }
+      perfWarmV1(current);
+    }
+    /* ════════════ end V2-PERF · I/J (hooks: grow, ready, closeDoor, finishClose, the tour) ════════════ */
     function unlock(){
       inerted.forEach(function(n){ n.inert = false; }); inerted = [];
       document.documentElement.classList.remove('door-lock');
@@ -2317,6 +2566,8 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
     function grow(id, li){
       var d = byId(id);
       state = 'opening';
+      perfRoom = !quiet && mqSheet.matches;              /* V2-PERF · I */
+      if (perfRoom) perfThemeHold = true;
       /* paint through the real open(): without .ready it paints at once (no wave, no glide) */
       if (id !== current){ detail.classList.remove('ready', 'fade'); open(id); }
       var field = li.querySelector('.field'), gimg = field.querySelector('img');
@@ -2349,6 +2600,11 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
       /* the arch grows into the room keeping its crown (doorFrames carries the easing) */
       run(portal, doorFrames(vp, fr, pr), { duration: EXP, easing: 'linear', fill: 'both' });
       run(portal, [{ opacity: 0 }, { opacity: 1 }], { duration: Math.round(EXP * 0.34), easing: 'ease-out', fill: 'both' });
+      if (perfRoom){                                     /* V2-PERF · I: the same keyframes, from 45% (door-in) on */
+        var pf = doorFrames(pr, fr, pr), P0 = 0.45, sub = [];
+        pf.forEach(function(k){ if (k.offset >= P0 - 1e-9) sub.push({ offset: Math.min(1, Math.max(0, (k.offset - P0) / (1 - P0))), clipPath: k.clipPath }); });
+        run(panel, sub, { duration: Math.round(EXP * (1 - P0)), delay: Math.round(EXP * P0), easing: 'linear', fill: 'both' });
+      } else
       run(panel, doorFrames(pr, fr, pr), { duration: EXP, easing: 'linear', fill: 'both' });
       if (skin) run(skin, [{ opacity: 1 }, { opacity: 0 }], { duration: 240, delay: Math.round(EXP * 0.36), fill: 'both' });
       /* the can rides with the arch from where it was lifted, landing a beat after it */
@@ -2377,7 +2633,13 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
     }
     function runPending(){ if (pendingClose){ var how = pendingClose; pendingClose = null; closeDoor(how); } }
     /* fully open: only now do the can, the pill, the tour and the scrim take taps (see .door-ready) */
-    function ready(){ state = 'open'; sheet.classList.add('door-ready'); runPending(); }
+    function ready(){ state = 'open'; sheet.classList.add('door-ready');
+      if (perfRoom){                                                           /* V2-PERF · I: behind the grown room */
+        if (!pendingClose) inertPage();
+        setTimeout(function(){ if (perfThemeHold) perfThemeFlush(false); }, 60);   /* the two restyles in two tasks */
+      }
+      if (!pendingClose) perfOpened();                                         /* V2-PERF · J */
+      runPending(); }
 
     /* make sure the arch we close into is on screen — but move the page as little as possible, and only
        when it has to. The arch you opened, still on screen, is never chased (the room shrinks into it
@@ -2400,6 +2662,10 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
       if (state === 'opening'){ pendingClose = how; return; }
       if (state !== 'open') return;
       state = 'closing'; sheet.classList.remove('door-ready');
+      clearTimeout(perfTourT);
+      /* V2-PERF · I: the room still covers the page; the held --theme lands in the next task, while the
+         shrink waits out its 150 ms delay (so the close's own measuring doesn't pay for it) */
+      if (perfRoom){ perfThemeHold = false; setTimeout(function(){ perfThemeFlush(true); }, 0); }
       if (how === 'pop') pushed = false;
       else if (pushed){ pushed = false; skipPop++; try { history.back(); } catch(e){ skipPop--; } }
       settleWave();                                                          /* a pour mid-tour lands first */
@@ -2451,6 +2717,7 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
       later(finishClose, D + SHRINK + 40);
     }
     function finishClose(){
+      perfThemeFlush(true); perfRoom = false;             /* V2-PERF · I (a no-op unless the close path skipped it) */
       timers.forEach(clearTimeout); timers = [];
       anims.forEach(function(a){ try { a.cancel(); } catch(e){} }); anims = [];
       flyer.getAnimations().forEach(function(a){ a.cancel(); });
@@ -2520,6 +2787,7 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
     /* the room follows the drink as you tour it (the scrim's tint glides; the surface matches the card) */
     new MutationObserver(function(){
       if (state === 'closed') return;
+      if (state === 'open'){ clearTimeout(perfTourT); perfTourT = setTimeout(function(){ if (state === 'open') perfWarmV1(current); }, 1200); }   /* V2-PERF · J: a toured drink you stay on */
       tint(detail.style.getPropertyValue('--accent'));
     }).observe(detail, { attributes: true, attributeFilter: ['style'] });
     /* "Síguela" from inside the room: take the room's history entry back OUT before the pour carries
@@ -2622,7 +2890,8 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
         var a = document.activeElement;
         return { state: state, current: current, inSheet: detail.parentNode === scroller, locked: document.documentElement.classList.contains('door-lock'),
           y: Math.round(scrollY), focus: a ? (a.className || a.tagName) + (a.closest && a.closest('.drink') ? '@' + a.closest('.drink').getAttribute('data-id') : '') : null,
-          pushed: pushed, hist: history.length, ph: !!ph, featured: detail.querySelector('[data-d="name"]').textContent };
+          pushed: pushed, hist: history.length, ph: !!ph, featured: detail.querySelector('[data-d="name"]').textContent,
+          perfRoom: perfRoom, themeHeld: perfThemeHold, themePending: perfThemePending, inert: inerted.length, warmed: Object.keys(perfWarmed).filter(function(k){ return k.indexOf('page:') !== 0; }).map(function(u){ return u.split('/').pop(); }) };
       }
     };
   })();
@@ -2659,20 +2928,36 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
     card.addEventListener('pointerleave', function(){ show(null); });
     /* the journey: as you scroll the section, the coquí walks from El Yunque out to the west,
        drawing the route behind him and lighting each town as he reaches it. */
+    /* V2-PERF · F3 — the map's looping lights (day: sea twinkles; night: pin glow, fireflies) pause while
+       the card is off-screen (5 infinite animations restyled the page thousands of times per scroll). */
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){ card.classList.toggle('perf-off', !es[es.length - 1].isIntersecting); }).observe(card);
+    }
     var ruta = card.querySelector('.ruta'), vj = card.querySelector('.viajero');
     if (!ruta) return;
     if (!vj || !window.gsap || !window.ScrollTrigger || quietMotion){ ruta.style.strokeDashoffset = '0'; return; }
     var L = ruta.getTotalLength(), SAMP = 240;
+    /* V2-PERF · F4 — the route is sampled ONCE (481 points: every 1/480 of its length) and both the stops
+       and the walker read that table. It used to cost 1,446 getPointAtLength() calls at startup (241
+       samples, once per pin) and one more on every scroll update. The stops use exactly the old 240-step
+       samples (every 2nd point), so they come out identical; the walker is interpolated between points
+       ~2 route-units apart (< 0.3 px off the curve at its three corners, on a phone). */
+    var LUT_N = SAMP * 2, LUT = new Float64Array((LUT_N + 1) * 2);
+    for (var li = 0; li <= LUT_N; li++){ var lp = ruta.getPointAtLength(L * li / LUT_N); LUT[li * 2] = lp.x; LUT[li * 2 + 1] = lp.y; }
+    function ptAt(prog){
+      var f = Math.max(0, Math.min(1, prog)) * LUT_N, i0 = Math.floor(f), i1 = Math.min(LUT_N, i0 + 1), k = f - i0;
+      return { x: LUT[i0 * 2] + (LUT[i1 * 2] - LUT[i0 * 2]) * k, y: LUT[i0 * 2 + 1] + (LUT[i1 * 2 + 1] - LUT[i0 * 2 + 1]) * k };
+    }
     var stops = Array.prototype.map.call(pins, function(p){
       var c = p.querySelector('circle'), cx = +c.getAttribute('cx'), cy = +c.getAttribute('cy'), best = 0, bd = 1e9;
       for (var i = 0; i <= SAMP; i++){
-        var pt = ruta.getPointAtLength(L * i / SAMP), dx = pt.x - cx, dy = pt.y - cy, d = dx*dx + dy*dy;
+        var dx = LUT[i * 4] - cx, dy = LUT[i * 4 + 1] - cy, d = dx*dx + dy*dy;
         if (d < bd){ bd = d; best = i / SAMP; }
       }
       return { el: p, t: best };
     });
     function place(prog){
-      var pt = ruta.getPointAtLength(L * prog);
+      var pt = ptAt(prog);
       vj.setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ',' + pt.y.toFixed(1) + ')');
       ruta.style.strokeDashoffset = String(1 - prog);
       stops.forEach(function(s){
@@ -2769,7 +3054,12 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
       fromY = y; toY = tickY(i);
       if (first || quietMotion){ y = toY; hopT = 1; write(); first = false; } else { hopT = 0; }
     }
-    gsap.ticker.add(function(time){
+    /* V2-PERF · F2 — the rail only exists at ≥1100px (CSS). Below that, the ticker and the scroll probe
+       are not registered at all: the ticker's getClientRects() forced a style flush every frame and the
+       probe read offsetTop ×7 + a rect on every scroll, for a coquí nobody can see. If the window grows
+       past 1100px they come back (and catch up at once); ≥1100px nothing changes. */
+    var railMQ = matchMedia('(min-width:1100px)'), railOn = false;
+    function railTick(time){
       if (!guide.getClientRects().length) return;   /* hidden (mobile) — do not composite */
       if (hopT < 1){
         hopT = Math.min(1, hopT + 0.042);
@@ -2784,7 +3074,7 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
         var b = Math.sin(time * 1.7) * .022;
         frogImg.style.transform = 'scaleY(' + (1 + b).toFixed(3) + ') scaleX(' + (1 - b).toFixed(3) + ')';
       }
-    });
+    }
     function probe(){
       var p = window.scrollY + innerHeight * .42, idx = 0;
       MARKS.forEach(function(m, i){ var el = document.getElementById(m.id); if (el && el.offsetTop <= p) idx = i; });
@@ -2793,9 +3083,16 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
       var st = document.getElementById('story');
       if (st && guide){ var sr = st.getBoundingClientRect(), fy = y + 15; guide.classList.toggle('on-night', fy > sr.top && fy < sr.bottom); }
     }
-    addEventListener('scroll', probe, { passive:true });
+    function railSet(){
+      var on = railMQ.matches;
+      if (on === railOn) return;
+      railOn = on;
+      if (on){ gsap.ticker.add(railTick); addEventListener('scroll', probe, { passive:true }); first = true; cur = -1; probe(); }
+      else { gsap.ticker.remove(railTick); removeEventListener('scroll', probe, { passive:true }); }
+    }
+    if (railMQ.addEventListener) railMQ.addEventListener('change', railSet); else if (railMQ.addListener) railMQ.addListener(railSet);
+    railSet();   /* V2-PERF · F2 (was: ticker + scroll probe always, then probe()) */
     addEventListener('resize', function(){ if (cur >= 0){ toY = tickY(cur); y = toY; write(); } }, { passive:true });
-    probe();
 
     var FACTS = [
       { en:'He only sings after dark. That’s why the island sounds different at night.', es:'Solo canta de noche. Por eso la isla suena distinta.' },
@@ -2823,12 +3120,17 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
   function setHeroVideo(noche){
     var v = document.querySelector('.hero-vid'); if (!v) return;
     var t = window.__heroTier ? __heroTier() : (innerWidth <= 768 ? '720' : '1080');
-    var base = noche ? 'hero-gold' : 'hero-beach';
-    /* the night clip only exists at 1080/720 until its 4K master arrives */
-    if (noche) t = (t === 'phone' || t === '720') ? '720' : '1080';
+    /* NIGHT HERO (2026-09-26): Pexels 10589210 "Sandy Beach in Full Moon" — the same 4K ladder and
+       phone portrait cut as the day beach (hero-night-{2160,1440,1080,720,phone}), with a 1.5 s
+       cross-dissolve baked into the loop so the drifting clouds never jump. Replaces hero-gold. */
+    var base = noche ? 'hero-night' : 'hero-beach';
     v.poster = 'assets/video/' + base + '-poster-' + (t === 'phone' ? 'phone' : t === '720' ? '720' : '1080') + '.jpg';
-    v.querySelector('source').src = 'assets/video/' + base + '-' + t + '.mp4';
-    v.load(); var p = v.play(); if (p && p.catch) p.catch(function(){});
+    var go = function(){
+      v.querySelector('source').src = 'assets/video/' + base + '-' + t + '.mp4';
+      v.load(); var p = v.play(); if (p && p.catch) p.catch(function(){});
+      if (window.__heroVis) window.__heroVis();   /* V2-PERF · D: a hero that is off-screen stays paused */
+    };
+    if (window.__heroGate) __heroGate.when(go); else go();   /* V2-PERF · B: not during the overture */
   }
   var modeBtn = document.getElementById('mode-toggle');
   function applyMode(noche){
@@ -3005,6 +3307,70 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
   gsap.registerPlugin(ScrollTrigger);
 
   var lenis = null;
+  /* ════════════ V2-PERF · C — Lenis only where it smooths anything (2026-09-25) ════════════
+     Lenis smooths the WHEEL only (syncTouch is off), so on a phone it did nothing for scrolling — but it
+     still put passive:false touchstart/touchmove/wheel listeners on window, which makes iOS wait for the
+     main thread before every finger scroll, ran lenis.raf every tick and forced layout reading scroll.
+     Touch-primary screens now scroll natively. The glides the page asks for (the nav's anchors, the
+     wordmark home, the card, the rail) keep their exact Lenis feel through a tiny stand-in with Lenis's
+     own scrollTo math (duration + its default expo-out easing, clamp, round, offset, 'top'). */
+  var PERF_FINE = matchMedia('(pointer: fine)').matches;
+  if (typeof Lenis !== 'undefined' && !PERF_FINE){
+    lenis = (function(){
+      var ease = function(t){ return Math.min(1, 1.001 - Math.pow(2, -10 * t)); };
+      var stopped = false, anim = null;
+      function limit(){ return Math.max(0, document.documentElement.scrollHeight - innerHeight); }
+      function cancel(){ if (anim){ gsap.ticker.remove(anim); anim = null; } }
+      ['touchstart', 'wheel'].forEach(function(ev){ addEventListener(ev, cancel, { passive: true }); });   /* a finger takes over, as with Lenis */
+      return {
+        isStub: true,
+        get scroll(){ return window.scrollY; },
+        get limit(){ return limit(); },
+        on: function(){}, raf: function(){},
+        stop: function(){ stopped = true; cancel(); },
+        start: function(){ stopped = false; },
+        scrollTo: function(target, o){
+          o = o || {};
+          if (stopped && !o.force) return;
+          var y = target;
+          if (typeof y === 'string' && /^(top|left|start)$/.test(y)) y = 0;
+          else if (typeof y === 'string' && /^(bottom|right|end)$/.test(y)) y = limit();
+          else if (typeof y === 'string' || (y && y.nodeType === 1)){
+            var el = typeof y === 'string' ? document.querySelector(y) : y;
+            if (!el) return;
+            y = el.getBoundingClientRect().top + window.scrollY;
+          }
+          if (typeof y !== 'number' || isNaN(y)) return;
+          y = Math.round(y + (o.offset || 0));
+          y = Math.max(0, Math.min(limit(), y));
+          cancel();
+          if (o.immediate || !o.duration){ window.scrollTo(0, y); if (o.onComplete) o.onComplete(); return; }
+          var from = window.scrollY, dur = o.duration * 1000, t0 = performance.now();
+          if (Math.abs(y - from) < 1) return;
+          anim = function(){
+            var k = Math.min(1, (performance.now() - t0) / dur);
+            window.scrollTo(0, from + (y - from) * (k >= 1 ? 1 : ease(k)));
+            if (k >= 1){ cancel(); if (o.onComplete) o.onComplete(); }
+          };
+          gsap.ticker.add(anim); anim();
+        }
+      };
+    })();
+    window.__lenis = lenis;
+    window.addEventListener('scroll', function(){ onScrollNav(window.scrollY); }, { passive: true });
+    onScrollNav(window.scrollY);
+    gsap.ticker.lagSmoothing(0);
+    document.querySelectorAll('a[href^="#"]').forEach(function(a){
+      a.addEventListener('click', function(e){
+        var id = a.getAttribute('href');
+        if (id.length < 2) return;
+        var t = document.querySelector(id); if (!t) return;
+        e.preventDefault();
+        lenis.scrollTo(t, { offset: id === '#top' ? 0 : -40, duration: 1.4 });
+      });
+    });
+  } else
+  /* ════════════ end V2-PERF · C (the original Lenis branch follows, unchanged) ════════════ */
   if (typeof Lenis !== 'undefined'){
     lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
     window.__lenis = lenis;   /* the EL LLAMADO overture needs to stop/start smooth scroll */
@@ -3040,6 +3406,14 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
   };
   var netT;
   addEventListener('scroll', function(){ clearTimeout(netT); netT = setTimeout(revealNet, 90); }, { passive:true });
+  /* V2-PERF · E — touch screens: a finished reveal drops its (no-op) clip-path; see the V2-PERF CSS */
+  if (matchMedia('(hover:none) and (pointer:coarse)').matches){
+    document.addEventListener('transitionend', function(e){
+      var n = e.target;
+      if (e.propertyName !== 'clip-path' || !n.classList || !n.classList.contains('in')) return;
+      if (n.classList.contains('reveal-img') || (n.classList.contains('h2') && n.classList.contains('reveal'))) n.classList.add('perf-rv-done');
+    }, true);
+  }
   setTimeout(revealNet, 6000);   /* once the intro has gone, anything in view settles */
 
   /* hero: cans rise in, background drifts on scroll */
@@ -3062,6 +3436,9 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
     var vp = heroVid.play(); if (vp && vp.catch) vp.catch(function(){});   // blocked autoplay just leaves the poster
   }
   var bgStill = document.querySelector('.hero-bg img');
+  /* V2-PERF · D/G — one gate for the touch-only paths below (phones and touch tablets: no hover) */
+  var PERF_TOUCH = matchMedia('(hover: none) and (pointer: coarse)').matches;
+  var perfBakes = [];
   var canData = [];
   cans.forEach(function(fig, i){
     var img = fig.querySelector('img'), shadow = fig.querySelector('.shadow');
@@ -3077,13 +3454,30 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
     /* bake a small alpha map of this can so hit-testing follows the can, not its bounding box */
     (function(){
       var MW = 88, MH = 118;
-      function bake(){
+      function bake(src){
+        src = src || img;
         try {
           var cv = document.createElement('canvas'); cv.width = MW; cv.height = MH;
           var cx2 = cv.getContext('2d', { willReadFrequently: true });
-          cx2.drawImage(img, 0, 0, MW, MH);
+          cx2.drawImage(src, 0, 0, MW, MH);
           c.mask = cx2.getImageData(0, 0, MW, MH).data; c.mw = MW; c.mh = MH;
         } catch (err){ c.mask = null; }
+      }
+      /* V2-PERF · G — on touch screens the mask only serves taps, so it is not baked on the load path
+         (1.0 s of synchronous 1080px decodes at phone CPU, inside the page's first long task): it is baked
+         from the can's own 540px twin (its reflection file), in idle time after the overture, or at the
+         first touch on the hero, whichever comes first. Until then a tap uses the can's box, exactly as
+         before the images had loaded. Desktop is unchanged. */
+      if (PERF_TOUCH){
+        var twin = fig.querySelector('.refl img') || img;
+        var bakeSync = function(){ if (c.mask) return; if (twin.complete && twin.naturalWidth) bake(twin);
+          else twin.addEventListener('load', function(){ if (!c.mask) bake(twin); }, { once: true }); };
+        /* V2-ROUTE · G (critic, 2026-09-25): the idle bake is the very same drawImage (so the very same mask),
+           but ONE CAN PER IDLE TASK: all three in one callback measured one 80–90 ms long task at phone CPU
+           (~6 s in, just as the hero is first scrolled); one each is ~25 ms. (An ImageBitmap decode was tried
+           and rejected: its downscale filter flips ~32 edge pixels of the mask.) */
+        perfBakes.push(bakeSync);
+        return;
       }
       if (img.complete && img.naturalWidth) bake(); else img.addEventListener('load', bake, { once: true });
     })();
@@ -3142,7 +3536,19 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
     if (hit) toggleCan(hit);
     else canData.forEach(function(o){ o.sel = false; o.fig.style.zIndex = o.baseZ; o.fig.setAttribute('aria-pressed', 'false'); });
   });
-  gsap.ticker.add(function(time){
+  /* ════════════ V2-PERF · D — a hero that sleeps (2026-09-25) ════════════
+     heroTick is the original per-frame hero code, unchanged. What changed is WHEN it runs:
+     · #hero off-screen (IntersectionObserver): the tick is off the ticker and the film is paused
+       (it kept decoding 6,000px below the fold). Everywhere.
+     · touch screens (PERF_TOUCH): there is no hover, so once every can and the film have glided to their
+       targets the hero is only three bobbing cans, their shadows and the film's slow push — pure
+       functions of time. The tick then hands those to the compositor as Web Animations sampled from the
+       SAME formulas on the SAME clock (gsap time, mapped onto document.timeline), so the hand-over is
+       seamless and nothing moves differently; the main thread stops writing 7 styles every frame. A
+       touch, tap or key on the hero hands control back to the tick the same frame.
+     Desktop keeps the tick running exactly as before while the hero is on screen. */
+  function heroTick(time){
+    var est = performance.now() - time * 1000; if (est < heroOffMin) heroOffMin = est;   /* V2-PERF · D: gsap's clock */
     if (window.scrollY > window.innerHeight * 1.15) return;
     var k = 0.11;
     canData.forEach(function(c){
@@ -3161,7 +3567,103 @@ html.door-lock #cq-guide,html.door-lock .cq-rail{margin-right:var(--door-sbw,0px
     /* a slow cinematic push on the footage so the shoreline is unmistakably alive, not a photo */
     if (heroVid){ var kb = 1.05 + Math.sin(time * 0.21) * 0.05;
       heroVid.style.transform = bt + ' scale(' + kb.toFixed(4) + ')'; }
-  });
+    if (PERF_TOUCH && heroSettled()) heroRest(time);
+  }
+  var heroTickOn = false, heroVisible = true, heroResting = false, heroAnims = [], heroOff = 0, heroOffMin = Infinity;
+  function tickOn(){ if (!heroTickOn){ heroTickOn = true; gsap.ticker.add(heroTick); } }
+  function tickOff(){ if (heroTickOn){ heroTickOn = false; gsap.ticker.remove(heroTick); } }
+  /* every can and the film have reached their targets (to 1/250 px or deg) */
+  function heroSettled(){
+    var E = 0.004;
+    for (var i = 0; i < canData.length; i++){
+      var c = canData[i], tl = c.sel ? -46 : c.tlift, ts = c.sel ? 1.06 : 1;
+      if (Math.abs(c.trotY - c.rotY) > E || Math.abs(c.trotX - c.rotX) > E || Math.abs(c.ttx - c.tx) > E ||
+          Math.abs(tl - c.lift) > E || Math.abs(ts - c.scale) > 0.0002) return false;
+    }
+    return Math.abs(bg.tx - bg.x) <= E;
+  }
+  var PERF_N = 72;                                     /* keyframes per period (linear between them) */
+  function heroRest(time){
+    if (!heroVid || !Element.prototype.animate || !document.timeline) return;
+    /* document-timeline time of gsap time 0: gsap reads Date.now() when it ticks, so the smallest
+       (performance.now() − gsap time) seen from inside a tick is that origin to within a millisecond
+       (reading document.timeline here instead was off by a late frame's latency, ~80 ms under load) */
+    var off = heroOff = Math.min(heroOffMin, performance.now() - time * 1000);
+    canData.forEach(function(c){
+      c.rotY = c.trotY; c.rotX = c.trotX; c.tx = c.ttx; c.lift = c.sel ? -46 : c.tlift; c.scale = c.sel ? 1.06 : 1;
+      var P = 2 * Math.PI / c.speed, bob = [], sh = [];
+      var pre = 'translate(' + c.tx.toFixed(2) + 'px,', post = 'px) rotateY(' + c.rotY.toFixed(2) + 'deg) rotateX(' + c.rotX.toFixed(2) + 'deg) scale(' + c.scale.toFixed(3) + ')';
+      for (var i = 0; i <= PERF_N; i++){
+        var fy = Math.sin(2 * Math.PI * i / PERF_N) * c.amp, ty = fy + c.lift, up = Math.max(0, -ty);
+        bob.push({ transform: pre + ty.toFixed(2) + post });                 /* the tick's own transform string */
+        sh.push({ transform: 'translate(-44%,-50%) scale(' + (1 - up * 0.012).toFixed(3) + ')', opacity: (1 - up * 0.02).toFixed(3) });
+      }
+      var st = off - c.phase / c.speed * 1000;         /* local time u = gsap time + phase/speed */
+      var a = c.img.animate(bob, { duration: P * 1000, iterations: Infinity }); a.startTime = st; heroAnims.push(a);
+      if (c.shadow){ var b = c.shadow.animate(sh, { duration: P * 1000, iterations: Infinity }); b.startTime = st; heroAnims.push(b); }
+    });
+    bg.x = bg.tx;
+    var Pv = 2 * Math.PI / 0.21, push = [], bt = 'translateX(' + bg.x.toFixed(2) + 'px) scale(';
+    for (var j = 0; j <= PERF_N; j++) push.push({ transform: bt + (1.05 + Math.sin(2 * Math.PI * j / PERF_N) * 0.05).toFixed(4) + ')' });
+    /* the push rides on the film's wrapper (same box, same centre): the film itself holds still */
+    var pushEl = heroVid.parentNode.classList.contains('perf-push') ? heroVid.parentNode : heroVid;
+    if (pushEl !== heroVid) heroVid.style.transform = 'none';
+    var v = pushEl.animate(push, { duration: Pv * 1000, iterations: Infinity }); v.startTime = off; heroAnims.push(v);
+    heroResting = true; tickOff();
+  }
+  function heroWake(){
+    if (heroResting){
+      heroResting = false;
+      heroAnims.forEach(function(a){ a.cancel(); }); heroAnims = [];   /* the tick writes the inline styles this frame */
+    }
+    if (heroVisible) tickOn();
+  }
+  /* off-screen: paused; back on screen: re-timed to the same clock (so the phase is where the tick's is) */
+  function heroSleep(){ tickOff(); heroAnims.forEach(function(a){ a.pause(); }); }
+  function heroResume(){
+    if (!heroResting){ tickOn(); return; }
+    var off = heroOff;                                 /* the same origin: gsap time never jumps (lagSmoothing 0) */
+    heroAnims.forEach(function(a){
+      var t = a.effect && a.effect.target, c = null;
+      canData.forEach(function(o){ if (o.img === t || o.shadow === t) c = o; });
+      a.startTime = c ? off - c.phase / c.speed * 1000 : off;
+    });
+  }
+  function heroVideoSync(){
+    if (!heroVid) return;
+    if (!heroVisible){ if (!heroVid.paused) heroVid.pause(); }
+    else if (heroVid.paused && (heroVid.currentSrc || (heroVid.querySelector('source') || {}).src)){ var p = heroVid.play(); if (p && p.catch) p.catch(function(){}); }
+  }
+  window.__heroVis = heroVideoSync;
+  if (PERF_TOUCH){
+    addEventListener('pointermove', heroWake, { passive: true });
+    heroEl.addEventListener('pointerleave', heroWake);
+    heroEl.addEventListener('pointerdown', heroWake);
+    heroEl.addEventListener('click', heroWake);
+    heroEl.addEventListener('keydown', heroWake);
+    /* the tap masks (V2-PERF · G): at the first touch on the hero, or in idle time after the overture */
+    var bakeNow = function(){ perfBakes.forEach(function(f){ f(); }); };   /* first touch: whatever is still missing, now (each skips a baked can) */
+    var ric = function(f, o){ return window.requestIdleCallback ? window.requestIdleCallback(f, o) : setTimeout(f, 1); };
+    var bakeIdle = function(){ var i = 0; (function step(){ var f = perfBakes[i++]; if (f){ f(); ric(step, { timeout: 1000 }); } })(); };   /* V2-ROUTE · G: one can per idle task */
+    heroEl.addEventListener('pointerdown', bakeNow, { once: true });
+    if (window.__heroGate) __heroGate.onOpen(function(){ setTimeout(function(){
+      (window.requestIdleCallback || function(f){ return setTimeout(f, 1); })(bakeIdle, { timeout: 2000 }); }, 2600); });
+    else bakeIdle();
+  }
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      var vis = es[es.length - 1].isIntersecting;
+      if (vis === heroVisible) return;
+      heroVisible = vis;
+      if (vis) heroResume(); else heroSleep();
+      heroVideoSync();
+    }, { rootMargin: '20% 0px 20% 0px' }).observe(heroEl);   /* V2-ROUTE · D (critic): wake ~0.2 screen BEFORE the hero
+       shows (the old tick's 1.15×vh guard did the same) — an observer reports after the frame is painted, so
+       waking on first sight showed the cans one frame at their parked pose, then a jump to their bob */
+  }
+  tickOn();
+  window.__heroPerf = function(){ return { resting: heroResting, tick: heroTickOn, visible: heroVisible, anims: heroAnims.length, masks: canData.map(function(c){ return !!c.mask; }), paused: heroVid ? heroVid.paused : null, gate: window.__heroGateWhy || null, off: heroOff, cans: canData.map(function(c){ return { speed: c.speed, phase: c.phase, amp: c.amp, lift: c.lift }; }) }; };
+  /* ════════════ end V2-PERF · D ════════════ */
 
   /* media block: kinetic word slides across, image drifts */
   gsap.fromTo('[data-kinetic]', { xPercent: 4 }, { xPercent: -46, ease: 'none', scrollTrigger: { trigger: '#media', start: 'top bottom', end: 'bottom top', scrub: true } });
@@ -3222,6 +3724,8 @@ html.ov-lock, html.ov-lock body{ overflow:hidden !important; height:100%; touch-
 (function(){
   if(/[?&]motion=0/.test(location.search) || !window.gsap) return;          // static mode → no overture
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  /* arriving AT a section (e.g. "← Las latas" from the phone mundo lands on #drinks) → straight there, no overture */
+  if(/^#[a-zA-Z][\w-]*$/.test(location.hash)) return;
   var QA=/[?&]qa=1/.test(location.search);
 
   var ov=document.createElement('div'); ov.id='ov'; ov.setAttribute('aria-hidden','true');
@@ -3339,6 +3843,8 @@ html.ov-lock, html.ov-lock body{ overflow:hidden !important; height:100%; touch-
     tl.fromTo(wmLetters,{opacity:0,yPercent:44,scale:.5,rotate:-5,color:function(i){return ACC[i%ACC.length];}},
                         {opacity:1,yPercent:0,scale:1,rotate:0,duration:.5,ease:'back.out(2.3)',stagger:.045},3.02);
     tl.to(wmLetters,{color:'#F4EAD2',duration:.55,ease:'power1.inOut',stagger:.028},3.42);
+    /* V2-PERF · B: the hero film may start loading now — it is playing before the veil drains (4.05 s) */
+    tl.add(function(){ if(window.__heroGate) __heroGate.open('overture-2.4s'); },2.4);
     tl.to([frameL,frameR],{opacity:0,duration:.5,ease:'power2.in'},3.5);
     tl.to(SPARKS,{opacity:0,scale:.4,duration:.55,ease:'power2.in'},3.5);
     tl.to(token,{opacity:0,y:-36,scale:.72,duration:.6,ease:'power2.in'},3.5);
@@ -3361,6 +3867,7 @@ html.ov-lock, html.ov-lock body{ overflow:hidden !important; height:100%; touch-
     gsap.to(wordmark,{ x:(ncx-wcx), y:(ncy-wcy), scale:sc, opacity:0, duration:.7, ease:'power3.inOut' });
   }
   function finish(){ if(done) return; done=true;
+    if(window.__heroGate) __heroGate.open('overture-finish');   /* V2-PERF · B */
     S.waveOn=false; gsap.ticker.remove(render); unlock();
     if(ov&&ov.parentNode) ov.parentNode.removeChild(ov);
     /* ov-lock collapsed the document height while triggers measured — remeasure now */
@@ -3375,6 +3882,19 @@ html.ov-lock, html.ov-lock body{ overflow:hidden !important; height:100%; touch-
   function boot(){ lock(); build(); }
   if(document.fonts && document.fonts.ready){ document.fonts.ready.then(boot); setTimeout(function(){ if(!tl) boot(); }, 1000); }
   else boot();
+})();
+</script>
+<script id="v2perf-b-tail">
+/* V2-PERF · B (tail) — no overture on this visit (static mode, reduced motion, no GSAP): the hero film
+   loads now. If a QA script removes #ov by hand instead of skipping, the film loads then too. */
+(function(){
+  if (!window.__heroGate) return;
+  var ov = document.getElementById('ov');
+  if (!ov){ __heroGate.open('no-overture'); return; }
+  if (!window.MutationObserver) return;
+  var mo = new MutationObserver(function(){ if (!document.getElementById('ov')){ mo.disconnect(); __heroGate.open('ov-removed'); } });
+  mo.observe(document.body, { childList: true });
+  __heroGate.onOpen(function(){ mo.disconnect(); });
 })();
 </script>
 <script id="lata-js">
@@ -3401,6 +3921,27 @@ html.ov-lock, html.ov-lock body{ overflow:hidden !important; height:100%; touch-
   var WORDS = toks.map(function(t){ return t.getAttribute('data-w').split(',').map(Number); });
   var quiet = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  /* ════════════ V2-PERF · F1 — the ring rests when it has arrived (touch screens) (2026-09-25) ════════════
+     The loop used to run every frame while the stage was on screen, only because of the idle bob
+     (sin(t·1.3 + i·1.7) · 3.5px). On touch screens the bob now rides on each token's `translate` as a
+     Web Animation on the very clock the loop used (document.timeline = the rAF timestamps), so it is
+     identical and runs on the compositor; the loop keeps only what actually changes, and stops once the
+     ring, the emerge and the tap offsets have settled. The bob is still scaled by the emerge (ei²):
+     while the loop runs it writes the difference (the animation always carries the full 3.5px), and a
+     ring resting half-risen ON screen keeps its loop, as before. Desktop (pointer parallax, depth blur)
+     keeps the old loop. */
+  var PERF_RING = !quiet && !fine && matchMedia('(hover: none) and (pointer: coarse)').matches && !!Element.prototype.animate;
+  var ringAnims = [], ringAmp = [], ringZ = [], ringEi = [], ringVis = true;
+  function ringBob(i, amp){
+    var kf = [], N = 48;
+    for (var k = 0; k <= N; k++) kf.push({ translate: '0px ' + (Math.sin(2 * Math.PI * k / N) * amp).toFixed(3) + 'px' });
+    if (ringAnims[i]) ringAnims[i].cancel();
+    var a = toks[i].animate(kf, { duration: 2 * Math.PI / 1.3 * 1000, iterations: Infinity });
+    a.startTime = -(i * 1.7 / 1.3) * 1000;                  /* local time → sin(1.3·now/1000 + i·1.7) */
+    if (!ringVis) a.pause();
+    ringAnims[i] = a; ringAmp[i] = amp;
+  }
+  /* ════════════ end V2-PERF · F1 (used in frame() below) ════════════ */
 
   var G = { cx:0, cy:0, rx:0, ry:0, mx:0, my:0 };
   var shown = 0, shownE = quiet ? 1 : 0, offset = 0, cur = -1, nRead = 0, done = false, read = {};
@@ -3480,14 +4021,21 @@ html.ov-lock, html.ov-lock body{ overflow:hidden !important; height:100%; touch-
       var near = Math.max(0, 1 - dth / (STEP / 2));
       var ei = quiet ? 1 : easeOut(clamp01(shownE * 1.6 - i * .12));
       var bob = quiet ? 0 : Math.sin(t * 1.3 + i * 1.7) * 3.5 * ei;
+      if (PERF_RING) bob = 0;                                /* V2-PERF · F1: added back below, net of the animation */
       var x = G.cx + G.rx * Math.sin(th) + px * 10 * d;
       var y = G.cy + G.ry * cs + py * 6 * d + bob;
       x = G.mx + (x - G.mx) * ei; y = G.my + (y - G.my) * ei;
+      if (PERF_RING){                                        /* the old bob reached the screen as sin·3.5·ei² */
+        if (!ringAnims[i]) ringBob(i, 3.5);
+        y += Math.sin(t * 1.3 + i * 1.7) * (3.5 * ei * ei - ringAmp[i]);
+        ringEi[i] = ei;
+      }
       var sc = (.5 + .5 * d) * (1 + .08 * near) * (.3 + .7 * ei);
       var el = toks[i];
       el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0) scale(' + sc.toFixed(3) + ')';
       el.style.opacity = ((.42 + .58 * d) * clamp01(ei * 2)).toFixed(3);
-      el.style.zIndex = cs > 0 ? 30 + Math.round(d * 9) : 3 + Math.round(d * 5);
+      var zi = cs > 0 ? 30 + Math.round(d * 9) : 3 + Math.round(d * 5);
+      if (ringZ[i] !== zi){ ringZ[i] = zi; el.style.zIndex = zi; }   /* V2-PERF · F1: write only on change */
       if (fine && !quiet){ var b = d < .62 ? ((.62 - d) * 3.4).toFixed(2) : 0; el.style.filter = b ? 'blur(' + b + 'px)' : ''; }
     }
     if (fine && !quiet){ stage.style.setProperty('--px', px.toFixed(3)); stage.style.setProperty('--py', py.toFixed(3)); }
@@ -3496,6 +4044,15 @@ html.ov-lock, html.ov-lock body{ overflow:hidden !important; height:100%; touch-
     if (s.vis && shownE > .85) markRead(c);
     var settling = Math.abs(target - shown) > .002 || Math.abs(s.e - shownE) > .002 ||
                    Math.abs(tpx - px) > .002 || Math.abs(tpy - py) > .002;
+    if (PERF_RING){
+      /* V2-PERF · F1: nothing left to move but the bob (its animation carries it) → stop. A ring that
+         rests half-risen on screen (ei < 1: its bob is smaller, ei²) keeps the loop running exactly as
+         before; off-screen, it stops as before. */
+      var partial = false;
+      for (var j = 0; j < N; j++) if (3.5 * (1 - ringEi[j] * ringEi[j]) > .01){ partial = true; break; }
+      if (settling || (partial && s.vis)){ requestAnimationFrame(frame); return; }
+      running = false; last = 0; return;
+    }
     if (s.vis || settling) requestAnimationFrame(frame);
     else { running = false; last = 0; }
   }
@@ -3536,10 +4093,17 @@ html.ov-lock, html.ov-lock body{ overflow:hidden !important; height:100%; touch-
   }, { passive: true });
   addEventListener('resize', function(){ measure(); kick(); });
   if (window.ResizeObserver) new ResizeObserver(function(){ measure(); kick(); }).observe(stage);
+  /* V2-PERF · F1: the bobs pause off-screen and come back on the same clock (same phase as ever) */
+  if (PERF_RING && 'IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      ringVis = es[es.length - 1].isIntersecting;
+      ringAnims.forEach(function(a, i){ if (!a) return; if (ringVis) a.startTime = -(i * 1.7 / 1.3) * 1000; else a.pause(); });
+    }, { rootMargin: '80px 0px' }).observe(stage);
+  }
 
   measure(); setCur(0); paintCount(); kick();
   /* QA: settle() jumps the ring to where it is heading (headless captures run on virtual time) */
-  window.__lata = { state: function(){ return { shown: shown, shownE: shownE, offset: offset, cur: cur, nRead: nRead, done: done, G: G }; }, measure: measure, kick: kick,
+  window.__lata = { state: function(){ return { shown: shown, shownE: shownE, offset: offset, cur: cur, nRead: nRead, done: done, G: G, running: running, perfRing: PERF_RING, bobs: ringAnims.filter(Boolean).length }; }, measure: measure, kick: kick,
     settle: function(){ var s = sstate(); offset += Math.round(s.p * (N - 1) + offset) - (s.p * (N - 1) + offset); shown = s.p * (N - 1) + offset; shownE = s.e; px = tpx; py = tpy; running = false; kick(); } };
 })();
 </script>
